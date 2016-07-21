@@ -32,6 +32,8 @@ module Votweb
     # Prevent initializing your application and connect to the database on assets precompile.
     config.assets.initialize_on_precompile = false
 
+    config.time_zone = ENV.fetch('TZ', 'Brasilia')
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
