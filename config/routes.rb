@@ -1,3 +1,17 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  localized do
+    devise_for :administrators, path: :admin, controllers: { registrations: 'admin/registrations' }
+    namespace :admin do
+      resources :administrators do
+        patch :unlock
+      end
+      resources :roles
+      root 'home#index'
+    end
+
+    scope module: :public do
+      root 'home#index'
+    end
+  end
 end

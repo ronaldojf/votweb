@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.default_locale %>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow">
+    <%= csrf_meta_tags %>
+
+    <% content_for(:module, t(controller_name, scope: [:page, :modules], default: '')) unless content_for? :module %>
+    <title>
+      <%= page_title(app_name: t('page.titles.short'), page_title_symbol: :module, separator: ' | ') %>
+    </title>
+
+    <%= favicon_link_tag 'favicon.png' %>
+    <%= stylesheet_link_tag    'admin/application', media: 'all', 'data-turbolinks-track' => true %>
+
+    <%= javascript_include_tag 'i18n', 'data-turbolinks-track' => true %>
+
+    <script type="text/javascript">
+      window.I18n.defaultLocale = '<%= I18n.default_locale %>';
+      window.I18n.locale = '<%= I18n.locale %>';
+      window.I18n.pathLocale = '<%= I18n.locale.to_s.underscore %>';
+    </script>
+
+    <%= javascript_include_tag 'admin/application', 'data-turbolinks-track' => true %>
+
+  </head>
+
+  <%= content_for?(:content) ? yield(:content) : yield %>
+</html>

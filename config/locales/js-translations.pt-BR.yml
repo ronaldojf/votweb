@@ -1,0 +1,39 @@
+pt-BR:
+  js:
+    forms:
+      unsaved:
+        default: As alterações ainda não foram salvas
+        quit: As alterações ainda não foram salvas. Quer mesmo sair da página?
+    messages:
+      titles:
+        sure: Você tem certeza?
+      contents:
+        signout: Você será desconectado.
+    enums:
+      published:
+        yes: Publicado
+        no: Não Publicado
+    date:
+      formats:
+        default: 'dd/mm/yyyy'
+    buttons:
+      ok: OK
+      cancel: Cancelar
+      search: Pesquisar
+    placeholders:
+      search: Pesquisar...
+    info:
+      loading: Carregando...
+      records_found_html:
+        one: ! Foi encontrado <strong>%{count}</strong> registro.
+        other: ! Foram encontrados <strong>%{count}</strong> registros.
+    errors:
+      searching_records: 'Ocorreu um erro ao tentar buscar os registros, tente novamente mais tarde'
+    datepicker:
+      next: Próximo
+      prev: Anterior
+    chosen:
+      results_none_found: Nada foi encontrado para
+      default_multiple_text: Escolha algumas opções...
+      default_single_text: Escolha uma opção...
+      default_no_result_text: Nenhum resultado encontrado...

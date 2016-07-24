@@ -1,0 +1,25 @@
+<%= content_for :content do %>
+  <body class="<%= body_class %>" <%= raw(content_for?(:angular_controller) ? "ng-controller=\'#{content_for(:angular_controller)}\'" : '') %>>
+    <%= render partial: 'layouts/admin/sidemenu' %>
+
+    <div id="page-wrapper" class="gray-bg">
+      <%= render partial: 'layouts/admin/header_signed_in' %>
+
+      <% if content_for?(:sub_header) %>
+        <div class="row wrapper border-bottom white-bg page-heading">
+          <%= yield(:sub_header) %>
+        </div>
+      <% end %>
+
+      <div class="wrapper wrapper-content animated fadeInRight">
+        <%= yield %>
+      </div>
+
+      <footer class="footer">
+        <%= t('page.footers.short_html', app: t('app.name'), year: Date.today.year) %>
+      </footer>
+    </div>
+  </body>
+<% end %>
+
+<%= render file: 'layouts/admin/application' %>

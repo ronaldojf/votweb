@@ -1,0 +1,60 @@
+<%% content_for :sub_header do %>
+  <div class="col-sm-6">
+    <h2><%%= t('models_and_attributes.models.<%= singular_table_name %>.other') %></h2>
+    <ol class="breadcrumb">
+      <li><%%= link_to t('page.modules.home'), [:admin, :root] %></li>
+      <li><%%= link_to t('page.modules.<%= plural_table_name %>'), [:admin, :<%= plural_table_name %>] %></li>
+      <li class="active">
+        <strong><%%= t('actions.show') %></strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-sm-6 text-right">
+    <%%= link_to [:new, :admin, :<%= singular_table_name %>], class: 'btn btn-w-s btn-primary m-t-md' do %>
+      <i class="fa fa-plus"></i><br/>
+      <%%= t('buttons.new') %>
+    <%% end if can?(:create, <%= class_name %>) %>
+
+    <%%= link_to [:edit, :admin, @<%= singular_table_name %>], class: 'btn btn-w-s btn-info m-t-md' do %>
+      <i class="fa fa-edit"></i><br/>
+      <%%= t('buttons.edit') %>
+    <%% end if can?(:update, <%= class_name %>) %>
+
+    <%%= link_to [:admin, @<%= singular_table_name %>], class: 'btn btn-w-s btn-danger m-t-md',
+          method: :delete, data: {confirm: t('confirm.delete_record')} do %>
+      <i class="fa fa-trash"></i><br/>
+      <%%= t('buttons.destroy') %>
+    <%% end if can?(:destroy, <%= class_name %>) %>
+
+    <%%= link_to [:admin, :<%= plural_table_name %>], class: 'btn btn-w-s btn-white m-t-md m-l-sm' do %>
+      <i class="fa fa-reply"></i><br/>
+      <%%= t('buttons.back') %>
+    <%% end %>
+  </div>
+<%% end %>
+
+<%%= flash_messages %>
+<div class="row responsive-padding">
+  <div class="col-xs-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>
+          <%%= t('view.keywords.informations') %>
+        </h5>
+      </div>
+
+      <div class="ibox-content">
+        <ul class="todo-list">
+
+<% attributes.reject(&:password_digest?).each do |attribute| -%>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%%= t('activerecord.attributes.<%= singular_table_name %>.<%= attribute.name %>') %>:</div>
+            <div class="col-sm-9"><%%= @<%= singular_table_name %>.<%= attribute.name %> %></div>
+          </li>
+<% end -%>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

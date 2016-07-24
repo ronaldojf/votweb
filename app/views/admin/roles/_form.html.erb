@@ -1,0 +1,31 @@
+<%= simple_form_for([:admin, @role]) do |f| %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.input :description, input_html: { autofocus: true } %>
+      </div>
+    </div>
+
+    <div class="row">
+      <%= f.simple_fields_for :permissions do |ff| %>
+        <% subject = ff.object.subject.underscore %>
+
+        <div class="col-md-6">
+          <div class="well">
+            <button type="button" class="btn btn-white btn-xs pull-right uncheck-all">Desmarcar todos</button>
+            <button type="button" class="btn btn-white btn-xs pull-right check-all">Marcar todos</button>
+            <%= ff.input :subject, as: :hidden if ff.object.new_record? %>
+            <%= ff.input :actions,
+              as: :check_boxes,
+              label: t("models_and_attributes.models.#{subject}.other"),
+              label_method: -> (label) { t(label, scope: :authorizable_actions) },
+              collection: @role_service.actions(ff.object.subject) %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <%= f.submit '', class: 'hide' %>
+  </div>
+<% end %>

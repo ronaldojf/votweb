@@ -1,0 +1,45 @@
+<nav class="navbar-default navbar-static-side">
+  <div class="sidebar-collapse">
+    <ul class="nav metismenu" id="side-menu">
+      <li class="nav-header">
+        <div class="dropdown profile-element">
+        <%= link_to admin_root_path do  %>
+            <%= image_tag 'votweb-full.svg', class: 'img-responsive' %>
+          <% end %>
+          <a href data-toggle="dropdown" class="dropdown-toggle">
+            <span class="clear"> <span class="block m-t-sm"> <strong class="font-bold"><%= current_administrator.name %></strong></span>
+            <span class="text-muted text-xs block"><%= current_administrator.email %> <b class="caret"></b></span> </span>
+          </a>
+          <ul class="dropdown-menu animated fadeInRight m-t-xs">
+            <li>
+              <%= link_to edit_registration_path(current_administrator) do %>
+                <i class="fa fa-edit"></i> <%= t('profile.edit') %>
+              <% end %>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <%= link_to destroy_session_path(:administrator), method: :delete,
+                  data: {confirm: t('confirm.signout')} do %>
+                <i class="fa fa-sign-out"></i> <%= t('profile.signout') %>
+              <% end %>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <%= content_tag(:li, class: class_for_item_menu('administrators')) do %>
+        <%= link_to admin_administrators_path do  %>
+          <i class="fa fa-user"></i>
+          <span class="nav-label"><%= t('models_and_attributes.models.administrator.other') %></span>
+        <% end %>
+      <% end if can?(:read, Administrator) %>
+
+      <%= content_tag(:li, class: class_for_item_menu('roles')) do %>
+        <%= link_to admin_roles_path do  %>
+          <i class="fa fa-check-square-o"></i>
+          <span class="nav-label"><%= t('models_and_attributes.models.role.other') %></span>
+        <% end %>
+      <% end if can?(:read, Role) %>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,35 @@
+<%= simple_form_for([:admin, @administrator]) do |f| %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :name, input_html: { autofocus: true } %>
+      </div>
+
+      <div class="col-md-6">
+        <%= f.input :email %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :password, required: @administrator.new_record?, input_html: (@administrator.persisted? ? {'fake-password' => true} : {}) %>
+      </div>
+
+      <div class="col-md-6">
+        <%= f.input :password_confirmation, required: @administrator.new_record?, input_html: (@administrator.persisted? ? {'fake-password' => true} : {}) %>
+      </div>
+    </div>
+
+    <% if can?(:read, Role) %>
+      <div class="row">
+        <div class="col-xs-12">
+          <%= custom_flash_messages warning: {show: @administrator.main?, icon: :warning, fixed: true, message: t('errors.custom_messages.main_administrador')} %>
+          <%= f.association :roles, as: :check_boxes, collection: Role.all, label: t('activerecord.models.role.other'), label_method: :description unless @administrator.main? %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= f.submit '', class: 'hide' %>
+  </div>
+<% end %>

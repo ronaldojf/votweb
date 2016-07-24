@@ -1,0 +1,33 @@
+// Variables, Mixins
+@import "base/variables";
+@import "base/mixins";
+
+// INSPINIA Theme Elements
+@import "base/typography";
+@import "base/navigation";
+@import "base/top_navigation";
+@import "base/buttons";
+@import "base/badgets_labels";
+@import "base/elements";
+@import "base/sidebar";
+@import "base/base";
+@import "base/pages";
+@import "base/spinners";
+
+// For demo only - config box style
+@import "base/theme-config";
+
+// INSPINIA Skins
+@import "base/skins";
+
+// Media query style
+@import "base/media";
+
+// Custom style
+@import "base/custom";
+
+// Plugins
+@import 'plugins/chosen/chosen';
+@import 'plugins/sweetalert/sweetalert';
+
+@import 'animate';

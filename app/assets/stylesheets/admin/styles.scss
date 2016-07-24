@@ -1,0 +1,17 @@
+@import 'base/base';
+
+.well.well-show {
+  background-color: white;
+  margin: 10px 0 0 0;
+}
+
+.nav-header {
+  padding-top: 25px;
+
+  .profile-element {
+    img {
+      height: 133px;
+      margin: auto;
+    }
+  }
+}

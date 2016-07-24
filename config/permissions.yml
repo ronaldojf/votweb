@@ -1,0 +1,14 @@
+default_actions: &default_actions
+  - read
+  - create
+  - update
+  - destroy
+
+Administrator:
+  - read
+  - create
+  - update
+  - unlock
+  - destroy
+
+Role: *default_actions

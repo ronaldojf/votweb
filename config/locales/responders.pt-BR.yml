@@ -1,0 +1,24 @@
+pt-BR:
+  flash:
+    actions:
+      create:
+        notice: Registro criado com sucesso.
+        alert: Registro não pôde ser criado. Confira o(s) erro(s) abaixo.
+      update:
+        notice: Registro atualizado com sucesso.
+        alert: Registro não pôde ser atualizado. Confira o(s) erro(s) abaixo.
+      publish:
+        notice: Registro publicado com sucesso.
+        alert: Registro não pôde ser publicado. Confira o(s) erro(s) abaixo.
+      edit:
+        alerts:
+          editing_main_administrator: Este administrador não pode ser editado.
+          full_control_role: Esta permissão não pode ser editada.
+      destroy:
+        notice: Registro excluído com sucesso.
+        alert: Registro não pôde ser excluído.
+        alerts:
+          main_administrator: Este administrador não pode ser excluído.
+          full_control_role: Esta permissão não pode ser excluída.
+          self_destroy: Não é posível se autoexcluir.
+          is_associated: Não foi possível excluir este registro pois está associado à outros registros.

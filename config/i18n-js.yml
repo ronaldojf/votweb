@@ -1,0 +1,5 @@
+fallbacks: :default_locale
+
+translations:
+- file: 'app/assets/javascripts/translations/pt-BR.js'
+  only: 'pt-BR.js.*'

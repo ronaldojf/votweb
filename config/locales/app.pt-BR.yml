@@ -1,13 +1,154 @@
 pt-BR:
+  app:
+    name: &app_name
+      VotWEB
+
+  page:
+    welcome_html: ! Seja bem-vindo ao <strong>%{app_name}</strong>!
+    titles: &page_titles
+      short: *app_name
+    modules:
+      home: Home
+      profiles: Perfil
+      sessions: Login
+      administrators: Administradores
+      roles: Funções
+      profile: Perfil
+    footers:
+      short_html: '<strong>%{app}</strong> &copy; %{year}'
+
+  actions:
+    new: Inserção
+    edit: Edição
+    show: Visualização
+    update: Edição
+    create: Inserção
+    destroy: Exclusão
+
+  authorizable_actions:
+    read: Ler
+    create: Criar
+    update: Editar
+    destroy: Excluir
+    unlock: Desbloquear acesso
+
+  buttons:
+    close: Fechar
+    cancel: Cancelar
+    back: Voltar
+    destroy: Excluir
+    edit: Editar
+    save: Salvar
+    new: Novo
+    create: Criar
+    add: Adicionar
+    search: Pesquisar
+    clear_filters: Limpar Filtros
+    signin: Entrar
+    confirm: Confirmar
+
+  login:
+    administrator:
+      welcome: Administração
+
+  profile:
+    edit: Alterar Perfil
+    signout: Sair
+
+  info:
+    no_results: Nenhum resultado encontrado
+    no_roles: Nenhuma função adicionada.
+    editing_password: Preencha apenas se deseja alterar...
+
+  warnings:
+    unlock_record_html: |
+      Este registro foi bloqueado por atingir %{maximum_attempts} tentativas seguidas de entrar no sistema com a senha incorreta.
+      <strong>
+        <a href="%{action}" data-method="patch" class="%{link_class}">
+          Desbloquear este registro?
+        </a>
+      </strong>
+
+  view:
+    keywords:
+      informations: Informações
+      list: Listagem
+      filter: Filtro
+      see_more: Ver Mais
+
+  confirm:
+    signout: Você tem certeza que deseja sair?
+    delete_record: O registro será excluído.
+    publish_record: O registro será publicado e não poderá mais ser editado ou excluído.
+
+  routes:
+    new: novo
+    edit: editar
+    administrators: administradores
+    roles: funcoes
+    profile: perfil
+    sign_in: entrar
+    sign_out: sair
+
   models_and_attributes: &models_and_attributes
-    # models:
-    #   event:
-    #     one: Evento
-    #     other: Eventos
-    # attributes:
-    #     event:
-    #       name: Nome
+    models: &models
+      administrator:
+        one: Administrador
+        other: Administradores
+      role:
+        one: Função
+        other: Funções
+      permission:
+        one: Permissão
+        other: Permissões
+    attributes: &attributes
+      user: &user
+        email: E-Mail
+        password: Senha
+        password_confirmation: Confirmação de Senha
+        current_password: Senha Atual
+        confirmation_token: Link de confirmação
+        reset_password_token: Link de troca de senha
+      administrator:
+        name: Nome
+        <<: *user
+      role:
+        description: Descrição
+      permission:
+        actions: Ações
+        subject: Contexto
+
+  enums:
+    names: &enum_names
+      gender: Sexo
+    items: &enum_items
+      gender:
+        male: Masculino
+        female: Feminino
+    specific_items: &enum_specific_items
+      administrator:
+        status:
+          normal: Normal
+          locked: Bloqueado
+
+  errors:
+    custom_messages:
+      current_password_not_match: não confere
+      unpermited: Você não tem permissão para acessar o recurso solicitado.
+
   activerecord:
     <<: *models_and_attributes
   activemodel:
     <<: *models_and_attributes
+
+  simple_form:
+    labels:
+      <<: *models
+      <<: *attributes
+      <<: *enum_names
+    options:
+      <<: *enum_specific_items
+      defaults:
+        <<: *enum_items
+    placeholders:
+      <<: *attributes

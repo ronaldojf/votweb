@@ -1,0 +1,38 @@
+<header class="row border-bottom">
+  <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+      <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href><i class="fa fa-bars"></i> </a>
+    </div>
+    <ul class="nav navbar-top-links navbar-right user-menu-responsive">
+
+      <li class="visible-xs user-menu-item-responsive">
+        <div class="dropdown">
+          <a href data-toggle="dropdown" class="dropdown-toggle btn btn-primary">
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu animated fadeInRight user-menu">
+            <li>
+              <%= link_to edit_registration_path(current_administrator) do %>
+                <i class="fa fa-edit"></i> <%= t('profile.edit') %>
+              <% end %>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <%= link_to destroy_session_path(:administrator), method: :delete,
+                  data: {confirm: t('confirm.signout')} do %>
+                <i class="fa fa-sign-out"></i> <%= t('profile.signout') %>
+              <% end %>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="hidden-xs">
+        <%= link_to destroy_session_path(:administrator), method: :delete, class: 'superior-logout',
+            data: {confirm: t('confirm.signout')} do %>
+          <i class="fa fa-sign-out"></i> <%= t('profile.signout') %>
+        <% end %>
+      </li>
+    </ul>
+  </nav>
+</header>

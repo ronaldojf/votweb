@@ -1,0 +1,87 @@
+<%% content_for :angular_controller, '<%= class_name.pluralize %>Controller' %>
+<%% content_for :sub_header do %>
+  <div class="col-sm-6">
+    <h2><%%= t('models_and_attributes.models.<%= singular_table_name %>.other') %></h2>
+    <ol class="breadcrumb">
+      <li><%%= link_to t('page.modules.home'), [:admin, :root] %></li>
+      <li class="active">
+        <strong><%%= t('page.modules.<%= plural_table_name %>') %></strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-sm-6 text-right">
+    <%%= link_to [:new, :admin, :<%= singular_table_name %>], class: 'btn btn-w-s btn-primary m-t-md' do %>
+      <i class="fa fa-plus"></i><br/>
+      <%%= t('buttons.new') %>
+    <%% end if can?(:create, <%= class_name %>) %>
+  </div>
+<%% end %>
+
+<%%= flash_messages %>
+
+<div class="row responsive-padding">
+  <div class="col-xs-12" ng-init="init(<%%= @config.to_json %>)">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>
+          <%%= t('view.keywords.list') %>&nbsp;&nbsp;&nbsp;
+          <big><i class="fa fa-spinner fa-spin text-success" ng-show="loading"></i></big>
+        </h5>
+      </div>
+
+      <div class="ibox-content">
+        <form>
+          <div class="m-b-lg">
+            <div class="row m-b-xss">
+              <div class="col-xs-12">
+                <small>
+                  <a class="pull-right" ng-click="NgTableService.clearFilters(filters)"><%%= t('buttons.clear_filters') %></a>
+                </small>
+              </div>
+            </div>
+
+            <div class="form-inputs">
+              <div class="row m-b-sm">
+                <div class="col-xs-12">
+                  <input type="text" id="filter" placeholder="<%%= t([:<%= attributes.first.name %>], scope: [:activerecord, :attributes, :<%= singular_table_name %>]).join('/') %>"
+                      class="form-control input-md" ng-model="filters.general" autocomplete="off" autofocus>
+                </div>
+              </div>
+            </div>
+
+            <div class="row m-t-sm">
+              <div class="col-sm-offset-8 col-sm-4">
+                <button class="btn btn-block btn-primary" ng-click="NgTableService.search(filters)" ng-disabled="tableParams.loadingTable">
+                  <i class="fa fa-search"></i> <%%= t('buttons.search') %>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="m-t-md">
+          <small class="pull-right text-muted" ng-bind-html="'info.records_found_html' | t:{count: tableParams.total() || 0} | trust"></small><br>
+          <hr class="m-t-none">
+        </div>
+
+        <%%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'tableParams.total() > 0'} %>
+        <div class="table-responsive" ng-show="tableParams.total() > 0">
+          <div loading-container="tableParams.loadingTable">
+            <table ng-table="tableParams" template-pagination="/angular-templates/ng-table/paginate" class="table table-striped table-hover">
+              <tr data-href="{{<%= singular_table_name %>.url}}" ng-repeat="<%= singular_table_name %> in $data.data.results track by <%= singular_table_name %>.id">
+
+<% attributes.reject(&:password_digest?).each do |attribute| -%>
+                <td data-title="'<%%= t('activerecord.attributes.<%= singular_table_name %>.<%= attribute.name %>') %>'" sortable="'<%= attribute.name %>'">
+                  {{<%= singular_table_name %>.<%= attribute.name[0] + attribute.name.camelize[1..-1] %>}}
+                </td>
+<% end -%>
+
+              </tr>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

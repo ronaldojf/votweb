@@ -5,12 +5,23 @@ pt-BR:
     required:
       text: 'obrigatório'
       mark: '*'
-      # You can uncomment the line below if you need to overwrite the whole required html.
-      # When using html, text and mark won't be used.
-      # html: '<abbr title="required">*</abbr>'
+      html: '<abbr title="obrigatório">*</abbr>'
     error_notification:
       default_message: "Por favor, verifique os problemas abaixo:"
-    # Labels and hints examples
+    placeholders:
+      defaults:
+        name: Digite o Nome
+        email: Digite o E-Mail
+        password: Digite a Senha
+        password_confirmation: Digite a Confirmação de Senha
+        current_password: Digite a Senha Atual
+        cpf: Digite o CPF
+        gender: Sexo
+        birth_date: Data de Nascimento
+        phone: Digite o Telefone
+        description: Digite a Descrição
+      # administrator:
+      #   name: Digite o Nome
     # labels:
     #   defaults:
     #     password: 'Password'

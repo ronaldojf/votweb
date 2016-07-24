@@ -1,0 +1,52 @@
+<div id='messages'>
+  <%= content_tag :div, {class: "alert alert-success #{'alert-dismissable' unless options[:fixed] || options[:notice][:fixed]} #{options[:notice][:class]}"}.merge(options[:html]) do %>
+    <% unless options[:fixed] || options[:notice][:fixed] %>
+      <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+    <% end %>
+
+    <% if (notice_icon = options[:notice][:icon] || options[:icon]) %>
+      <i class='fa fa-<%= notice_icon == true ? '' : notice_icon %>'></i>&nbsp;
+    <% end %>
+
+    <%= options[:notice][:message] %>
+  <% end if options[:notice][:show] %>
+
+
+  <%= content_tag :div, {class: "alert alert-danger #{'alert-dismissable' unless options[:fixed] || options[:alert][:fixed]} #{options[:alert][:class]}"}.merge(options[:html]) do %>
+    <% unless options[:fixed] || options[:alert][:fixed] %>
+      <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+    <% end %>
+
+    <% if (alert_icon = options[:alert][:icon] || options[:icon]) %>
+      <i class='fa fa-<%= alert_icon == true ? '' : alert_icon %>'></i>&nbsp;
+    <% end %>
+
+    <%= options[:alert][:message] %>
+  <% end if options[:alert][:show] %>
+
+
+  <%= content_tag :div, {class: "alert alert-warning #{'alert-dismissable' unless options[:fixed] || options[:warning][:fixed]} #{options[:warning][:class]}"}.merge(options[:html]) do %>
+    <% unless options[:fixed] || options[:warning][:fixed] %>
+      <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+    <% end %>
+
+    <% if (warning_icon = options[:warning][:icon] || options[:icon]) %>
+      <i class='fa fa-<%= warning_icon == true ? '' : warning_icon %>'></i>&nbsp;
+    <% end %>
+
+    <%= options[:warning][:message] %>
+  <% end if options[:warning][:show] %>
+
+
+  <%= content_tag :div, {class: "alert alert-info #{'alert-dismissable' unless options[:fixed] || options[:info][:fixed]} #{options[:info][:class]}"}.merge(options[:html]) do %>
+    <% unless options[:fixed] || options[:info][:fixed] %>
+      <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+    <% end %>
+
+    <% if (info_icon = options[:info][:icon] || options[:icon]) %>
+      <i class='fa fa-<%= info_icon == true ? '' : info_icon %>'></i>&nbsp;
+    <% end %>
+
+    <%= options[:info][:message] %>
+  <% end if options[:info][:show] %>
+</div>

@@ -1,0 +1,15 @@
+<%%= simple_form_for([:admin, @<%= singular_table_name %>]) do |f| %>
+
+  <div class="form-inputs">
+<%- attributes.each do |attribute| -%>
+    <div class="row">
+      <div class="col-md-6">
+        <%%= f.<%= attribute.reference? ? :association : :input %> :<%= attribute.name %> %>
+      </div>
+
+    </div>
+<%- end -%>
+
+    <%%= f.submit '', class: 'hide' %>
+  </div>
+<%% end %>

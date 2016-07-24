@@ -1,0 +1,79 @@
+<% content_for :sub_header do %>
+  <div class="col-sm-6">
+    <h2><%= t('models_and_attributes.models.administrator.other') %></h2>
+    <ol class="breadcrumb">
+      <li><%= link_to t('page.modules.home'), [:admin, :root] %></li>
+      <li><%= link_to t('page.modules.administrators'), [:admin, :administrators] %></li>
+      <li class="active">
+        <strong><%= t('actions.show') %></strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-sm-6 text-right">
+    <%= link_to [:new, :admin, :administrator], class: 'btn btn-w-s btn-primary m-t-md' do %>
+      <i class="fa fa-plus"></i><br/>
+      <%= t('buttons.new') %>
+    <% end if can?(:create, Administrator) %>
+
+    <%= link_to [:edit, :admin, @administrator], class: 'btn btn-w-s btn-info m-t-md' do %>
+      <i class="fa fa-edit"></i><br/>
+      <%= t('buttons.edit') %>
+    <% end if can?(:update, Administrator) %>
+
+    <%= link_to [:admin, @administrator], class: 'btn btn-w-s btn-danger m-t-md',
+          method: :delete, data: {confirm: t('confirm.delete_record')} do %>
+      <i class="fa fa-trash"></i><br/>
+      <%= t('buttons.destroy') %>
+    <% end if can?(:destroy, Administrator) %>
+
+    <%= link_to [:admin, :administrators], class: 'btn btn-w-s btn-white m-t-md m-l-sm' do %>
+      <i class="fa fa-reply"></i><br/>
+      <%= t('buttons.back') %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= flash_messages %>
+<div class="row responsive-padding">
+  <div class="col-xs-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>
+          <%= t('view.keywords.informations') %>
+        </h5>
+      </div>
+
+      <div class="ibox-content">
+        <%= custom_flash_messages warning: {
+          show: can?(:unlock, Administrator) && @administrator.access_locked?,
+          fixed: true,
+          icon: :warning,
+          message: t('warnings.unlock_record_html', {
+            link_class: 'text-primary',
+            maximum_attempts: Devise.maximum_attempts,
+            action: admin_administrator_unlock_path(@administrator),
+            method: :patch
+          })
+        } %>
+
+        <ul class="todo-list">
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.administrator.name') %>:</div>
+            <div class="col-sm-9"><%= @administrator.name %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.administrator.email') %>:</div>
+            <div class="col-sm-9"><%= @administrator.email %></div>
+          </li>
+
+          <% if can?(:read, Role) %>
+            <li class="show-action-label">
+              <div class="col-sm-3"><%= t('models_and_attributes.models.role.other') %>:</div>
+              <div class="col-sm-9"><%= @administrator.roles.pluck(:description).join(', ') %></div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

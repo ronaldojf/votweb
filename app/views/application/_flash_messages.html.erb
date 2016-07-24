@@ -1,0 +1,17 @@
+<% if notice || alert %>
+  <div id="mensagens">
+    <%= content_tag :div, class: "alert alert-success alert-dismissable" do %>
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= content_tag :i, class: "fa fa-#{options[:alert][:icon] || options[:icon]}" if (options[:alert][:icon] || options[:icon]) %>&nbsp;
+
+      <%= notice %>
+    <% end if notice  %>
+
+    <%= content_tag :div, class: "alert alert-danger alert-dismissable" do %>
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= content_tag :i, class: "fa fa-#{options[:notice][:icon] || options[:icon]}" if (options[:notice][:icon] || options[:icon]) %>&nbsp;
+
+      <%= alert %>
+    <% end if alert  %>
+  </div>
+<% end %>

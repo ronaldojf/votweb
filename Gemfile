@@ -2,34 +2,39 @@ source 'https://rubygems.org'
 ruby '2.3.1'
 
 gem 'rails',                  '5.0.0'
-gem 'puma',                   '2.15.3'
+gem 'puma',                   '3.5.2'
 gem 'secure_headers',         '2.4.4'
 gem 'jquery-rails',           '4.1.1'
 gem 'turbolinks',             '2.5.3'
 gem 'jbuilder',               '2.5.0'
-gem 'slim-rails',             '3.1.0'
 gem 'pg',                     '0.18.4'
-gem 'sass-rails',             '5.0.5'
+gem 'sass-rails',             '5.0.6'
 gem 'coffee-rails',           '4.2.1'
 gem 'uglifier',               '2.7.2'
 gem 'simple_form',            '3.2.1'
 gem 'flutie',                 '2.0.0'
-gem 'bourbon',                '4.2.6'
-gem 'neat',                   '1.7.2'
-gem 'bitters',                '1.1.0'
-gem 'refills',                '0.1.0'
 gem 'normalize-rails',        '3.0.3'
-gem 'rollbar',                '2.11.3'
+gem 'sprockets',              '3.6.3'
+
+gem 'devise',                 '4.2.0'
+gem 'js-routes',              '1.2.7'
+gem 'i18n-js',                '3.0.0.rc11'
+gem 'ng-rails-csrf',          '0.1.0'
+gem 'responders',             '2.2.0'
+gem 'route_translator',       '5.0.1'
+gem 'cancancan',              '1.15.0'
+gem 'kaminari-bootstrap',     '3.0.1'
+
+gem 'bootstrap-sass',         '3.3.6'
+gem 'font-awesome-sass',      '4.6.2'
 
 group :production, :staging do
-  gem 'rails_12factor',       '0.0.3'
   gem 'rack-canonical-host',  '0.2.2'
-  gem 'newrelic_rpm',         '~> 3.12'
   gem 'librato-rails',        '1.0.0'
 end
 
 group :development do
-  gem 'foreman',              '0.78.0'
+  gem 'foreman',              '0.82.0'
   gem 'jumpup',               '0.0.8'
   gem 'jumpup-heroku',        '0.0.6'
   gem 'better_errors',        '2.1.1'
@@ -37,6 +42,8 @@ group :development do
   gem 'letter_opener',        '1.4.1'
   gem 'bullet',               '5.1.1'
   gem 'listen',               '3.1.5'
+  gem 'guard-livereload',     '2.5.2',  require: false
+  gem 'guard-rspec',          '4.7.2',  require: false
 end
 
 group :test do
@@ -55,7 +62,7 @@ group :development, :test do
   gem 'factory_girl_rails',    '4.5.0'
   gem 'pry-rails',             '0.3.4'
   gem 'dotenv-rails',          '2.1.1'
-  gem 'awesome_print',         '1.6.1'
+  gem 'awesome_print',         '1.7.0'
   gem 'spring-commands-rspec', '1.0.4'
   gem 'byebug',                '8.2.1'
   gem 'spring',                '1.5.0'

@@ -1,0 +1,21 @@
+<body class="gray-bg">
+  <div class="passwordBox animated fadeInDown text-center">
+    <div class='m-b-sm'>
+      <%= image_tag('votweb-full.svg', class: 'img-responsive center-block') %>
+    </div>
+
+    <div class="ibox-content">
+      <h2 class="font-bold text-center"><%= t('login.administrator.welcome') %></h2>
+
+      <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'm-t'}) do |f| %>
+        <%= f.input :email, required: true, label: false, input_html: { autofocus: true } %>
+        <%= f.input :password, required: true, label: false %>
+
+        <%= flash_messages %>
+        <%= f.button :submit, t('buttons.signin'), class: 'btn btn-primary block full-width m-b' %>
+      <% end %>
+    </div>
+
+    <p class="m-t"> <small><%= t('page.footers.short_html', app: t('app.name'), year: Date.today.year) %></small> </p>
+  </div>
+</body>

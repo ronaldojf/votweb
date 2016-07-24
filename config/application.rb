@@ -24,6 +24,9 @@ module Votweb
       g.view_specs false
       g.assets false
       g.integration_tool false
+      g.controller_specs false
+      g.route_specs false
+      g.routing_specs false
     end
     config.app_generators do |g|
       g.test_framework :rspec
@@ -39,5 +42,11 @@ module Votweb
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+
+    config.i18n.enforce_available_locales = true
+    config.i18n.default_locale = :'pt-BR'
+    config.i18n.locale = :'pt-BR'
+
+    config.autoload_paths += %W(#{config.root}/lib)
   end
 end
