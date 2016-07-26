@@ -12,7 +12,7 @@ class Administrator < ApplicationRecord
     model = model.try(:name) || model.try(:constantize).try(:name)
 
     if model.present? && permission.present?
-      joins{roles.permissions.outer}
+      left_outer_joins(roles: :permissions)
       .distinct
       .where("roles.full_control = 't' OR (:permission = ANY (permissions.actions) AND permissions.subject = :model)",
         permission: permission,

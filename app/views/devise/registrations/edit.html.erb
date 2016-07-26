@@ -10,12 +10,12 @@
   </div>
   <div class="col-sm-6 text-right">
     <%= link_to [:admin, :administrators], class: 'btn btn-w-s btn-primary m-t-md',
-          data: {'form-submit' => url_for([:admin, resource])} do %>
+          data: {'form-submit' => registration_path(resource_name)} do %>
 
       <i class="fa fa-save"></i><br>
       <%= t('buttons.save') %>
     <% end %>
-    <%= link_to [:admin, resource], class: 'btn btn-w-s btn-warning m-t-md' do %>
+    <%= link_to [:admin, :root], class: 'btn btn-w-s btn-warning m-t-md' do %>
       <i class="fa fa-remove"></i><br>
       <%= t('buttons.cancel') %>
     <% end %>

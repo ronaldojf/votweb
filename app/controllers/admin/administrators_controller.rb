@@ -16,7 +16,11 @@ class Admin::AdministratorsController < Admin::BaseController
   end
 
   def edit
-    redirect_to edit_registration_path(current_administrator) if current_administrator == @administrator
+    if current_administrator == @administrator
+      redirect_to edit_registration_path(current_administrator)
+    elsif @administrator.main?
+      redirect_to(admin_administrator_path(@administrator), alert: I18n.t('flash.actions.edit.alerts.editing_main_administrator'))
+    end
   end
 
   def create
@@ -26,7 +30,10 @@ class Admin::AdministratorsController < Admin::BaseController
   end
 
   def update
-    @administrator.update(administrator_params) if @administrator != current_administrator
+    unless @administrator.main?
+      @administrator.update(administrator_params) if @administrator != current_administrator
+    end
+
     respond_with :admin, @administrator
   end
 

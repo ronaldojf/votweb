@@ -1,0 +1,12 @@
+default_actions: &default_actions
+  - create
+  - update
+  - destroy
+  - read
+
+Administrator:
+  - *default_actions
+  - another
+
+Deliveryman:
+  - *default_actions
