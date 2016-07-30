@@ -52,28 +52,20 @@ module.exports = function(grunt) {
         concat: {
             js: {
                 src: [
-                    'src/scripts/intro.js',
-                    'src/scripts/ngTable.module.js',
-                    'src/scripts/ngTableDefaults.js',
+                    'src/scripts/01-*.js',
+                    'src/scripts/02-*.js',
                     'src/scripts/ngTableEventsChannel.js',
                     'src/scripts/ngTableFilterConfig.js',
                     'src/scripts/ngTableDefaultGetData.js',
-                    'src/scripts/ngTableColumn.js',
-                    'src/scripts/ngTableParams.js',
-                    'src/scripts/ngTableController.js',
-                    'src/scripts/ngTable.directive.js',
-                    'src/scripts/ngTableDynamic.directive.js',
-                    'src/scripts/ngTableColumnsBinding.directive.js',
-                    'src/scripts/ngTablePagination.directive.js',
+                    'src/scripts/ngTableGetDataBcShim.js',
+                    'src/scripts/03-*.js',
                     'src/scripts/ngTableFilterRowController.js',
-                    'src/scripts/ngTableFilterRow.directive.js',
-                    'src/scripts/ngTableGroupRowController.js',
-                    'src/scripts/ngTableGroupRow.directive.js',
                     'src/scripts/ngTableSorterRowController.js',
-                    'src/scripts/ngTableSorterRow.directive.js',
-                    'src/scripts/ngTableSelectFilterDs.directive.js',
+                    'src/scripts/04-*.js',
+                    'src/scripts/05-*.js',
+                    'src/scripts/06-*.js',
                     './.temp/scripts/views.js',
-                    'src/scripts/outro.js'
+                    'src/scripts/07-*.js'
                 ],
                 dest: './dist/ng-table.js'
             }

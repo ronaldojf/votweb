@@ -15,14 +15,15 @@ angular
         }, {
           filterDelay: typeof(config.filterDelay) == 'undefined' ? 0 : config.filterDelay,
           total: 0,
-          getData: function(params) {
+          getData: function($defer, params) {
             var request = params.url();
             request.format = 'json';
 
             ngTable.loadingTable = true;
-            return $http.get(config.url, {params: request})
+            $http.get(config.url, {params: request})
               .success(function(data) {
                 params.total(data.total);
+                $defer.resolve(data.results);
                 if (config.successCallback) {
                   config.successCallback(data);
                 }

@@ -7,43 +7,10 @@ Code licensed under New BSD License.
 This directive allow to liven your tables. It support sorting, filtering and pagination.
 Header row with titles and filters automatic generated on compilation step.
 
-
-## Upgrading from an earlier version?
-
-### Upgrade from 0.8.3
-
-It's recommended to upgrade in two jumps:
-1. Upgrade to version 1.0.0-beta.9, making any changes to your application code neccessary to work with this version
-2. Refactor your application to remove any code that depended on depreciated behaviours that where removed in the 1.0.0 release
-3. Install 1.0.0 (should now be a drop in replacement for 1.0.0-beta.9)
-
-
-### Upgrade from version earlier than 0.8.3
-
-It's recommended to upgrade in three jumps:
-1. Upgrade to version 0.8.3, making any changes to your application code neccessary to work with this version
-    * EG: `bower install ng-table#0.8.3 --save`
-3. Follow the guide above to upgrade from 0.8.3 -> 1.0.0-beta.9 -> 1.0.0
-
-**Tips**
-* To install an earlier version of ng-table (1.0.0-beta.9 in this case): `bower install ng-table#1.0.0-beta.9 --save`
-* Read the [CHANGELOG.md](CHANGELOG.md). Each release details the breaking changes and migration guidance
-
-
-
-## Installing
-
-**Bower**
+## Installing via Bower
 ```
-bower install ng-table --save
+bower install ng-table
 ```
-
-**NPM**
-```
-npm install ng-table --save
-```
-**IMPORTANT: the version on npm is out of date**. Waiting on project owner to grant publish rights.
-
 
 ## Development
 We use Karma to ensure the quality of the code. The easiest way to run these checks is to use grunt:
@@ -52,14 +19,13 @@ We use Karma to ensure the quality of the code. The easiest way to run these che
 npm install -g grunt-cli
 npm install && bower install
 grunt
-npm test
 ```
 
 The karma task will try to open Firefox and Chrome as browser in which to run the tests. Make sure this is available or change the configuration in `karma.conf.js`
 
 
 ## Configuring ng-table
-For a list of configuration options available, see [examples website](http://ng-table.com/)
+For a list of configuration options available, see [Configuring your table with NgTableParams](https://github.com/esvit/ng-table/wiki/Configuring-your-table-with-ngTableParams)
 
 
 ## Updates
