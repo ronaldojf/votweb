@@ -83,7 +83,7 @@ $(function() {
   };
 });
 
-$(document).on('page:change', function() {
+$(document).on('turbolinks:load', function() {
   window.app = new window.App();
 
   if ($('[fake-password]').length > 0 && !$($('[fake-password]').parent()).hasClass('has-error')) {
@@ -144,7 +144,7 @@ $(document).on('page:change', function() {
   };
 });
 
-$(document).on('page:before-change', function(e) {
+$(document).on('turbolinks:before-visit', function(e) {
   if (window._isDirty && !confirm(window.I18n.t('js.forms.unsaved.quit'))) {
     e.preventDefault();
   } else {
@@ -152,12 +152,12 @@ $(document).on('page:before-change', function(e) {
   }
 });
 
-$(document).on('page:change', function(e) {
-  $('div.form form *').on('change', function() {
+$(document).on('turbolinks:load', function(e) {
+  $('div.protected form *').on('change', function() {
     app.markDirty();
   });
 
-  $('div.form form').on('submit', function() {
+  $('div.protected form').on('submit', function() {
     app.clearDirty();
   });
 });

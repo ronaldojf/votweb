@@ -1,5 +1,5 @@
 $(function() {
-  window.Turbolinks.enableProgressBar();
+  Turbolinks.start()
 
   window.localizedPath = function(args) {
     var pathPrefix = [].shift.apply(arguments);

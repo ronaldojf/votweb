@@ -12,9 +12,9 @@
     </title>
 
     <%= favicon_link_tag 'favicon.png' %>
-    <%= stylesheet_link_tag    'admin/application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= stylesheet_link_tag    'admin/application', media: 'all', 'data-turbolinks-track' => 'reload' %>
 
-    <%= javascript_include_tag 'i18n', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'i18n', 'data-turbolinks-track' => 'reload' %>
 
     <script type="text/javascript">
       window.I18n.defaultLocale = '<%= I18n.default_locale %>';
@@ -22,17 +22,7 @@
       window.I18n.pathLocale = '<%= I18n.locale.to_s.underscore %>';
     </script>
 
-    <%= javascript_include_tag 'admin/application', 'data-turbolinks-track' => true %>
-
-    <!--[if lt IE 9]>
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
-      <script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-shim.js"></script>
-      <script>
-        document.createElement('ui-select');
-        document.createElement('ui-select-match');
-        document.createElement('ui-select-choices');
-      </script>
-    <![endif]-->
+    <%= javascript_include_tag 'admin/application', 'data-turbolinks-track' => 'reload' %>
   </head>
 
   <%= content_for?(:content) ? yield(:content) : yield %>

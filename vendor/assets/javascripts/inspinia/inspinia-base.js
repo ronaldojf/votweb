@@ -5,7 +5,7 @@
  *
  */
 
-$(document).on('page:change', function () {
+$(document).on('turbolinks:load', function () {
   // Add body-small class if window less than 768px
   if ($(this).width() < 769) {
     $('body').addClass('body-small');
@@ -138,7 +138,7 @@ $(document).on('page:change', function () {
     }
   });
 
-  $(window).bind("page:load load resize scroll", function() {
+  $(window).bind("turbolinks:load resize scroll", function() {
     if(!$("body").hasClass('body-small')) {
       window.fixHeight();
     }
@@ -165,7 +165,7 @@ $(window).bind("resize", function () {
 
 // Local Storage functions
 // Set proper body class and plugins based on user configuration
-$(document).on('page:change', function () {
+$(document).on('turbolinks:load', function () {
   if (localStorageSupport) {
 
     var collapse = localStorage.getItem("collapse_menu");

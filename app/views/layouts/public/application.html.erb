@@ -12,9 +12,9 @@
     </title>
 
     <%= favicon_link_tag 'favicon.png' %>
-    <%= stylesheet_link_tag    'public/application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= stylesheet_link_tag    'public/application', media: 'all', 'data-turbolinks-track' => 'reload' %>
 
-    <%= javascript_include_tag 'i18n', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'i18n', 'data-turbolinks-track' => 'reload' %>
 
     <script type="text/javascript">
       window.I18n.defaultLocale = '<%= I18n.default_locale %>';
@@ -22,7 +22,7 @@
       window.I18n.pathLocale = '<%= I18n.locale.to_s.underscore %>';
     </script>
 
-    <%= javascript_include_tag 'public/application', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'public/application', 'data-turbolinks-track' => 'reload' %>
 
     <!-- Substituir UA-XXXXXX-X pelo ID da aplicação no Analytics -->
     <script>
