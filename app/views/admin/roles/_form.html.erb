@@ -23,6 +23,8 @@
               collection: @role_service.actions(ff.object.subject) %>
           </div>
         </div>
+
+        <%= content_tag :div, '', class: 'clearfix' if ((ff.index + 1) % 2.0).zero? %>
       <% end %>
     </div>
 

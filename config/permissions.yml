@@ -12,3 +12,5 @@ Administrator:
   - destroy
 
 Role: *default_actions
+Alderman: *default_actions
+Party: *default_actions

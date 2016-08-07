@@ -1,8 +1,8 @@
-if ENV['coverage'] == 'on'
-  require 'simplecov'
-  SimpleCov.start 'rails' do
-    minimum_coverage 85
-  end
+require 'simplecov'
+require 'paperclip/matchers'
+
+SimpleCov.start 'rails' do
+  add_group 'Services', 'app/services'
 end
 
 RSpec.configure do |config|
@@ -20,5 +20,19 @@ RSpec.configure do |config|
   end
   if config.files_to_run.one?
     config.default_formatter = 'doc'
+  end
+
+  config.around(:each) do |example|
+    if example.metadata[:vcr] == false # Isso mesmo, tem que ser igual a false, outro valor não pode
+      WebMock.allow_net_connect!
+      VCR.turned_off { example.run }
+      WebMock.disable_net_connect!
+    else
+      example.run
+    end
+  end
+
+  config.after(:suite) do
+    FileUtils.rm_rf(Dir["#{Rails.root}/spec/test_files/"])
   end
 end

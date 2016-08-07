@@ -1,3 +1,7 @@
+// Plugins
+@import 'plugins/chosen/chosen';
+@import 'plugins/sweetalert/sweetalert';
+
 // Variables, Mixins
 @import "base/variables";
 @import "base/mixins";
@@ -22,12 +26,5 @@
 
 // Media query style
 @import "base/media";
-
-// Custom style
-@import "base/custom";
-
-// Plugins
-@import 'plugins/chosen/chosen';
-@import 'plugins/sweetalert/sweetalert';
 
 @import 'animate';

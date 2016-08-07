@@ -6,7 +6,9 @@ Rails.application.routes.draw do
       resources :administrators do
         patch :unlock
       end
-      resources :roles
+
+      resources :roles, :aldermen, :parties
+
       root 'home#index'
     end
 

@@ -24,6 +24,7 @@
 //= require angular/angular
 //= require angular-locale-pt-br/angular-locale_pt-br
 //= require ng-table/dist/ng-table.min
+//= require ng-cropper/dist/ngCropper.all.min
 
 //= require angular-chosen-localytics/chosen
 //= require ng-rails-csrf

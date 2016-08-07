@@ -9,11 +9,12 @@ pt-BR:
       short: *app_name
     modules:
       home: Home
-      profiles: Perfil
+      profile: Perfil
       sessions: Login
       administrators: Administradores
       roles: Funções
-      profile: Perfil
+      aldermen: Vereadores(as)
+      parties: Partidos
     footers:
       short_html: '<strong>%{app}</strong> &copy; %{year}'
 
@@ -84,11 +85,13 @@ pt-BR:
   routes:
     new: novo
     edit: editar
-    administrators: administradores
-    roles: funcoes
     profile: perfil
     sign_in: entrar
     sign_out: sair
+    administrators: administradores
+    roles: funcoes
+    aldermen: vereadores
+    parties: partidos
 
   models_and_attributes: &models_and_attributes
     models: &models
@@ -101,6 +104,12 @@ pt-BR:
       permission:
         one: Permissão
         other: Permissões
+      alderman:
+        one: Vereador(a)
+        other: Vereadores(as)
+      party:
+        one: Partido
+        other: Partidos
     attributes: &attributes
       user: &user
         email: E-Mail
@@ -117,12 +126,24 @@ pt-BR:
       permission:
         actions: Ações
         subject: Contexto
+      alderman:
+        name: Nome Completo
+        voter_registration: Título de eleitor
+        gender: Sexo
+        party_id: Partido
+        party: Partido
+        avatar: Avatar
+      party:
+        name: Nome
+        abbreviation: Sigla
+        logo: Logo
 
   enums:
     names: &enum_names
       gender: Sexo
     items: &enum_items
       gender:
+        unspecified: Não informado
         male: Masculino
         female: Feminino
     specific_items: &enum_specific_items

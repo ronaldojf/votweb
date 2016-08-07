@@ -70,7 +70,7 @@
             <table ng-table="tableParams" template-pagination="/angular-templates/ng-table/paginate" class="table table-striped table-hover">
               <tr data-href="{{role.url}}" ng-repeat="role in $data track by role.id">
 
-                <td data-title="'<%= t('activerecord.attributes.role.description') %>'" sortable="'description'">
+                <td data-title="'<%= t('activerecord.attributes.role.description') %>'" data-sortable="'description'">
                   {{role.description}}
                 </td>
 

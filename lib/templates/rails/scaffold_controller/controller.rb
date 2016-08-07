@@ -32,7 +32,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 
   def destroy
     @<%= orm_instance.destroy %>
-    respond_with @<%= singular_table_name %>, location: -> { <%= index_helper %>_path }
+    respond_with @<%= singular_table_name %>, location: -> { admin_<%= index_helper %>_path }
   end
 
   private

@@ -303,161 +303,162 @@ ul.notes li div {
   -webkit-transition: -webkit-transform 0.15s linear;
 }
 
-/* FILE MANAGER */
-
-.file-box {
-  float: left;
-  width: 220px;
-}
-
-.file-manager h5 {
-  text-transform: uppercase;
-}
-
+/* FILE MANAGER (MUST BE INSIDE .file-manager to not affect simple-form's file input) */
 .file-manager {
-  list-style: none outside none;
-  margin: 0;
-  padding: 0;
-}
+  .file-box {
+    float: left;
+    width: 220px;
+  }
 
-.folder-list li a {
-  color: #666666;
-  display: block;
-  padding: 5px 0;
-}
+  .file-manager h5 {
+    text-transform: uppercase;
+  }
 
-.folder-list li {
-  border-bottom: 1px solid $border-color;
-  display: block;
-}
+  .file-manager {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+  }
 
-.folder-list li i {
-  margin-right: 8px;
-  color: #3d4d5d;
-}
+  .folder-list li a {
+    color: #666666;
+    display: block;
+    padding: 5px 0;
+  }
 
-.category-list li a {
-  color: #666666;
-  display: block;
-  padding: 5px 0;
-}
+  .folder-list li {
+    border-bottom: 1px solid $border-color;
+    display: block;
+  }
 
-.category-list li {
-  display: block;
-}
+  .folder-list li i {
+    margin-right: 8px;
+    color: #3d4d5d;
+  }
 
-.category-list li i {
-  margin-right: 8px;
-  color: #3d4d5d;
-}
+  .category-list li a {
+    color: #666666;
+    display: block;
+    padding: 5px 0;
+  }
 
-.category-list li a .text-navy {
-  color: $navy;
-}
+  .category-list li {
+    display: block;
+  }
 
-.category-list li a .text-primary {
-  color: $blue;
-}
+  .category-list li i {
+    margin-right: 8px;
+    color: #3d4d5d;
+  }
 
-.category-list li a .text-info {
-  color: $lazur;
-}
+  .category-list li a .text-navy {
+    color: $navy;
+  }
 
-.category-list li a .text-danger {
-  color: #ef5352;
-}
+  .category-list li a .text-primary {
+    color: $blue;
+  }
 
-.category-list li a .text-warning {
-  color: #f8ac59;
-}
+  .category-list li a .text-info {
+    color: $lazur;
+  }
 
-.file-manager h5.tag-title {
-  margin-top: 20px;
-}
+  .category-list li a .text-danger {
+    color: #ef5352;
+  }
 
-.tag-list li {
-  float: left;
-}
+  .category-list li a .text-warning {
+    color: #f8ac59;
+  }
 
-.tag-list li a {
-  font-size: 10px;
-  background-color: $gray;
-  padding: 5px 12px;
-  color: inherit;
-  border-radius: 2px;
-  border: 1px solid $border-color;
-  margin-right: 5px;
-  margin-top: 5px;
-  display: block;
-}
+  .file-manager h5.tag-title {
+    margin-top: 20px;
+  }
 
-.file {
-  border: 1px solid $border-color;
-  padding: 0;
-  background-color: white;
-  position: relative;
-  margin-bottom: 20px;
-  margin-right: 20px;
-}
+  .tag-list li {
+    float: left;
+  }
 
-.file-manager .hr-line-dashed {
-  margin: 15px 0;
-}
+  .tag-list li a {
+    font-size: 10px;
+    background-color: $gray;
+    padding: 5px 12px;
+    color: inherit;
+    border-radius: 2px;
+    border: 1px solid $border-color;
+    margin-right: 5px;
+    margin-top: 5px;
+    display: block;
+  }
 
-.file .icon, .file .image {
-  height: 100px;
-  overflow: hidden;
-}
+  .file {
+    border: 1px solid $border-color;
+    padding: 0;
+    background-color: white;
+    position: relative;
+    margin-bottom: 20px;
+    margin-right: 20px;
+  }
 
-.file .icon {
-  padding: 15px 10px;
-  text-align: center;
-}
+  .file-manager .hr-line-dashed {
+    margin: 15px 0;
+  }
 
-.file-control {
-  color: inherit;
-  font-size: 11px;
-  margin-right: 10px;
-}
+  .file .icon, .file .image {
+    height: 100px;
+    overflow: hidden;
+  }
 
-.file-control.active {
-  text-decoration: underline;
-}
+  .file .icon {
+    padding: 15px 10px;
+    text-align: center;
+  }
 
-.file .icon i {
-  font-size: 70px;
-  color: #dadada;
-}
+  .file-control {
+    color: inherit;
+    font-size: 11px;
+    margin-right: 10px;
+  }
 
-.file .file-name {
-  padding: 10px;
-  background-color: #f8f8f8;
-  border-top: 1px solid $border-color;
-}
+  .file-control.active {
+    text-decoration: underline;
+  }
 
-.file-name small {
-  color: $text-color;
-}
+  .file .icon i {
+    font-size: 70px;
+    color: #dadada;
+  }
 
-.corner {
-  position: absolute;
-  display: inline-block;
-  width: 0;
-  height: 0;
-  line-height: 0;
-  border: 0.6em solid transparent;
-  border-right: 0.6em solid #f1f1f1;
-  border-bottom: 0.6em solid #f1f1f1;
-  right: 0em;
-  bottom: 0em;
-}
+  .file .file-name {
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-top: 1px solid $border-color;
+  }
 
-a.compose-mail {
-  padding: 8px 10px;
-}
+  .file-name small {
+    color: $text-color;
+  }
 
-.mail-search {
-  max-width: 300px;
+  .corner {
+    position: absolute;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    line-height: 0;
+    border: 0.6em solid transparent;
+    border-right: 0.6em solid #f1f1f1;
+    border-bottom: 0.6em solid #f1f1f1;
+    right: 0em;
+    bottom: 0em;
+  }
+
+  a.compose-mail {
+    padding: 8px 10px;
+  }
+
+  .mail-search {
+    max-width: 300px;
+  }
 }
 
 /* PROFILE */

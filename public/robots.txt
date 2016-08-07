@@ -2,3 +2,5 @@ User-agent: *
 Disallow: /admin/
 Disallow: /auth/
 Disallow: /logout
+Disallow: /system
+Disallow: /angular-templates

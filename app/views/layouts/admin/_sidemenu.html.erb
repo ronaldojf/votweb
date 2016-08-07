@@ -40,6 +40,20 @@
           <span class="nav-label"><%= t('models_and_attributes.models.role.other') %></span>
         <% end %>
       <% end if can?(:read, Role) %>
+
+      <%= content_tag(:li, class: class_for_item_menu('aldermen')) do %>
+        <%= link_to admin_aldermen_path do  %>
+          <i class="fa fa-group"></i>
+          <span class="nav-label"><%= t('models_and_attributes.models.alderman.other') %></span>
+        <% end %>
+      <% end if can?(:read, Alderman) %>
+
+      <%= content_tag(:li, class: class_for_item_menu('parties')) do %>
+        <%= link_to admin_parties_path do  %>
+          <i class="fa fa-flag"></i>
+          <span class="nav-label"><%= t('models_and_attributes.models.party.other') %></span>
+        <% end %>
+      <% end if can?(:read, Party) %>
     </ul>
   </div>
 </nav>

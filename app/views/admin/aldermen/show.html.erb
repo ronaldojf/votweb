@@ -1,0 +1,74 @@
+<% content_for :sub_header do %>
+  <div class="col-sm-6">
+    <h2><%= t('models_and_attributes.models.alderman.other') %></h2>
+    <ol class="breadcrumb">
+      <li><%= link_to t('page.modules.home'), [:admin, :root] %></li>
+      <li><%= link_to t('page.modules.aldermen'), [:admin, :aldermen] %></li>
+      <li class="active">
+        <strong><%= t('actions.show') %></strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-sm-6 text-right">
+    <%= link_to [:new, :admin, :alderman], class: 'btn btn-w-s btn-primary m-t-md' do %>
+      <i class="fa fa-plus"></i><br/>
+      <%= t('buttons.new') %>
+    <% end if can?(:create, Alderman) %>
+
+    <%= link_to [:edit, :admin, @alderman], class: 'btn btn-w-s btn-info m-t-md' do %>
+      <i class="fa fa-edit"></i><br/>
+      <%= t('buttons.edit') %>
+    <% end if can?(:update, Alderman) %>
+
+    <%= link_to [:admin, @alderman], class: 'btn btn-w-s btn-danger m-t-md',
+          method: :delete, data: {confirm: t('confirm.delete_record')} do %>
+      <i class="fa fa-trash"></i><br/>
+      <%= t('buttons.destroy') %>
+    <% end if can?(:destroy, Alderman) %>
+
+    <%= link_to [:admin, :aldermen], class: 'btn btn-w-s btn-white m-t-md m-l-sm' do %>
+      <i class="fa fa-reply"></i><br/>
+      <%= t('buttons.back') %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= flash_messages %>
+<div class="row responsive-padding">
+  <div class="col-xs-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>
+          <%= t('view.keywords.informations') %>
+        </h5>
+      </div>
+
+      <div class="ibox-content">
+        <ul class="todo-list">
+
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.alderman.name') %>:</div>
+            <div class="col-sm-9"><%= @alderman.name %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.alderman.voter_registration') %>:</div>
+            <div class="col-sm-9"><%= @alderman.voter_registration %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.alderman.gender') %>:</div>
+            <div class="col-sm-9"><%= t(@alderman.gender, scope: [:enums, :items, :gender]) %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.alderman.party') %>:</div>
+            <div class="col-sm-9"><%= link_to "#{@alderman.party.abbreviation} - #{@alderman.party.name}", admin_party_path(@alderman.party) %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.alderman.avatar') %>:</div>
+            <div class="col-sm-9"><%= image_tag @alderman.avatar %></div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -71,7 +71,7 @@
               <tr data-href="{{<%= singular_table_name %>.url}}" ng-repeat="<%= singular_table_name %> in $data track by <%= singular_table_name %>.id">
 
 <% attributes.reject(&:password_digest?).each do |attribute| -%>
-                <td data-title="'<%%= t('activerecord.attributes.<%= singular_table_name %>.<%= attribute.name %>') %>'" sortable="'<%= attribute.name %>'">
+                <td data-title="'<%%= t('activerecord.attributes.<%= singular_table_name %>.<%= attribute.name %>') %>'" data-sortable="'<%= attribute.name %>'">
                   {{<%= singular_table_name %>.<%= attribute.name[0] + attribute.name.camelize[1..-1] %>}}
                 </td>
 <% end -%>

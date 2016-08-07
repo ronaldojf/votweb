@@ -1,0 +1,66 @@
+<% content_for :sub_header do %>
+  <div class="col-sm-6">
+    <h2><%= t('models_and_attributes.models.party.other') %></h2>
+    <ol class="breadcrumb">
+      <li><%= link_to t('page.modules.home'), [:admin, :root] %></li>
+      <li><%= link_to t('page.modules.parties'), [:admin, :parties] %></li>
+      <li class="active">
+        <strong><%= t('actions.show') %></strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-sm-6 text-right">
+    <%= link_to [:new, :admin, :party], class: 'btn btn-w-s btn-primary m-t-md' do %>
+      <i class="fa fa-plus"></i><br/>
+      <%= t('buttons.new') %>
+    <% end if can?(:create, Party) %>
+
+    <%= link_to [:edit, :admin, @party], class: 'btn btn-w-s btn-info m-t-md' do %>
+      <i class="fa fa-edit"></i><br/>
+      <%= t('buttons.edit') %>
+    <% end if can?(:update, Party) %>
+
+    <%= link_to [:admin, @party], class: 'btn btn-w-s btn-danger m-t-md',
+          method: :delete, data: {confirm: t('confirm.delete_record')} do %>
+      <i class="fa fa-trash"></i><br/>
+      <%= t('buttons.destroy') %>
+    <% end if can?(:destroy, Party) %>
+
+    <%= link_to [:admin, :parties], class: 'btn btn-w-s btn-white m-t-md m-l-sm' do %>
+      <i class="fa fa-reply"></i><br/>
+      <%= t('buttons.back') %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= flash_messages %>
+<div class="row responsive-padding">
+  <div class="col-xs-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>
+          <%= t('view.keywords.informations') %>
+        </h5>
+      </div>
+
+      <div class="ibox-content">
+        <ul class="todo-list">
+
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.party.name') %>:</div>
+            <div class="col-sm-9"><%= @party.name %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.party.abbreviation') %>:</div>
+            <div class="col-sm-9"><%= @party.abbreviation %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.party.logo') %>:</div>
+            <div class="col-sm-9"><%= image_tag @party.logo %></div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

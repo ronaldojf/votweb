@@ -70,10 +70,10 @@
             <table ng-table="tableParams" template-pagination="/angular-templates/ng-table/paginate" class="table table-striped table-hover">
               <tr data-href="{{administrator.url}}" ng-repeat="administrator in $data track by administrator.id">
 
-                <td data-title="'<%= t('activerecord.attributes.administrator.name') %>'" sortable="'name'">
+                <td data-title="'<%= t('activerecord.attributes.administrator.name') %>'" data-sortable="'name'">
                   {{administrator.name}}
                 </td>
-                <td data-title="'<%= t('activerecord.attributes.administrator.email') %>'" sortable="'email'">
+                <td data-title="'<%= t('activerecord.attributes.administrator.email') %>'" data-sortable="'email'">
                   {{administrator.email}}
                 </td>
 

@@ -24,6 +24,7 @@ gem 'responders',             '2.2.0'
 gem 'route_translator',       '5.0.1'
 gem 'cancancan',              '1.15.0'
 gem 'kaminari-bootstrap',     '3.0.1'
+gem 'paperclip',              '5.0.0'
 
 gem 'bootstrap-sass',         '3.3.6'
 gem 'font-awesome-sass',      '4.6.2'

@@ -15,7 +15,7 @@ pt-BR:
         password: Digite a Senha
         password_confirmation: Digite a Confirmação de Senha
         current_password: Digite a Senha Atual
-        cpf: Digite o CPF
+        voter_registration: Digite o número do título de eleitor
         gender: Sexo
         birth_date: Data de Nascimento
         phone: Digite o Telefone

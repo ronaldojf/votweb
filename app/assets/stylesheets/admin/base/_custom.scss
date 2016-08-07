@@ -47,6 +47,7 @@
 }
 
 .m-none { margin: 0; }
+.p-xss { padding: 5px; }
 
 .input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group { z-index: 0; }
 
@@ -61,6 +62,17 @@
 .line-height-xs { line-height: 2 !important; }
 .line-height-sm { line-height: 3 !important; }
 .overflow-hidden { overflow: hidden; }
+
+.note-editor .panel-body { min-height: 250px; }
+.note-editor { border: 1px solid #f5f5f5; }
+
+.td-sm { max-width: 35px; }
+
+td.td-image {
+  img { width: 50px; }
+  width: 60px;
+  text-align: center;
+}
 
 .chosen-container-multi {
   .search-choice-close {
@@ -115,8 +127,6 @@ textarea {
   }
 }
 
-.todo-list > li { word-break: break-all; }
-
 .chosen-container {
   .search-choice-close {
     margin-top: 4px;
@@ -146,11 +156,26 @@ textarea {
   overflow: auto;
 }
 
-.td-sm { max-width: 35px; }
-
 .ui-sortable .drag-handler:hover {
   cursor: move;
   background-color: rgba(231, 234, 236, 0.5);
 }
 
-.note-editor .panel-body { min-height: 250px; }
+.drag-handler:hover {
+  color: $navy;
+}
+
+.chosen-container {
+  .search-choice-close {
+    margin-top: 4px;
+    cursor: pointer;
+  }
+  b {
+    margin-top: 4px;
+    cursor: pointer;
+  }
+}
+
+.input-group-addon.iCheck-wrapper {
+  padding: 5px 12px !important;
+}
