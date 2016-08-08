@@ -58,7 +58,7 @@ end
 ############## PARTIES - END #################
 
 
-############## ALDERMEN - BEGIN #################
+############## COUNCILLOR - BEGIN #################
 
 [
   { name: 'Fernando Augusto Barp', avatar: '/uploads/councillors/3/councillor_c176e04ec4f7cd435186350f4ba3b233.jpg', party: 'PCdoB', voter_registration: '043824130973' },
@@ -78,16 +78,16 @@ end
   { name: 'Anacleto Zanella', avatar: '/uploads/councillors/22/councillor_a15fd219464cabd127b442ffbef131e1.jpg', party: 'PT', voter_registration: '32944040477' },
   { name: 'Vânia Isabel Smaniotto Miola', avatar: '/uploads/councillors/23/councillor_517ddd0816d56b2d2fea113270fb8917.jpg', party: 'PMDB', voter_registration: '025760750400' },
   { name: 'Edgar Paulo Marmentini', avatar: '/uploads/councillors/24/councillor_2dba627721ac3a33d45545322957d8e1.jpg', party: 'PMDB', voter_registration: '43242010442' }
-].each do |alderman|
-  unless Alderman.where(voter_registration: alderman[:voter_registration]).exists?
-    puts "==> Criando vereador(a) #{alderman[:name]}"
+].each do |councillor|
+  unless Councillor.where(voter_registration: councillor[:voter_registration]).exists?
+    puts "==> Criando vereador(a) #{councillor[:name]}"
 
-    attributes = alderman.dup
+    attributes = councillor.dup
     attributes[:party] = Party.find_by!(abbreviation: attributes[:party])
     attributes[:avatar] = open('http://www.camaraerechim.rs.gov.br' + attributes[:avatar]) rescue no_photo
 
-    Alderman.create! attributes
+    Councillor.create! attributes
   end
 end
 
-############## ALDERMEN - END #################
+############## COUNCILLOR - END #################

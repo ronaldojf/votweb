@@ -1,0 +1,66 @@
+<% content_for :sub_header do %>
+  <div class="col-sm-6">
+    <h2><%= t('models_and_attributes.models.plenary_session.other') %></h2>
+    <ol class="breadcrumb">
+      <li><%= link_to t('page.modules.home'), [:admin, :root] %></li>
+      <li><%= link_to t('page.modules.plenary_sessions'), [:admin, :plenary_sessions] %></li>
+      <li class="active">
+        <strong><%= t('actions.show') %></strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-sm-6 text-right">
+    <%= link_to [:new, :admin, :plenary_session], class: 'btn btn-w-s btn-primary m-t-md' do %>
+      <i class="fa fa-plus"></i><br/>
+      <%= t('buttons.new') %>
+    <% end if can?(:create, PlenarySession) %>
+
+    <%= link_to [:edit, :admin, @plenary_session], class: 'btn btn-w-s btn-info m-t-md' do %>
+      <i class="fa fa-edit"></i><br/>
+      <%= t('buttons.edit') %>
+    <% end if can?(:update, PlenarySession) %>
+
+    <%= link_to [:admin, @plenary_session], class: 'btn btn-w-s btn-danger m-t-md',
+          method: :delete, data: {confirm: t('confirm.delete_record')} do %>
+      <i class="fa fa-trash"></i><br/>
+      <%= t('buttons.destroy') %>
+    <% end if can?(:destroy, PlenarySession) %>
+
+    <%= link_to [:admin, :plenary_sessions], class: 'btn btn-w-s btn-white m-t-md m-l-sm' do %>
+      <i class="fa fa-reply"></i><br/>
+      <%= t('buttons.back') %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= flash_messages %>
+<div class="row responsive-padding">
+  <div class="col-xs-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>
+          <%= t('view.keywords.informations') %>
+        </h5>
+      </div>
+
+      <div class="ibox-content">
+        <ul class="todo-list">
+
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.title') %>:</div>
+            <div class="col-sm-9"><%= @plenary_session.title %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.start_at') %>:</div>
+            <div class="col-sm-9"><%= l(@plenary_session.start_at, format: :long) %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.end_at') %>:</div>
+            <div class="col-sm-9"><%= l(@plenary_session.end_at, format: :long) %></div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<%= simple_form_for([:admin, @surrogate]) do |f| %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :name, input_html: { autofocus: true } %>
+      </div>
+
+      <div class="col-md-6">
+        <%= f.input :voter_registration %>
+      </div>
+    </div>
+
+    <%= f.submit '', class: 'hide' %>
+  </div>
+<% end %>

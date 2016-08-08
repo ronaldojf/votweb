@@ -1,0 +1,74 @@
+<% content_for :sub_header do %>
+  <div class="col-sm-6">
+    <h2><%= t('models_and_attributes.models.councillor.other') %></h2>
+    <ol class="breadcrumb">
+      <li><%= link_to t('page.modules.home'), [:admin, :root] %></li>
+      <li><%= link_to t('page.modules.councillors'), [:admin, :councillors] %></li>
+      <li class="active">
+        <strong><%= t('actions.show') %></strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-sm-6 text-right">
+    <%= link_to [:new, :admin, :councillor], class: 'btn btn-w-s btn-primary m-t-md' do %>
+      <i class="fa fa-plus"></i><br/>
+      <%= t('buttons.new') %>
+    <% end if can?(:create, Councillor) %>
+
+    <%= link_to [:edit, :admin, @councillor], class: 'btn btn-w-s btn-info m-t-md' do %>
+      <i class="fa fa-edit"></i><br/>
+      <%= t('buttons.edit') %>
+    <% end if can?(:update, Councillor) %>
+
+    <%= link_to [:admin, @councillor], class: 'btn btn-w-s btn-danger m-t-md',
+          method: :delete, data: {confirm: t('confirm.delete_record')} do %>
+      <i class="fa fa-trash"></i><br/>
+      <%= t('buttons.destroy') %>
+    <% end if can?(:destroy, Councillor) %>
+
+    <%= link_to [:admin, :councillors], class: 'btn btn-w-s btn-white m-t-md m-l-sm' do %>
+      <i class="fa fa-reply"></i><br/>
+      <%= t('buttons.back') %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= flash_messages %>
+<div class="row responsive-padding">
+  <div class="col-xs-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>
+          <%= t('view.keywords.informations') %>
+        </h5>
+      </div>
+
+      <div class="ibox-content">
+        <ul class="todo-list">
+
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.councillor.name') %>:</div>
+            <div class="col-sm-9"><%= @councillor.name %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.councillor.voter_registration') %>:</div>
+            <div class="col-sm-9"><%= @councillor.voter_registration %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.councillor.gender') %>:</div>
+            <div class="col-sm-9"><%= t(@councillor.gender, scope: [:enums, :items, :gender]) %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.councillor.party') %>:</div>
+            <div class="col-sm-9"><%= link_to "#{@councillor.party.abbreviation} - #{@councillor.party.name}", admin_party_path(@councillor.party) %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.councillor.avatar') %>:</div>
+            <div class="col-sm-9"><%= image_tag @councillor.avatar %></div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

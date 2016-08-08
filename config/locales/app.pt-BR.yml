@@ -13,8 +13,12 @@ pt-BR:
       sessions: Login
       administrators: Administradores
       roles: Funções
-      aldermen: Vereadores(as)
+      councillors: Vereadores(as)
       parties: Partidos
+      surrogates: Suplentes
+      projects: Projetos
+      plenary_sessions: Sessões
+      holds: Cadeiras
     footers:
       short_html: '<strong>%{app}</strong> &copy; %{year}'
 
@@ -90,8 +94,12 @@ pt-BR:
     sign_out: sair
     administrators: administradores
     roles: funcoes
-    aldermen: vereadores
+    councillors: vereadores
     parties: partidos
+    surrogates: suplentes
+    projects: projetos
+    plenary_sessions: sessoes
+    holds: cadeiras
 
   models_and_attributes: &models_and_attributes
     models: &models
@@ -104,12 +112,24 @@ pt-BR:
       permission:
         one: Permissão
         other: Permissões
-      alderman:
+      councillor:
         one: Vereador(a)
         other: Vereadores(as)
       party:
         one: Partido
         other: Partidos
+      surrogate:
+        one: Suplente
+        other: Suplentes
+      project:
+        one: Projeto
+        other: Projetos
+      plenary_session:
+        one: Sessão
+        other: Sessões
+      hold:
+        one: Cadeira
+        other: Cadeiras
     attributes: &attributes
       user: &user
         email: E-Mail
@@ -119,14 +139,14 @@ pt-BR:
         confirmation_token: Link de confirmação
         reset_password_token: Link de troca de senha
       administrator:
-        name: Nome
+        name: Nome Completo
         <<: *user
       role:
         description: Descrição
       permission:
         actions: Ações
         subject: Contexto
-      alderman:
+      councillor:
         name: Nome Completo
         voter_registration: Título de eleitor
         gender: Sexo
@@ -137,6 +157,20 @@ pt-BR:
         name: Nome
         abbreviation: Sigla
         logo: Logo
+      surrogate:
+        name: Nome Completo
+        voter_registration: Título de eleitor
+      project:
+        title: Título
+        author: Autor
+        author_id: Autor
+      plenary_session:
+        title: Título
+        start_at: Início em
+        end_at: Término em
+        period: Período de duração
+      hold:
+        reference_id: Identificação
 
   enums:
     names: &enum_names

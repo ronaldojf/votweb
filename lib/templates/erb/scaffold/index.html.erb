@@ -72,7 +72,7 @@
 
 <% attributes.reject(&:password_digest?).each do |attribute| -%>
                 <td data-title="'<%%= t('activerecord.attributes.<%= singular_table_name %>.<%= attribute.name %>') %>'" data-sortable="'<%= attribute.name %>'">
-                  {{<%= singular_table_name %>.<%= attribute.name[0] + attribute.name.camelize[1..-1] %>}}
+                  {{<%= singular_table_name %>.<%= attribute.name %>}}
                 </td>
 <% end -%>
 

@@ -1,0 +1,16 @@
+<%= simple_form_for([:admin, @project]) do |f| %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :title, input_html: { autofocus: true } %>
+      </div>
+
+      <div class="col-md-6">
+        <%= f.association :author, label_method: :name, input_html: {chosen: '', 'data-placeholder' => t('activerecord.attributes.project.author')} %>
+      </div>
+    </div>
+
+    <%= f.submit '', class: 'hide' %>
+  </div>
+<% end %>

@@ -4,7 +4,7 @@
     <div class="form-inputs" ng-init="party = <%= @party.to_json(only: [], methods: [:logo]) %>">
       <div class="row">
         <div class="col-sm-8">
-          <%= f.input :name %>
+          <%= f.input :name, input_html: { autofocus: true } %>
         </div>
 
         <div class="col-sm-4">

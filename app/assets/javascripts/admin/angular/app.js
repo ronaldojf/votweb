@@ -16,6 +16,7 @@ angular.module('votweb', [
     'ng-rails-csrf',
     'localytics.directives',
     'ngCropper',
+    'daterangepicker',
     'votweb.services',
     'votweb.directives',
     'votweb.filters',

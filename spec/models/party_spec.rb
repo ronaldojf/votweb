@@ -9,7 +9,7 @@ RSpec.describe Party, type: :model do
   it { is_expected.to validate_attachment_presence(:logo) }
   it { is_expected.to validate_attachment_content_type(:logo).allowing('image/png', 'image/jpg', 'image/jpeg') }
   it { is_expected.to validate_attachment_size(:logo).less_than(500.kilobytes) }
-  it { is_expected.to have_many :aldermen }
+  it { is_expected.to have_many :councillors }
 
   describe '.search' do
     subject(:name) { 'Jônh Dóe' }

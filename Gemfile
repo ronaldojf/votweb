@@ -25,6 +25,8 @@ gem 'route_translator',       '5.0.2'
 gem 'cancancan',              '1.15.0'
 gem 'kaminari-bootstrap',     '3.0.1'
 gem 'paperclip',              '5.0.0'
+gem 'date_validator',         '0.9.0'
+gem 'paranoia',               '2.2.0.pre'
 
 gem 'bootstrap-sass',         '3.3.6'
 gem 'font-awesome-sass',      '4.6.2'

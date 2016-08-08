@@ -37,3 +37,37 @@ pt-BR:
       default_multiple_text: Escolha algumas opções...
       default_single_text: Escolha uma opção...
       default_no_result_text: Nenhum resultado encontrado...
+    daterangepicker_default_options:
+      timePicker: yes
+      timePicker24Hour: yes
+      timePickerIncrement: 1
+      locale:
+        format: 'DD/MM/YYYY HH:mm'
+        separator: ' - '
+        applyLabel: 'OK'
+        cancelLabel: 'Cancelar'
+        fromLabel: 'De'
+        toLabel: 'Para'
+        customRangeLabel: 'Customizado'
+        weekLabel: 'S'
+        daysOfWeek:
+          - Dom
+          - Seg
+          - Ter
+          - Qua
+          - Qui
+          - Sex
+          - Sáb
+        monthNames:
+          - Janeiro
+          - Fevereiro
+          - Março
+          - Abril
+          - Maio
+          - Junho
+          - Julho
+          - Agosto
+          - Setembro
+          - Outubro
+          - Novembro
+          - Dezembro

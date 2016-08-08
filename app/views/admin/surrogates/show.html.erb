@@ -1,0 +1,62 @@
+<% content_for :sub_header do %>
+  <div class="col-sm-6">
+    <h2><%= t('models_and_attributes.models.surrogate.other') %></h2>
+    <ol class="breadcrumb">
+      <li><%= link_to t('page.modules.home'), [:admin, :root] %></li>
+      <li><%= link_to t('page.modules.surrogates'), [:admin, :surrogates] %></li>
+      <li class="active">
+        <strong><%= t('actions.show') %></strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-sm-6 text-right">
+    <%= link_to [:new, :admin, :surrogate], class: 'btn btn-w-s btn-primary m-t-md' do %>
+      <i class="fa fa-plus"></i><br/>
+      <%= t('buttons.new') %>
+    <% end if can?(:create, Surrogate) %>
+
+    <%= link_to [:edit, :admin, @surrogate], class: 'btn btn-w-s btn-info m-t-md' do %>
+      <i class="fa fa-edit"></i><br/>
+      <%= t('buttons.edit') %>
+    <% end if can?(:update, Surrogate) %>
+
+    <%= link_to [:admin, @surrogate], class: 'btn btn-w-s btn-danger m-t-md',
+          method: :delete, data: {confirm: t('confirm.delete_record')} do %>
+      <i class="fa fa-trash"></i><br/>
+      <%= t('buttons.destroy') %>
+    <% end if can?(:destroy, Surrogate) %>
+
+    <%= link_to [:admin, :surrogates], class: 'btn btn-w-s btn-white m-t-md m-l-sm' do %>
+      <i class="fa fa-reply"></i><br/>
+      <%= t('buttons.back') %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= flash_messages %>
+<div class="row responsive-padding">
+  <div class="col-xs-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>
+          <%= t('view.keywords.informations') %>
+        </h5>
+      </div>
+
+      <div class="ibox-content">
+        <ul class="todo-list">
+
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.surrogate.name') %>:</div>
+            <div class="col-sm-9"><%= @surrogate.name %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.surrogate.voter_registration') %>:</div>
+            <div class="col-sm-9"><%= @surrogate.voter_registration %></div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

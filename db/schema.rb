@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160731175820) do
+ActiveRecord::Schema.define(version: 20160807210637) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 20160731175820) do
     t.integer "role_id",          null: false
   end
 
-  create_table "aldermen", force: :cascade do |t|
+  create_table "councillors", force: :cascade do |t|
     t.string   "name"
     t.string   "voter_registration"
     t.integer  "gender",              default: 0, null: false
@@ -49,7 +49,14 @@ ActiveRecord::Schema.define(version: 20160731175820) do
     t.datetime "avatar_updated_at"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
-    t.index ["party_id"], name: "index_aldermen_on_party_id", using: :btree
+    t.datetime "deleted_at"
+    t.index ["party_id"], name: "index_councillors_on_party_id", using: :btree
+  end
+
+  create_table "holds", force: :cascade do |t|
+    t.string   "reference_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "parties", force: :cascade do |t|
@@ -72,6 +79,26 @@ ActiveRecord::Schema.define(version: 20160731175820) do
     t.index ["role_id"], name: "index_permissions_on_role_id", using: :btree
   end
 
+  create_table "plenary_sessions", force: :cascade do |t|
+    t.string   "title"
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_plenary_sessions_on_deleted_at", using: :btree
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.integer  "councillor_id"
+    t.string   "title"
+    t.datetime "deleted_at"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["councillor_id"], name: "index_projects_on_councillor_id", using: :btree
+    t.index ["deleted_at"], name: "index_projects_on_deleted_at", using: :btree
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string   "description"
     t.boolean  "full_control", default: false, null: false
@@ -79,6 +106,30 @@ ActiveRecord::Schema.define(version: 20160731175820) do
     t.datetime "updated_at",                   null: false
   end
 
-  add_foreign_key "aldermen", "parties"
+  create_table "surrogates", force: :cascade do |t|
+    t.string   "name"
+    t.string   "voter_registration"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  create_table "votes", force: :cascade do |t|
+    t.integer  "project_id"
+    t.integer  "councillor_id"
+    t.integer  "plenary_session_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["councillor_id"], name: "index_votes_on_councillor_id", using: :btree
+    t.index ["deleted_at"], name: "index_votes_on_deleted_at", using: :btree
+    t.index ["plenary_session_id"], name: "index_votes_on_plenary_session_id", using: :btree
+    t.index ["project_id"], name: "index_votes_on_project_id", using: :btree
+  end
+
+  add_foreign_key "councillors", "parties"
   add_foreign_key "permissions", "roles"
+  add_foreign_key "projects", "councillors"
+  add_foreign_key "votes", "councillors"
+  add_foreign_key "votes", "plenary_sessions"
+  add_foreign_key "votes", "projects"
 end

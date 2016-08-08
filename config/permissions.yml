@@ -12,5 +12,9 @@ Administrator:
   - destroy
 
 Role: *default_actions
-Alderman: *default_actions
+Councillor: *default_actions
 Party: *default_actions
+Surrogate: *default_actions
+Project: *default_actions
+PlenarySession: *default_actions
+Hold: *default_actions

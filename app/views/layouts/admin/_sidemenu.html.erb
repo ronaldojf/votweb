@@ -3,7 +3,7 @@
     <ul class="nav metismenu" id="side-menu">
       <li class="nav-header">
         <div class="dropdown profile-element">
-        <%= link_to admin_root_path do  %>
+          <%= link_to admin_root_path do  %>
             <%= image_tag 'votweb-full.svg', class: 'img-responsive' %>
           <% end %>
           <a href data-toggle="dropdown" class="dropdown-toggle">
@@ -41,12 +41,33 @@
         <% end %>
       <% end if can?(:read, Role) %>
 
-      <%= content_tag(:li, class: class_for_item_menu('aldermen')) do %>
-        <%= link_to admin_aldermen_path do  %>
-          <i class="fa fa-group"></i>
-          <span class="nav-label"><%= t('models_and_attributes.models.alderman.other') %></span>
+      <%= content_tag(:li, class: class_for_item_menu('projects')) do %>
+        <%= link_to admin_projects_path do  %>
+          <i class="fa fa-files-o"></i>
+          <span class="nav-label"><%= t('models_and_attributes.models.project.other') %></span>
         <% end %>
-      <% end if can?(:read, Alderman) %>
+      <% end if can?(:read, Project) %>
+
+      <%= content_tag(:li, class: class_for_item_menu('plenary_sessions')) do %>
+        <%= link_to admin_plenary_sessions_path do  %>
+          <i class="fa fa-bullhorn"></i>
+          <span class="nav-label"><%= t('models_and_attributes.models.plenary_session.other') %></span>
+        <% end %>
+      <% end if can?(:read, PlenarySession) %>
+
+      <%= content_tag(:li, class: class_for_item_menu('surrogates')) do %>
+        <%= link_to admin_surrogates_path do  %>
+          <i class="fa fa-male"></i>
+          <span class="nav-label"><%= t('models_and_attributes.models.surrogate.other') %></span>
+        <% end %>
+      <% end if can?(:read, Surrogate) %>
+
+      <%= content_tag(:li, class: class_for_item_menu('councillors')) do %>
+        <%= link_to admin_councillors_path do  %>
+          <i class="fa fa-group"></i>
+          <span class="nav-label"><%= t('models_and_attributes.models.councillor.other') %></span>
+        <% end %>
+      <% end if can?(:read, Councillor) %>
 
       <%= content_tag(:li, class: class_for_item_menu('parties')) do %>
         <%= link_to admin_parties_path do  %>
@@ -54,6 +75,13 @@
           <span class="nav-label"><%= t('models_and_attributes.models.party.other') %></span>
         <% end %>
       <% end if can?(:read, Party) %>
+
+      <%= content_tag(:li, class: class_for_item_menu('holds')) do %>
+        <%= link_to admin_holds_path do  %>
+          <i class="fa fa-thumb-tack"></i>
+          <span class="nav-label"><%= t('models_and_attributes.models.hold.other') %></span>
+        <% end %>
+      <% end if can?(:read, Hold) %>
     </ul>
   </div>
 </nav>

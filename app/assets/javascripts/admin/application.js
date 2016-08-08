@@ -25,6 +25,10 @@
 //= require angular-locale-pt-br/angular-locale_pt-br
 //= require ng-table/dist/ng-table.min
 //= require ng-cropper/dist/ngCropper.all.min
+//= require moment/moment.js
+//= require moment/locale/pt-br.js
+//= require bootstrap-daterangepicker/daterangepicker.js
+//= require angular-daterangepicker/js/angular-daterangepicker.js
 
 //= require angular-chosen-localytics/chosen
 //= require ng-rails-csrf

@@ -1,0 +1,40 @@
+<% content_for :angular_controller, 'PlenarySessionsFormController' %>
+
+<%= simple_form_for([:admin, @plenary_session]) do |f| %>
+
+  <div class="form-inputs" ng-init="init(<%= @plenary_session.to_json(only: [:start_at, :end_at]) %>)">
+
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.input :title, input_html: { autofocus: true } %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label for="session_period" class="control-label">
+            <%= t('simple_form.required.html') %>
+            <%= t('activerecord.attributes.plenary_session.period') %>
+          </label>
+
+          <div class="input-group date">
+            <input date-range-picker type="text" id="session_period" class="form-control"
+                  placeholder="<%= t('activerecord.attributes.plenary_session.period') %>"
+                  ng-model="plenarySession.period"
+                  options="dateRangePickerOptions">
+
+            <label for="session_period" class="input-group-addon">
+              <i class="fa fa-calendar"></i>
+            </label>
+          </div>
+
+          <input type="hidden" name="plenary_session[start_at]" ng-value="plenarySession.period.startDate.toJSON()">
+          <input type="hidden" name="plenary_session[end_at]" ng-value="plenarySession.period.endDate.toJSON()">
+        </div>
+      </div>
+    </div>
+
+    <%= f.submit '', class: 'hide' %>
+  </div>
+<% end %>

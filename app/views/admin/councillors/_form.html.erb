@@ -1,0 +1,59 @@
+<div ng-controller="ImageUploadController">
+  <%= simple_form_for([:admin, @councillor], multipart: true, html: { 'ng-submit' => 'submitForm($event, this)' }) do |f| %>
+
+    <div class="form-inputs" ng-init="councillor = <%= @councillor.to_json(only: [], methods: [:avatar]) %>">
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :name, input_html: { autofocus: true } %>
+        </div>
+
+        <div class="col-md-6">
+          <%= f.input :voter_registration %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <%= f.input :gender,
+                collection: t('enums.items.gender').invert,
+                input_html: {chosen: '', 'data-placeholder' => t('simple_form.placeholders.defaults.gender')} %>
+        </div>
+
+        <div class="col-sm-6">
+          <%= f.association :party, label_method: -> (party) { "#{party.abbreviation} - #{party.name}" },
+                input_html: {chosen: '', 'data-placeholder' => t('activerecord.attributes.councillor.party_id')} %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12" ng-init="originalImageDataUrl = councillor.avatar">
+          <div class="form-group <%= 'has-error' if @councillor.errors[:avatar].first.present? %>">
+            <label class="control-label"><%= t('simple_form.required.html') %> <%= t('activerecord.attributes.councillor.avatar') %></label><br>
+
+            <label for="inputImage" class="btn btn-white">
+              <input type="file" accept="image/*" id="inputImage" class="hide" onchange="angular.element(this).scope().onFile(this.files[0]);">
+              Enviar nova imagem
+            </label>
+
+            <div ng-if="originalImageDataUrl" class="image-crop">
+              <img ng-if="originalImageDataUrl" ng-src="{{originalImageDataUrl}}"
+                    ng-cropper
+                    ng-cropper-proxy="cropperProxy"
+                    ng-cropper-show="'show'"
+                    ng-cropper-hide="'hide'"
+                    ng-cropper-options="cropperOptions">
+            </div>
+
+            <span class="help-block">
+              <%= @councillor.errors[:avatar].first %>
+            </span>
+          </div>
+
+          <input type="hidden" name="councillor[avatar]" ng-value="imageDataUrl">
+        </div>
+      </div>
+
+      <%= f.submit '', class: 'hide' %>
+    </div>
+  <% end %>
+</div>

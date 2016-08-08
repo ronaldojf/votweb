@@ -1,0 +1,35 @@
+<% content_for :sub_header do %>
+  <div class="col-sm-6">
+    <h2><%= t("models_and_attributes.models.hold.other") %></h2>
+    <ol class="breadcrumb">
+      <li><%= link_to t('page.modules.home'), [:admin, :root] %></li>
+      <li><%= link_to t('page.modules.holds'), [:admin, :holds] %></li>
+      <li class="active">
+        <strong><%= t('actions.edit') %></strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-sm-6 text-right">
+    <%= link_to [:admin, :holds], class: 'btn btn-w-s btn-primary m-t-md',
+          data: {'form-submit' => url_for([:admin, @hold])} do %>
+
+      <i class="fa fa-save"></i><br>
+      <%= t('buttons.save') %>
+    <% end %>
+    <%= link_to [:admin, @hold], class: 'btn btn-w-s btn-warning m-t-md' do %>
+      <i class="fa fa-remove"></i><br>
+      <%= t('buttons.cancel') %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= flash_messages %>
+<div class="row">
+  <div class="col-xs-12 current-responsive-padding">
+    <div class="ibox float-e-margins">
+      <div class="ibox-content protected">
+        <%= render 'form' %>
+      </div>
+    </div>
+  </div>
+</div>
