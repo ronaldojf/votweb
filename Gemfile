@@ -27,6 +27,7 @@ gem 'kaminari-bootstrap',     '3.0.1'
 gem 'paperclip',              '5.0.0'
 gem 'date_validator',         '0.9.0'
 gem 'paranoia',               '2.2.0.pre'
+gem 'rollbar',                '2.12.0'
 
 gem 'bootstrap-sass',         '3.3.6'
 gem 'font-awesome-sass',      '4.6.2'
