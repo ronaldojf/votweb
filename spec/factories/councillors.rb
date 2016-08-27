@@ -1,10 +1,8 @@
-include ActionDispatch::TestProcess
-
 FactoryGirl.define do
   factory :councillor do
     name 'MyString MyString'
-    voter_registration { 12.times.map { rand(10) }.join('') }
+    sequence(:username) { |i| "username#{i}" }
+    password 'passwd321'
     association(:party)
-    avatar File.open(Rails.root.join('spec', 'photos', 'test.png'))
   end
 end

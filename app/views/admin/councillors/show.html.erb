@@ -51,20 +51,20 @@
             <div class="col-sm-9"><%= @councillor.name %></div>
           </li>
           <li class="show-action-label">
-            <div class="col-sm-3"><%= t('activerecord.attributes.councillor.voter_registration') %>:</div>
-            <div class="col-sm-9"><%= @councillor.voter_registration %></div>
-          </li>
-          <li class="show-action-label">
-            <div class="col-sm-3"><%= t('activerecord.attributes.councillor.gender') %>:</div>
-            <div class="col-sm-9"><%= t(@councillor.gender, scope: [:enums, :items, :gender]) %></div>
-          </li>
-          <li class="show-action-label">
             <div class="col-sm-3"><%= t('activerecord.attributes.councillor.party') %>:</div>
             <div class="col-sm-9"><%= link_to "#{@councillor.party.abbreviation} - #{@councillor.party.name}", admin_party_path(@councillor.party) %></div>
           </li>
           <li class="show-action-label">
-            <div class="col-sm-3"><%= t('activerecord.attributes.councillor.avatar') %>:</div>
-            <div class="col-sm-9"><%= image_tag @councillor.avatar %></div>
+            <div class="col-sm-3"><%= t('activerecord.attributes.councillor.username') %>:</div>
+            <div class="col-sm-9"><%= @councillor.username %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.councillor.is_holder') %></div>
+            <div class="col-sm-9"><%= t('enums.items.boolean')[@councillor.is_holder] %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.councillor.is_active') %></div>
+            <div class="col-sm-9"><%= t('enums.items.boolean')[@councillor.is_active] %></div>
           </li>
 
         </ul>

@@ -134,12 +134,12 @@ pt-BR:
       user: &user
         email: E-Mail
         password: Senha
-        password_confirmation: Confirmação de Senha
-        current_password: Senha Atual
+        password_confirmation: Confirmação de senha
+        current_password: Senha atual
         confirmation_token: Link de confirmação
         reset_password_token: Link de troca de senha
       administrator:
-        name: Nome Completo
+        name: Nome completo
         <<: *user
       role:
         description: Descrição
@@ -147,19 +147,18 @@ pt-BR:
         actions: Ações
         subject: Contexto
       councillor:
-        name: Nome Completo
-        voter_registration: Título de eleitor
-        gender: Sexo
+        name: Nome completo
         party_id: Partido
         party: Partido
-        avatar: Avatar
+        is_active: 'Ativo?'
+        is_holder: 'Titular?'
+        username: Usuário
+        password: Senha
+        password_confirmation: Confirmação de senha
       party:
         name: Nome
         abbreviation: Sigla
         logo: Logo
-      surrogate:
-        name: Nome Completo
-        voter_registration: Título de eleitor
       project:
         title: Título
         author: Autor
@@ -169,8 +168,6 @@ pt-BR:
         start_at: Início em
         end_at: Término em
         period: Período de duração
-      hold:
-        reference_id: Identificação
 
   enums:
     names: &enum_names
@@ -180,11 +177,21 @@ pt-BR:
         unspecified: Não informado
         male: Masculino
         female: Feminino
+      boolean:
+        yes: Sim
+        no: Não
     specific_items: &enum_specific_items
       administrator:
         status:
           normal: Normal
           locked: Bloqueado
+      councillor:
+        is_active:
+          yes: Vereador Ativo
+          no: Vereador Inativo
+        is_holder:
+          yes: Titular
+          no: Suplente
 
   errors:
     custom_messages:

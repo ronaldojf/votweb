@@ -3,20 +3,13 @@ require 'rails_helper'
 RSpec.describe Councillor, type: :model do
   it { is_expected.to be_an ApplicationRecord }
   it { is_expected.to validate_presence_of :name }
-  it { is_expected.to validate_presence_of :voter_registration }
-  it { is_expected.to validate_presence_of :gender }
+  it { is_expected.to validate_presence_of :username }
   it { is_expected.to validate_presence_of :party }
-  it { is_expected.to validate_uniqueness_of :voter_registration }
-  it { is_expected.to have_attached_file(:avatar) }
-  it { is_expected.to validate_attachment_presence(:avatar) }
-  it { is_expected.to validate_attachment_content_type(:avatar).allowing('image/png', 'image/jpg', 'image/jpeg') }
-  it { is_expected.to validate_attachment_size(:avatar).less_than(5.megabytes) }
-  it { is_expected.to define_enum_for :gender }
   it { is_expected.to belong_to :party }
 
   describe '.search' do
     subject(:name) { 'Jônh' }
-    subject(:voter_registration) { 12.times.map { rand(10) }.join('') }
+    subject(:username) { 'johntitor' }
 
     context 'quando metade do valor de um atributo é passado' do
       it 'deve retornar o registro que corresponde ao nome' do
@@ -25,10 +18,10 @@ RSpec.describe Councillor, type: :model do
         expect(Councillor.search(name[0..(name.size / 2).to_i])).to eq [councillor]
       end
 
-      it 'deve retornar o registro que corresponde ao título de eleitor' do
-        councillor = create :councillor, voter_registration: voter_registration
+      it 'deve retornar o registro que corresponde ao nome de usuário' do
+        councillor = create :councillor, username: username
 
-        expect(Councillor.search(voter_registration[0..(voter_registration.size / 2).to_i])).to eq [councillor]
+        expect(Councillor.search(username[0..(username.size / 2).to_i])).to eq [councillor]
       end
     end
 
@@ -39,16 +32,16 @@ RSpec.describe Councillor, type: :model do
         expect(Councillor.search(name)).to eq [councillor]
       end
 
-      it 'deve retornar o registro que corresponde ao título de eleitor' do
-        councillor = create :councillor, voter_registration: voter_registration
+      it 'deve retornar o registro que corresponde ao nome de usuário' do
+        councillor = create :councillor, username: username
 
-        expect(Councillor.search(voter_registration)).to eq [councillor]
+        expect(Councillor.search(username)).to eq [councillor]
       end
     end
 
     context 'quando algo que não vai ser encontrado é passado' do
       it 'não retorna nenhum registro' do
-        create :councillor, name: name, voter_registration: voter_registration
+        create :councillor, name: name, username: username
 
         expect(Councillor.search('2339184f9vc8nu2893')).to eq []
       end
@@ -56,28 +49,9 @@ RSpec.describe Councillor, type: :model do
 
     context 'quando nada é passado' do
       it 'retorna todos os registros' do
-        councillor = create :councillor, name: name, voter_registration: voter_registration
+        councillor = create :councillor, name: name, username: username
 
         expect(Councillor.search('')).to eq [councillor]
-      end
-    end
-  end
-
-  describe '.by_gender' do
-    context 'quando o sexo é passado' do
-      it 'retorna os registros do sexo passado' do
-        councillor = create :councillor, gender: :male
-        alderwoman = create :councillor, gender: :female
-
-        expect(Councillor.by_gender('female')).to eq [alderwoman]
-      end
-    end
-
-    context 'quando o sexo não é passado' do
-      it 'deve retornar todos os registros' do
-        councillor = create :councillor, gender: :male
-
-        expect(Councillor.by_gender('')).to eq [councillor]
       end
     end
   end
@@ -98,6 +72,119 @@ RSpec.describe Councillor, type: :model do
         councillor = create :councillor
 
         expect(Councillor.by_party('')).to eq [councillor]
+      end
+    end
+  end
+
+  describe '.active' do
+    it 'deve retornar somente vereadores ativos' do
+      councillor1 = create :councillor, is_active: true
+      councillor2 = create :councillor, is_active: false
+
+      expect(Councillor.active).to eq [councillor1]
+    end
+  end
+
+  describe '.holder' do
+    it 'deve retornar somente vereadores titulares' do
+      councillor1 = create :councillor, is_holder: true
+      councillor2 = create :councillor, is_holder: false
+
+      expect(Councillor.holder).to eq [councillor1]
+    end
+  end
+
+  describe '.surrogate' do
+    it 'deve retornar somente vereadores suplentes' do
+      councillor1 = create :councillor, is_holder: true
+      councillor2 = create :councillor, is_holder: false
+
+      expect(Councillor.surrogate).to eq [councillor2]
+    end
+  end
+
+  describe '#username=' do
+    it 'deve gravar o nome de usuário em letras minúsculas' do
+      councillor = build :councillor, username: 'UPPER_USERNAME'
+
+      expect(councillor.username).to eq 'upper_username'
+    end
+  end
+
+  describe '#email_required?' do
+    it 'deve ser falso' do
+      councillor = build :councillor
+      expect(councillor.email_required?).to be false
+    end
+  end
+
+  describe '#email_changed?' do
+    it 'deve ser falso' do
+      councillor = build :councillor
+      expect(councillor.email_changed?).to be false
+    end
+  end
+
+  describe '.by_active' do
+    context "quando for passado 'true'" do
+      it 'deve retornar todos os vereadores ativos' do
+        councillor1 = create :councillor, is_active: true
+        councillor2 = create :councillor, is_active: false
+
+        expect(Councillor.by_active('true')).to eq [councillor1]
+        expect(Councillor.by_active(true)).to eq [councillor1]
+      end
+    end
+
+    context "quando for passado algo além de 'true'" do
+      it 'deve retornar todos os vereadores inativos' do
+        councillor1 = create :councillor, is_active: true
+        councillor2 = create :councillor, is_active: false
+
+        expect(Councillor.by_active('false')).to eq [councillor2]
+        expect(Councillor.by_active(false)).to eq [councillor2]
+        expect(Councillor.by_active('other')).to eq [councillor2]
+      end
+    end
+
+    context "quando nada for passado" do
+      it 'deve retornar todos os registros' do
+        councillor1 = create :councillor, is_active: true
+        councillor2 = create :councillor, is_active: false
+
+        expect(Councillor.by_active('')).to include(councillor1, councillor2)
+      end
+    end
+  end
+
+  describe '.by_holder' do
+    context "quando for passado 'true'" do
+      it 'deve retornar todos os vereadores titulares' do
+        councillor1 = create :councillor, is_holder: true
+        councillor2 = create :councillor, is_holder: false
+
+        expect(Councillor.by_holder('true')).to eq [councillor1]
+        expect(Councillor.by_holder(true)).to eq [councillor1]
+      end
+    end
+
+    context "quando for passado algo além de 'true'" do
+      it 'deve retornar todos os vereadores suplentes' do
+        councillor1 = create :councillor, is_holder: true
+        councillor2 = create :councillor, is_holder: false
+
+        expect(Councillor.by_holder('false')).to eq [councillor2]
+        expect(Councillor.by_holder(false)).to eq [councillor2]
+        expect(Councillor.by_holder('other')).to eq [councillor2]
+      end
+    end
+
+    context "quando nada for passado" do
+      it 'deve retornar todos os registros' do
+        councillor1 = create :councillor, is_holder: true
+        councillor2 = create :councillor, is_holder: false
+
+        expect(Councillor.by_holder(nil)).to include(councillor1, councillor2)
       end
     end
   end

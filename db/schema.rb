@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160807210637) do
+ActiveRecord::Schema.define(version: 20160827125425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,23 +40,15 @@ ActiveRecord::Schema.define(version: 20160807210637) do
 
   create_table "councillors", force: :cascade do |t|
     t.string   "name"
-    t.string   "voter_registration"
-    t.integer  "gender",              default: 0, null: false
     t.integer  "party_id"
-    t.string   "avatar_file_name"
-    t.string   "avatar_content_type"
-    t.integer  "avatar_file_size"
-    t.datetime "avatar_updated_at"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.datetime "deleted_at"
+    t.string   "username"
+    t.string   "encrypted_password"
+    t.boolean  "is_active",          default: true,  null: false
+    t.boolean  "is_holder",          default: false, null: false
     t.index ["party_id"], name: "index_councillors_on_party_id", using: :btree
-  end
-
-  create_table "holds", force: :cascade do |t|
-    t.string   "reference_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
   end
 
   create_table "parties", force: :cascade do |t|
@@ -104,13 +96,6 @@ ActiveRecord::Schema.define(version: 20160807210637) do
     t.boolean  "full_control", default: false, null: false
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
-  end
-
-  create_table "surrogates", force: :cascade do |t|
-    t.string   "name"
-    t.string   "voter_registration"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
   end
 
   create_table "votes", force: :cascade do |t|
