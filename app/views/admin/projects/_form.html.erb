@@ -7,7 +7,7 @@
       </div>
 
       <div class="col-md-6">
-        <%= f.association :author, collection: Councillor.holder, label_method: :name, input_html: {chosen: '', 'data-placeholder' => t('activerecord.attributes.project.author')} %>
+        <%= f.association :author, collection: Councillor.active, label_method: :name, input_html: {chosen: '', 'data-placeholder' => t('activerecord.attributes.project.author')} %>
       </div>
     </div>
 
