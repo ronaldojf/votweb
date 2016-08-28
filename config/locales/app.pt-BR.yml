@@ -16,7 +16,7 @@ pt-BR:
       councillors: Vereadores(as)
       parties: Partidos
       surrogates: Suplentes
-      projects: Projetos
+      session_items: Itens da ordem do dia
       plenary_sessions: Sessões
       holds: Cadeiras
     footers:
@@ -97,7 +97,7 @@ pt-BR:
     councillors: vereadores
     parties: partidos
     surrogates: suplentes
-    projects: projetos
+    session_items: itens-ordem-dia
     plenary_sessions: sessoes
     holds: cadeiras
 
@@ -121,9 +121,9 @@ pt-BR:
       surrogate:
         one: Suplente
         other: Suplentes
-      project:
-        one: Projeto
-        other: Projetos
+      session_item:
+        one: Item da ordem do dia
+        other: Itens da ordem do dia
       plenary_session:
         one: Sessão
         other: Sessões
@@ -159,10 +159,11 @@ pt-BR:
         name: Nome
         abbreviation: Sigla
         logo: Logo
-      project:
+      session_item:
         title: Título
         author: Autor
         author_id: Autor
+        acceptance: Aceitação
       plenary_session:
         title: Título
         kind: Tipo
@@ -203,6 +204,11 @@ pt-BR:
         is_test:
           yes: Sessão teste
           no: Sessão normal
+      session_item:
+        acceptance:
+          not_voted: Não votado
+          approved: Aprovado
+          rejected: Rejeitado
 
   errors:
     custom_messages:

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :vote do
-    association(:project)
+    association(:session_item)
     association(:councillor)
     association(:plenary_session)
   end

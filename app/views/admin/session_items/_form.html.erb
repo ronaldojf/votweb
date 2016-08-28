@@ -1,0 +1,25 @@
+<%= simple_form_for([:admin, @session_item]) do |f| %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.input :title, input_html: { autofocus: true } %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <%= f.association :author, collection: Councillor.active, label_method: :name, input_html: {chosen: '', 'data-placeholder' => t('activerecord.attributes.session_item.author')} %>
+      </div>
+
+      <div class="col-xs-12 col-md-4">
+        <%= f.input :acceptance,
+                    collection: t('enums.specific_items.session_item.acceptance').invert,
+                    include_blank: true,
+                    input_html: {chosen: '', 'data-placeholder' => t('activerecord.attributes.session_item.acceptance')} %>
+      </div>
+    </div>
+
+    <%= f.submit '', class: 'hide' %>
+  </div>
+<% end %>

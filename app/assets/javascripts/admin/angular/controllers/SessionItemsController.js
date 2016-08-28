@@ -1,6 +1,6 @@
 angular
   .module('votweb.controllers')
-  .controller('ProjectsController', ['$scope', '$window', 'NgTableService', function($scope, $window, NgTableService) {
+  .controller('SessionItemsController', ['$scope', '$window', 'NgTableService', function($scope, $window, NgTableService) {
     $scope.NgTableService = NgTableService;
 
     $scope.init = function(config) {
@@ -10,7 +10,7 @@ angular
         count: config.count,
         sorting: config.sorting,
         filter: $scope.filters,
-        url: $window.localizedPath('admin_projects')
+        url: $window.localizedPath('admin_session_items')
       });
     };
   }]);

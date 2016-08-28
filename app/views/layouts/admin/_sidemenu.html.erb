@@ -41,12 +41,12 @@
         <% end %>
       <% end if can?(:read, Role) %>
 
-      <%= content_tag(:li, class: class_for_item_menu('projects')) do %>
-        <%= link_to admin_projects_path do  %>
+      <%= content_tag(:li, class: class_for_item_menu('session_items')) do %>
+        <%= link_to admin_session_items_path do  %>
           <i class="fa fa-files-o"></i>
-          <span class="nav-label"><%= t('models_and_attributes.models.project.other') %></span>
+          <span class="nav-label"><%= t('models_and_attributes.models.session_item.other') %></span>
         <% end %>
-      <% end if can?(:read, Project) %>
+      <% end if can?(:read, SessionItem) %>
 
       <%= content_tag(:li, class: class_for_item_menu('plenary_sessions')) do %>
         <%= link_to admin_plenary_sessions_path do  %>

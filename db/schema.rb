@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160828120054) do
+ActiveRecord::Schema.define(version: 20160828143810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,16 +83,6 @@ ActiveRecord::Schema.define(version: 20160828120054) do
     t.index ["deleted_at"], name: "index_plenary_sessions_on_deleted_at", using: :btree
   end
 
-  create_table "projects", force: :cascade do |t|
-    t.integer  "councillor_id"
-    t.string   "title"
-    t.datetime "deleted_at"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["councillor_id"], name: "index_projects_on_councillor_id", using: :btree
-    t.index ["deleted_at"], name: "index_projects_on_deleted_at", using: :btree
-  end
-
   create_table "roles", force: :cascade do |t|
     t.string   "description"
     t.boolean  "full_control", default: false, null: false
@@ -100,8 +90,19 @@ ActiveRecord::Schema.define(version: 20160828120054) do
     t.datetime "updated_at",                   null: false
   end
 
+  create_table "session_items", force: :cascade do |t|
+    t.integer  "councillor_id"
+    t.string   "title"
+    t.datetime "deleted_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "acceptance",    default: 0, null: false
+    t.index ["councillor_id"], name: "index_session_items_on_councillor_id", using: :btree
+    t.index ["deleted_at"], name: "index_session_items_on_deleted_at", using: :btree
+  end
+
   create_table "votes", force: :cascade do |t|
-    t.integer  "project_id"
+    t.integer  "session_item_id"
     t.integer  "councillor_id"
     t.integer  "plenary_session_id"
     t.datetime "deleted_at"
@@ -110,13 +111,13 @@ ActiveRecord::Schema.define(version: 20160828120054) do
     t.index ["councillor_id"], name: "index_votes_on_councillor_id", using: :btree
     t.index ["deleted_at"], name: "index_votes_on_deleted_at", using: :btree
     t.index ["plenary_session_id"], name: "index_votes_on_plenary_session_id", using: :btree
-    t.index ["project_id"], name: "index_votes_on_project_id", using: :btree
+    t.index ["session_item_id"], name: "index_votes_on_session_item_id", using: :btree
   end
 
   add_foreign_key "councillors", "parties"
   add_foreign_key "permissions", "roles"
-  add_foreign_key "projects", "councillors"
+  add_foreign_key "session_items", "councillors"
   add_foreign_key "votes", "councillors"
   add_foreign_key "votes", "plenary_sessions"
-  add_foreign_key "votes", "projects"
+  add_foreign_key "votes", "session_items"
 end

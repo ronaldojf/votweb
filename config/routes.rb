@@ -7,7 +7,7 @@ Rails.application.routes.draw do
         patch :unlock
       end
 
-      resources :roles, :councillors, :parties, :projects, :plenary_sessions
+      resources :roles, :councillors, :parties, :session_items, :plenary_sessions
 
       root 'home#index'
     end
