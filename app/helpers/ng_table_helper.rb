@@ -18,6 +18,7 @@ module NgTableHelper
     store_controller_config :sorting, params[:sorting]
     store_controller_config :page, params[:page]
     store_controller_config :count, params[:count]
+    puts params[:filter].inspect
     store_controller_config :filter, params[:filter]
   end
 

@@ -176,6 +176,15 @@ textarea {
   }
 }
 
+[class*="icheckbox"] { margin-right: 5px; }
+
 .input-group-addon.iCheck-wrapper {
   padding: 5px 12px !important;
+}
+
+label.boolean {
+  display: inline-flex;
+  align-items: center;
+  padding-left: 0px;
+  font-weight: bold;
 }

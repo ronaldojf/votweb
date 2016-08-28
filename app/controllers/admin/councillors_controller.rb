@@ -8,8 +8,9 @@ class Admin::CouncillorsController < Admin::BaseController
         @councillors = scope_for_ng_table(Councillor)
                       .includes(:party)
                       .search(params[:filter].try(:[], :search_query).to_s)
-                      .by_gender(params[:filter].try(:[], :gender).to_s)
                       .by_party(params[:filter].try(:[], :party_id).to_s)
+                      .by_active(params[:filter].try(:[], :is_active).to_s)
+                      .by_holder(params[:filter].try(:[], :is_holder).to_s)
       end
     end
   end
@@ -43,6 +44,6 @@ class Admin::CouncillorsController < Admin::BaseController
   def councillor_params
     params
       .require(:councillor)
-      .permit(:name, :voter_registration, :gender, :party_id, :avatar)
+      .permit(:name, :username, :password, :password_confirmation, :party_id, :is_active, :is_holder)
   end
 end

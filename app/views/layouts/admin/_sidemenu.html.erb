@@ -41,12 +41,12 @@
         <% end %>
       <% end if can?(:read, Role) %>
 
-      <%= content_tag(:li, class: class_for_item_menu('projects')) do %>
-        <%= link_to admin_projects_path do  %>
+      <%= content_tag(:li, class: class_for_item_menu('session_items')) do %>
+        <%= link_to admin_session_items_path do  %>
           <i class="fa fa-files-o"></i>
-          <span class="nav-label"><%= t('models_and_attributes.models.project.other') %></span>
+          <span class="nav-label"><%= t('models_and_attributes.models.session_item.other') %></span>
         <% end %>
-      <% end if can?(:read, Project) %>
+      <% end if can?(:read, SessionItem) %>
 
       <%= content_tag(:li, class: class_for_item_menu('plenary_sessions')) do %>
         <%= link_to admin_plenary_sessions_path do  %>
@@ -54,13 +54,6 @@
           <span class="nav-label"><%= t('models_and_attributes.models.plenary_session.other') %></span>
         <% end %>
       <% end if can?(:read, PlenarySession) %>
-
-      <%= content_tag(:li, class: class_for_item_menu('surrogates')) do %>
-        <%= link_to admin_surrogates_path do  %>
-          <i class="fa fa-male"></i>
-          <span class="nav-label"><%= t('models_and_attributes.models.surrogate.other') %></span>
-        <% end %>
-      <% end if can?(:read, Surrogate) %>
 
       <%= content_tag(:li, class: class_for_item_menu('councillors')) do %>
         <%= link_to admin_councillors_path do  %>
@@ -75,13 +68,6 @@
           <span class="nav-label"><%= t('models_and_attributes.models.party.other') %></span>
         <% end %>
       <% end if can?(:read, Party) %>
-
-      <%= content_tag(:li, class: class_for_item_menu('holds')) do %>
-        <%= link_to admin_holds_path do  %>
-          <i class="fa fa-thumb-tack"></i>
-          <span class="nav-label"><%= t('models_and_attributes.models.hold.other') %></span>
-        <% end %>
-      <% end if can?(:read, Hold) %>
     </ul>
   </div>
 </nav>

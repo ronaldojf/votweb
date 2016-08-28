@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160807210637) do
+ActiveRecord::Schema.define(version: 20160828193528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,23 +40,21 @@ ActiveRecord::Schema.define(version: 20160807210637) do
 
   create_table "councillors", force: :cascade do |t|
     t.string   "name"
-    t.string   "voter_registration"
-    t.integer  "gender",              default: 0, null: false
     t.integer  "party_id"
-    t.string   "avatar_file_name"
-    t.string   "avatar_content_type"
-    t.integer  "avatar_file_size"
-    t.datetime "avatar_updated_at"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.datetime "deleted_at"
+    t.string   "username"
+    t.string   "encrypted_password"
+    t.boolean  "is_active",          default: true,  null: false
+    t.boolean  "is_holder",          default: false, null: false
     t.index ["party_id"], name: "index_councillors_on_party_id", using: :btree
   end
 
-  create_table "holds", force: :cascade do |t|
-    t.string   "reference_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+  create_table "councillors_queues", force: :cascade do |t|
+    t.json     "councillors_ids", default: [], null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "parties", force: :cascade do |t|
@@ -84,19 +82,25 @@ ActiveRecord::Schema.define(version: 20160807210637) do
     t.datetime "start_at"
     t.datetime "end_at"
     t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "kind",       default: 0,     null: false
+    t.boolean  "is_test",    default: false, null: false
     t.index ["deleted_at"], name: "index_plenary_sessions_on_deleted_at", using: :btree
   end
 
-  create_table "projects", force: :cascade do |t|
-    t.integer  "councillor_id"
-    t.string   "title"
+  create_table "polls", force: :cascade do |t|
+    t.integer  "process",            default: 0, null: false
+    t.integer  "plenary_session_id"
+    t.integer  "session_item_id"
+    t.string   "description"
+    t.integer  "duration"
     t.datetime "deleted_at"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["councillor_id"], name: "index_projects_on_councillor_id", using: :btree
-    t.index ["deleted_at"], name: "index_projects_on_deleted_at", using: :btree
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.index ["deleted_at"], name: "index_polls_on_deleted_at", using: :btree
+    t.index ["plenary_session_id"], name: "index_polls_on_plenary_session_id", using: :btree
+    t.index ["session_item_id"], name: "index_polls_on_session_item_id", using: :btree
   end
 
   create_table "roles", force: :cascade do |t|
@@ -106,30 +110,49 @@ ActiveRecord::Schema.define(version: 20160807210637) do
     t.datetime "updated_at",                   null: false
   end
 
-  create_table "surrogates", force: :cascade do |t|
-    t.string   "name"
-    t.string   "voter_registration"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+  create_table "session_items", force: :cascade do |t|
+    t.integer  "councillor_id"
+    t.string   "title"
+    t.datetime "deleted_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "acceptance",    default: 0, null: false
+    t.index ["councillor_id"], name: "index_session_items_on_councillor_id", using: :btree
+    t.index ["deleted_at"], name: "index_session_items_on_deleted_at", using: :btree
+  end
+
+  create_table "session_members", force: :cascade do |t|
+    t.integer  "plenary_session_id"
+    t.integer  "councillor_id"
+    t.boolean  "is_present"
+    t.boolean  "is_president",       default: false, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.index ["councillor_id"], name: "index_session_members_on_councillor_id", using: :btree
+    t.index ["deleted_at"], name: "index_session_members_on_deleted_at", using: :btree
+    t.index ["plenary_session_id"], name: "index_session_members_on_plenary_session_id", using: :btree
   end
 
   create_table "votes", force: :cascade do |t|
-    t.integer  "project_id"
     t.integer  "councillor_id"
-    t.integer  "plenary_session_id"
     t.datetime "deleted_at"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "poll_id"
+    t.integer  "kind",          default: 0, null: false
     t.index ["councillor_id"], name: "index_votes_on_councillor_id", using: :btree
     t.index ["deleted_at"], name: "index_votes_on_deleted_at", using: :btree
-    t.index ["plenary_session_id"], name: "index_votes_on_plenary_session_id", using: :btree
-    t.index ["project_id"], name: "index_votes_on_project_id", using: :btree
+    t.index ["poll_id"], name: "index_votes_on_poll_id", using: :btree
   end
 
   add_foreign_key "councillors", "parties"
   add_foreign_key "permissions", "roles"
-  add_foreign_key "projects", "councillors"
+  add_foreign_key "polls", "plenary_sessions"
+  add_foreign_key "polls", "session_items"
+  add_foreign_key "session_items", "councillors"
+  add_foreign_key "session_members", "councillors"
+  add_foreign_key "session_members", "plenary_sessions"
   add_foreign_key "votes", "councillors"
-  add_foreign_key "votes", "plenary_sessions"
-  add_foreign_key "votes", "projects"
+  add_foreign_key "votes", "polls"
 end

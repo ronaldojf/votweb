@@ -1,24 +1,40 @@
 class Councillor < ApplicationRecord
   include Utils::Searching
+  devise :database_authenticatable, :validatable, authentication_keys: [:username]
   acts_as_paranoid
-
-  has_attached_file :avatar, styles: { big: '1600x1600>', medium: '400x400>', thumbnail: '125x125>' }, default_url: ''
 
   belongs_to :party
 
-  searching :name, :voter_registration
+  searching :name, :username
 
-  scope :by_gender, -> (gender) {
-    where(gender: genders[gender]) if gender.present?
-  }
+  scope :active, -> { where(is_active: true) }
+  scope :holder, -> { where(is_holder: true) }
+  scope :surrogate, -> { where(is_holder: false) }
 
   scope :by_party, -> (party) {
     where(party_id: party.try(:id) || party) if party.present?
   }
 
-  enum gender: [:unspecified, :male, :female]
+  scope :by_active, -> (is_active) {
+    where(is_active: is_active.to_s == 'true') if !is_active.nil? && is_active.to_s.present?
+  }
 
-  validates :name, :gender, :party, :voter_registration, presence: true
-  validates :voter_registration, uniqueness: true
-  validates_attachment :avatar, presence: true, content_type: { content_type: %w(image/jpeg image/jpg image/png) }, size: { less_than_or_equal_to: 5.megabytes }
+  scope :by_holder, -> (is_holder) {
+    where(is_holder: is_holder.to_s == 'true') if !is_holder.nil? && is_holder.to_s.present?
+  }
+
+  validates :name, :username, :party, presence: true
+  validates :username, uniqueness: { case_sensitive: false }
+
+  def username=(value)
+    super(value.to_s.downcase)
+  end
+
+  def email_required?
+    false
+  end
+
+  def email_changed?
+    false
+  end
 end

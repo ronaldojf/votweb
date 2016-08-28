@@ -14,7 +14,5 @@ Administrator:
 Role: *default_actions
 Councillor: *default_actions
 Party: *default_actions
-Surrogate: *default_actions
-Project: *default_actions
+SessionItem: *default_actions
 PlenarySession: *default_actions
-Hold: *default_actions

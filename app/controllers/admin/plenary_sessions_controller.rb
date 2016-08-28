@@ -7,12 +7,28 @@ class Admin::PlenarySessionsController < Admin::BaseController
       format.json do
         @plenary_sessions = scope_for_ng_table(PlenarySession)
                             .search(params[:filter].try(:[], :search_query).to_s)
+                            .by_test(params[:filter].try(:[], :is_test).to_s)
+                            .by_kind(params[:filter].try(:[], :kind).to_s)
       end
     end
   end
 
+  def show
+    @members = @plenary_session.members
+                  .left_joins(:councillor)
+                  .includes(:councillor)
+                  .order('councillors.name ASC')
+  end
+
   def new
     @plenary_session = PlenarySession.new
+    @plenary_session.start_at = DateTime.current.next_week(:monday).change(hour: 19, minute: 0, second: 0)
+    @plenary_session.end_at = @plenary_session.start_at + 2.5.hours
+
+    last_president_id = SessionMember.where(is_president: true).last.try(:councillor_id)
+    Councillor.active.holder.each do |councillor|
+      @plenary_session.members.build councillor: councillor, is_president: councillor.id == last_president_id
+    end
   end
 
   def create
@@ -40,6 +56,6 @@ class Admin::PlenarySessionsController < Admin::BaseController
   def plenary_session_params
     params
       .require(:plenary_session)
-      .permit(:title, :start_at, :end_at)
+      .permit(:title, :kind, :start_at, :end_at, :is_test, members_attributes: [:id, :councillor_id, :is_president, :_destroy])
   end
 end

@@ -16,7 +16,7 @@ pt-BR:
       councillors: Vereadores(as)
       parties: Partidos
       surrogates: Suplentes
-      projects: Projetos
+      session_items: Itens da ordem do dia
       plenary_sessions: Sessões
       holds: Cadeiras
     footers:
@@ -62,7 +62,8 @@ pt-BR:
 
   info:
     no_results: Nenhum resultado encontrado
-    no_roles: Nenhuma função adicionada.
+    no_roles: Nenhuma função adicionada
+    no_councillors: Nenhum(a) vereador(a) adicionado(a)
     editing_password: Preencha apenas se deseja alterar...
 
   warnings:
@@ -97,7 +98,7 @@ pt-BR:
     councillors: vereadores
     parties: partidos
     surrogates: suplentes
-    projects: projetos
+    session_items: itens-ordem-dia
     plenary_sessions: sessoes
     holds: cadeiras
 
@@ -121,9 +122,9 @@ pt-BR:
       surrogate:
         one: Suplente
         other: Suplentes
-      project:
-        one: Projeto
-        other: Projetos
+      session_item:
+        one: Item da ordem do dia
+        other: Itens da ordem do dia
       plenary_session:
         one: Sessão
         other: Sessões
@@ -134,12 +135,12 @@ pt-BR:
       user: &user
         email: E-Mail
         password: Senha
-        password_confirmation: Confirmação de Senha
-        current_password: Senha Atual
+        password_confirmation: Confirmação de senha
+        current_password: Senha atual
         confirmation_token: Link de confirmação
         reset_password_token: Link de troca de senha
       administrator:
-        name: Nome Completo
+        name: Nome completo
         <<: *user
       role:
         description: Descrição
@@ -147,30 +148,35 @@ pt-BR:
         actions: Ações
         subject: Contexto
       councillor:
-        name: Nome Completo
-        voter_registration: Título de eleitor
-        gender: Sexo
+        name: Nome completo
         party_id: Partido
         party: Partido
-        avatar: Avatar
+        is_active: 'Ativo?'
+        is_holder: 'Titular?'
+        username: Usuário
+        password: Senha
+        password_confirmation: Confirmação de senha
       party:
         name: Nome
         abbreviation: Sigla
         logo: Logo
-      surrogate:
-        name: Nome Completo
-        voter_registration: Título de eleitor
-      project:
+      session_item:
         title: Título
         author: Autor
         author_id: Autor
+        acceptance: Aceitação
       plenary_session:
         title: Título
+        kind: Tipo
         start_at: Início em
         end_at: Término em
         period: Período de duração
-      hold:
-        reference_id: Identificação
+        is_test: 'Sessão teste?'
+        members: Participantes
+      session_member:
+        councillor_id: Vereador
+        is_president: Presidente?
+        is_present: Presente?
 
   enums:
     names: &enum_names
@@ -180,16 +186,53 @@ pt-BR:
         unspecified: Não informado
         male: Masculino
         female: Feminino
+      boolean:
+        yes: Sim
+        no: Não
     specific_items: &enum_specific_items
       administrator:
         status:
           normal: Normal
           locked: Bloqueado
+      councillor:
+        is_active:
+          yes: Vereador Ativo
+          no: Vereador Inativo
+        is_holder:
+          yes: Titular
+          no: Suplente
+      plenary_session:
+        kind:
+          ordinary: Ordinária
+          extraordinary: Extraordinária
+          solemn: Solene
+          special: Especial
+        is_test:
+          yes: Sessão teste
+          no: Sessão normal
+      session_item:
+        acceptance:
+          not_voted: Não votado
+          approved: Aprovado
+          rejected: Rejeitado
+      session_member:
+        is_president:
+          yes: Presidente
+          no: Vereador
+        is_present:
+          yes: Presente
+          no: Ausente
 
   errors:
     custom_messages:
       current_password_not_match: não confere
       unpermited: Você não tem permissão para acessar o recurso solicitado.
+
+  miscellaneous:
+    councillor:
+      add: Adicionar Vereador(a)
+    session_member:
+      president: Presidente
 
   activerecord:
     <<: *models_and_attributes

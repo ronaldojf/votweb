@@ -1,6 +1,6 @@
 json.set! :results do
   json.array!(@councillors) do |councillor|
-    json.extract! councillor, :id, :name, :voter_registration, :gender, :avatar
+    json.extract! councillor, :id, :name, :username, :is_holder, :is_active
 
     json.set! :party do
       json.extract! councillor.party, :id, :name, :abbreviation

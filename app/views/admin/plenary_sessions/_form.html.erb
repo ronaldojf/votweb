@@ -2,11 +2,25 @@
 
 <%= simple_form_for([:admin, @plenary_session]) do |f| %>
 
-  <div class="form-inputs" ng-init="init(<%= @plenary_session.to_json(only: [:start_at, :end_at]) %>)">
+  <div class="form-inputs" ng-init="
+    init(<%= @plenary_session.to_json(only: [:is_test, :start_at, :end_at]) %>);
+    availableCouncillors = <%= Councillor.active.order(name: :asc).to_json(only: [:id, :name]) %>;
+    plenarySession.members = <%= (
+      @plenary_session.new_record? ?
+        @plenary_session.members :
+        @plenary_session.members.includes(:councillor)
+    ).to_json(only: [:id, :councillor_id, :is_president], include: [councillor: {only: [:name]}]) %>;">
 
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-xs-12 col-sm-8">
         <%= f.input :title, input_html: { autofocus: true } %>
+      </div>
+
+      <div class="col-xs-12 col-sm-4">
+        <%= f.input :kind,
+                    collection: t('enums.specific_items.plenary_session.kind').invert,
+                    include_blank: true,
+                    input_html: {chosen: '', 'data-placeholder' => t('activerecord.attributes.plenary_session.kind')} %>
       </div>
     </div>
 
@@ -29,8 +43,61 @@
             </label>
           </div>
 
-          <input type="hidden" name="plenary_session[start_at]" ng-value="plenarySession.period.startDate.toJSON()">
-          <input type="hidden" name="plenary_session[end_at]" ng-value="plenarySession.period.endDate.toJSON()">
+          <input type="hidden" name="plenary_session[start_at]" ng-value="plenarySession.period.startDate.toJSON() || plenarySession.period.startDate">
+          <input type="hidden" name="plenary_session[end_at]" ng-value="plenarySession.period.endDate.toJSON() || plenarySession.period.endDate">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.input :is_test, input_html: { icheck: '', 'ng-model' => 'plenarySession.is_test' } %>
+      </div>
+    </div>
+
+    <legend><%= t('activerecord.attributes.plenary_session.members') %></legend>
+    <div class="well well-sm">
+      <div class="row">
+        <div class="col-xs-12 text-right">
+          <%= link_to '', class: 'btn btn-w-s btn-primary', 'data-toggle' => 'modal', 'data-target' => '#add-councillors' do %>
+            <i class="fa fa-plus"></i><br/>
+            <%= t('buttons.new') %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row m-t-sm">
+        <div class="col-xs-12">
+          <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_councillors')}, html: {'ng-hide' => 'plenarySession.members.length > 0'} %>
+
+          <table class="table table-striped table-hover" ng-show="plenarySession.members.length > 0">
+            <thead>
+              <tr>
+                <th><%= t('activerecord.attributes.session_member.councillor_id') %></th>
+                <th><%= t('activerecord.attributes.session_member.is_president') %></th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr ng-repeat="member in (plenarySession.members | orderBy:'councillor.name') track by $index" ng-hide="member._destroy">
+                <td>{{member.councillor.name}}</td>
+                <td>
+                  <label class="boolean optional" for="member_president_{{member.councillor_id}}">
+                    <input type="checkbox" icheck class="boolean optional" id="member_president_{{member.councillor_id}}" ng-model="member.is_president" />
+                  </label>
+                </td>
+                <td class="text-right">
+                  <a href class="btn btn-xs btn-danger" ng-click="removeMember(member)"><i class="fa fa-trash"></i></a>
+
+                  <input type="hidden" name="plenary_session[members_attributes[]][id]" ng-value="member.id" />
+                  <input type="hidden" name="plenary_session[members_attributes[]][councillor_id]" ng-value="member.councillor_id" />
+                  <input type="hidden" name="plenary_session[members_attributes[]][is_president]" ng-value="member.is_president || false" />
+                  <input type="hidden" name="plenary_session[members_attributes[]][_destroy]" ng-value="member._destroy" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -38,3 +105,29 @@
     <%= f.submit '', class: 'hide' %>
   </div>
 <% end %>
+
+<div class="modal inmodal" id="add-councillors" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content animated fadeIn">
+      <div class="modal-header">
+        <i class="fa fa-group modal-icon"></i>
+        <h4 class="modal-title"><%= t('miscellaneous.councillor.add') %></h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <select chosen data-placeholder-text-single="'<%= t('activerecord.attributes.session_member.councillor_id') %>'"
+                  allow-single-deselect="true"
+                  class="form-control"
+                  ng-model="councillorToAdd"
+                  ng-options="councillor as councillor.name for councillor in filterAddedCouncillors(availableCouncillors)">
+            <option></option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+        <button type="button" class="btn btn-primary" ng-click="addMember(councillorToAdd)"><%= t('buttons.add') %></button>
+      </div>
+    </div>
+  </div>
+</div>

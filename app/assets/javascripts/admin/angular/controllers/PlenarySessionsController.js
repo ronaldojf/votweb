@@ -5,6 +5,10 @@ angular
 
     $scope.init = function(config) {
       $scope.filters  = config.filter;
+      if (!$scope.filters.is_test) {
+        $scope.filters.is_test = 'false';
+      }
+
       $scope.tableParams = $scope.NgTableService.init({
         page: config.page,
         count: config.count,
