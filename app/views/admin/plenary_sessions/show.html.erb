@@ -51,12 +51,20 @@
             <div class="col-sm-9"><%= @plenary_session.title %></div>
           </li>
           <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.kind') %>:</div>
+            <div class="col-sm-9"><%= t(@plenary_session.kind, scope: [:enums, :specific_items, :plenary_session, :kind]) %></div>
+          </li>
+          <li class="show-action-label">
             <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.start_at') %>:</div>
             <div class="col-sm-9"><%= l(@plenary_session.start_at, format: :long) %></div>
           </li>
           <li class="show-action-label">
             <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.end_at') %>:</div>
             <div class="col-sm-9"><%= l(@plenary_session.end_at, format: :long) %></div>
+          </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.is_test') %></div>
+            <div class="col-sm-9"><%= t('enums.items.boolean')[@plenary_session.is_test] %></div>
           </li>
 
         </ul>

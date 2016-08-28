@@ -47,6 +47,28 @@
                       class="form-control input-md" ng-model="filters.search_query" autocomplete="off" autofocus>
                 </div>
               </div>
+
+              <div class="row m-b-sm">
+                <div class="col-xs-12 col-sm-6 m-t-xs" ng-init="testStatuses = <%= t('enums.specific_items.plenary_session.is_test').to_json %>;">
+                  <select chosen data-placeholder-text-single="'<%= t('activerecord.attributes.plenary_session.is_test') %>'"
+                          allow-single-deselect="true"
+                          class="form-control"
+                          ng-model="filters.is_test"
+                          ng-options="key as value for (key, value) in testStatuses">
+                    <option></option>
+                  </select>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 m-t-xs" ng-init="kinds = <%= t('enums.specific_items.plenary_session.kind').to_json %>;">
+                  <select chosen data-placeholder-text-single="'<%= t('activerecord.attributes.plenary_session.kind') %>'"
+                          allow-single-deselect="true"
+                          class="form-control"
+                          ng-model="filters.kind"
+                          ng-options="key as value for (key, value) in kinds">
+                    <option></option>
+                  </select>
+                </div>
+              </div>
             </div>
 
             <div class="row m-t-sm">
@@ -70,14 +92,20 @@
             <table ng-table="tableParams" template-pagination="/angular-templates/ng-table/paginate" class="table table-striped table-hover">
               <tr data-href="{{plenary_session.url}}" ng-repeat="plenary_session in $data track by plenary_session.id">
 
-                <td data-title="'<%= t('activerecord.attributes.plenary_session.title') %>'" data-sortable="'title'">
+                <td data-title="'<%= t('activerecord.attributes.plenary_session.title') %>'" data-sortable="'plenary_sessions.title'">
                   {{plenary_session.title}}
                 </td>
-                <td data-title="'<%= t('activerecord.attributes.plenary_session.start_at') %>'" data-sortable="'start_at'">
+                <td data-title="'<%= t('activerecord.attributes.plenary_session.kind') %>'" data-sortable="'plenary_sessions.kind'">
+                  {{kinds[plenary_session.kind]}}
+                </td>
+                <td data-title="'<%= t('activerecord.attributes.plenary_session.start_at') %>'" data-sortable="'plenary_sessions.start_at'">
                   {{plenary_session.start_at | date:'medium'}}
                 </td>
-                <td data-title="'<%= t('activerecord.attributes.plenary_session.end_at') %>'" data-sortable="'end_at'">
+                <td data-title="'<%= t('activerecord.attributes.plenary_session.end_at') %>'" data-sortable="'plenary_sessions.end_at'">
                   {{plenary_session.end_at | date:'medium'}}
+                </td>
+                <td data-title="'<%= t('activerecord.attributes.plenary_session.is_test') %>'" data-sortable="'plenary_sessions.is_test'">
+                  {{testStatuses[plenary_session.is_test]}}
                 </td>
 
               </tr>

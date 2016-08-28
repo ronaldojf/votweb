@@ -165,9 +165,11 @@ pt-BR:
         author_id: Autor
       plenary_session:
         title: Título
+        kind: Tipo
         start_at: Início em
         end_at: Término em
         period: Período de duração
+        is_test: 'Sessão teste?'
 
   enums:
     names: &enum_names
@@ -192,6 +194,15 @@ pt-BR:
         is_holder:
           yes: Titular
           no: Suplente
+      plenary_session:
+        kind:
+          ordinary: Ordinária
+          extraordinary: Extraordinária
+          solemn: Solene
+          special: Especial
+        is_test:
+          yes: Sessão teste
+          no: Sessão normal
 
   errors:
     custom_messages:

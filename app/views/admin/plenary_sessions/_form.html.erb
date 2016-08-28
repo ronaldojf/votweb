@@ -2,11 +2,18 @@
 
 <%= simple_form_for([:admin, @plenary_session]) do |f| %>
 
-  <div class="form-inputs" ng-init="init(<%= @plenary_session.to_json(only: [:start_at, :end_at]) %>)">
+  <div class="form-inputs" ng-init="init(<%= @plenary_session.to_json(only: [:is_test, :start_at, :end_at]) %>)">
 
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-xs-12 col-sm-8">
         <%= f.input :title, input_html: { autofocus: true } %>
+      </div>
+
+      <div class="col-xs-12 col-sm-4">
+        <%= f.input :kind,
+                    collection: t('enums.specific_items.plenary_session.kind').invert,
+                    include_blank: true,
+                    input_html: {chosen: '', 'data-placeholder' => t('activerecord.attributes.plenary_session.kind')} %>
       </div>
     </div>
 
@@ -29,9 +36,15 @@
             </label>
           </div>
 
-          <input type="hidden" name="plenary_session[start_at]" ng-value="plenarySession.period.startDate.toJSON()">
-          <input type="hidden" name="plenary_session[end_at]" ng-value="plenarySession.period.endDate.toJSON()">
+          <input type="hidden" name="plenary_session[start_at]" ng-value="plenarySession.period.startDate.toJSON() || plenarySession.period.startDate">
+          <input type="hidden" name="plenary_session[end_at]" ng-value="plenarySession.period.endDate.toJSON() || plenarySession.period.endDate">
         </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.input :is_test, input_html: { icheck: '', 'ng-model' => 'plenarySession.is_test' } %>
       </div>
     </div>
 
