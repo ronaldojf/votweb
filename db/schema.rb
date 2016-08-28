@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160828172500) do
+ActiveRecord::Schema.define(version: 20160828182147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,12 @@ ActiveRecord::Schema.define(version: 20160828172500) do
     t.boolean  "is_active",          default: true,  null: false
     t.boolean  "is_holder",          default: false, null: false
     t.index ["party_id"], name: "index_councillors_on_party_id", using: :btree
+  end
+
+  create_table "councillors_queues", force: :cascade do |t|
+    t.json     "councillors_ids", default: [], null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "parties", force: :cascade do |t|
