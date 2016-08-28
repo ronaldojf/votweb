@@ -7,6 +7,9 @@ RSpec.describe PlenarySession, type: :model do
   it { is_expected.to validate_presence_of :start_at }
   it { is_expected.to validate_presence_of :end_at }
   it { is_expected.to define_enum_for :kind }
+  it { is_expected.to have_many :polls }
+  it { is_expected.to have_many :members }
+  it { is_expected.to accept_nested_attributes_for :members }
 
   describe '.search' do
     subject(:title) { 'Sessão 12.542 - 2016' }

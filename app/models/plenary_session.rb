@@ -3,6 +3,8 @@ class PlenarySession < ApplicationRecord
   acts_as_paranoid
 
   has_many :polls
+  has_many :members, class_name: 'SessionMember'
+  accepts_nested_attributes_for :members, allow_destroy: true
 
   enum kind: [:ordinary, :extraordinary, :solemn, :special]
 

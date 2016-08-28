@@ -72,3 +72,32 @@
     </div>
   </div>
 </div>
+
+<div class="row responsive-padding">
+  <div class="col-xs-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5><%= t('activerecord.attributes.plenary_session.members') %></h5>
+      </div>
+
+      <div class="ibox-content">
+        <%= custom_flash_messages info: {show: @members.length.zero?, fixed: true, icon: :info, message: t('info.no_councillors')} %>
+
+        <% if @members.length > 0 %>
+          <table class="table table-striped table-hover">
+            <tbody>
+              <% @members.each_with_index do |member, index| %>
+                <tr>
+                  <td>
+                    <%= index + 1 %>. <%= member.councillor.name %>
+                    <%= content_tag :span, t('miscellaneous.session_member.president'), class: 'label label-primary' if member.is_president %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

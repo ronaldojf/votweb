@@ -62,7 +62,8 @@ pt-BR:
 
   info:
     no_results: Nenhum resultado encontrado
-    no_roles: Nenhuma função adicionada.
+    no_roles: Nenhuma função adicionada
+    no_councillors: Nenhum(a) vereador(a) adicionado(a)
     editing_password: Preencha apenas se deseja alterar...
 
   warnings:
@@ -171,6 +172,11 @@ pt-BR:
         end_at: Término em
         period: Período de duração
         is_test: 'Sessão teste?'
+        members: Participantes
+      session_member:
+        councillor_id: Vereador
+        is_president: Presidente?
+        is_present: Presente?
 
   enums:
     names: &enum_names
@@ -209,11 +215,24 @@ pt-BR:
           not_voted: Não votado
           approved: Aprovado
           rejected: Rejeitado
+      session_member:
+        is_president:
+          yes: Presidente
+          no: Vereador
+        is_present:
+          yes: Presente
+          no: Ausente
 
   errors:
     custom_messages:
       current_password_not_match: não confere
       unpermited: Você não tem permissão para acessar o recurso solicitado.
+
+  miscellaneous:
+    councillor:
+      add: Adicionar Vereador(a)
+    session_member:
+      president: Presidente
 
   activerecord:
     <<: *models_and_attributes
