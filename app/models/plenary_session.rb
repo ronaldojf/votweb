@@ -2,6 +2,8 @@ class PlenarySession < ApplicationRecord
   include Utils::Searching
   acts_as_paranoid
 
+  has_many :polls
+
   enum kind: [:ordinary, :extraordinary, :solemn, :special]
 
   searching :title

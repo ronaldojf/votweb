@@ -1,13 +1,10 @@
 class Vote < ApplicationRecord
   acts_as_paranoid
 
-  belongs_to :session_item
   belongs_to :councillor
-  belongs_to :plenary_session
+  belongs_to :poll
 
-  validates :session_item, :councillor, :plenary_session, presence: true
+  enum kind: [:approvation, :rejection, :abstention]
 
-  def destroy
-    false
-  end
+  validates :poll, :kind, presence: true
 end
