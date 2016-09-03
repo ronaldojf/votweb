@@ -64,6 +64,9 @@ pt-BR:
     no_results: Nenhum resultado encontrado
     no_roles: Nenhuma função adicionada
     no_councillors: Nenhum(a) vereador(a) adicionado(a)
+    no_session_items: Nenhum item da ordem do dia adicionado
+    no_president: Nenhum presidente foi adicionado
+    no_member: Nenhum participante foi adicionado
     editing_password: Preencha apenas se deseja alterar...
 
   warnings:
@@ -230,7 +233,12 @@ pt-BR:
 
   miscellaneous:
     councillor:
-      add: Adicionar Vereador(a)
+      add: Adicionar vereador(a)
+      add_to_session_info: Somente vereadores(as) ativos(as) podem ser adicionados(as)
+    session_item:
+      add: Adicionar item da ordem do dia
+      list: Ordem do dia
+      add_to_session_info: Somente itens não ligados a nenhuma sessão podem ser adicionados
     session_member:
       president: Presidente
 

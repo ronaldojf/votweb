@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160828193528) do
+ActiveRecord::Schema.define(version: 20160903123808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,11 +114,13 @@ ActiveRecord::Schema.define(version: 20160828193528) do
     t.integer  "councillor_id"
     t.string   "title"
     t.datetime "deleted_at"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.integer  "acceptance",    default: 0, null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "acceptance",         default: 0, null: false
+    t.integer  "plenary_session_id"
     t.index ["councillor_id"], name: "index_session_items_on_councillor_id", using: :btree
     t.index ["deleted_at"], name: "index_session_items_on_deleted_at", using: :btree
+    t.index ["plenary_session_id"], name: "index_session_items_on_plenary_session_id", using: :btree
   end
 
   create_table "session_members", force: :cascade do |t|
@@ -151,6 +153,7 @@ ActiveRecord::Schema.define(version: 20160828193528) do
   add_foreign_key "polls", "plenary_sessions"
   add_foreign_key "polls", "session_items"
   add_foreign_key "session_items", "councillors"
+  add_foreign_key "session_items", "plenary_sessions"
   add_foreign_key "session_members", "councillors"
   add_foreign_key "session_members", "plenary_sessions"
   add_foreign_key "votes", "councillors"

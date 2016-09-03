@@ -9,3 +9,13 @@ json.set! :members do
     end
   end
 end
+
+json.set! :items do
+  json.array!(@items) do |item|
+    json.extract! item, :id, :title, :acceptance
+
+    json.set! :author do
+      json.extract! item.author, :id, :name
+    end
+  end
+end

@@ -3,6 +3,7 @@ class SessionItem < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :author, class_name: 'Councillor', foreign_key: :councillor_id
+  belongs_to :session, class_name: 'PlenarySession', foreign_key: :plenary_session_id
   has_one :poll
 
   enum acceptance: [:not_voted, :approved, :rejected]

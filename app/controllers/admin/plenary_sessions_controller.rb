@@ -18,6 +18,10 @@ class Admin::PlenarySessionsController < Admin::BaseController
                   .left_joins(:councillor)
                   .includes(:councillor)
                   .order('councillors.name ASC')
+
+    @items = @plenary_session.items
+                  .includes(:author)
+                  .order(:title)
   end
 
   def new
@@ -54,8 +58,14 @@ class Admin::PlenarySessionsController < Admin::BaseController
   end
 
   def plenary_session_params
-    params
-      .require(:plenary_session)
-      .permit(:title, :kind, :start_at, :end_at, :is_test, members_attributes: [:id, :councillor_id, :is_president, :_destroy])
+    result = params
+              .require(:plenary_session)
+              .permit(
+                :title, :kind, :start_at, :end_at, :is_test, item_ids: [],
+                members_attributes: [:id, :councillor_id, :is_president, :_destroy],
+              )
+
+    result[:item_ids] ||= []
+    result
   end
 end

@@ -34,69 +34,98 @@
 <% end %>
 
 <%= flash_messages %>
-<div class="row responsive-padding">
-  <div class="col-xs-12">
-    <div class="ibox float-e-margins">
-      <div class="ibox-title">
-        <h5>
-          <%= t('view.keywords.informations') %>
-        </h5>
-      </div>
 
-      <div class="ibox-content">
-        <ul class="todo-list">
+<% if @members.blank? %>
+  <%= custom_flash_messages warning: {show: true, icon: :warning, message: t('info.no_member')} %>
+<% else %>
+  <%= custom_flash_messages warning: {show: @members.select { |member| member.is_president }.blank?, icon: :warning, message: t('info.no_president')} %>
+<% end %>
 
-          <li class="show-action-label">
-            <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.title') %>:</div>
-            <div class="col-sm-9"><%= @plenary_session.title %></div>
-          </li>
-          <li class="show-action-label">
-            <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.kind') %>:</div>
-            <div class="col-sm-9"><%= t(@plenary_session.kind, scope: [:enums, :specific_items, :plenary_session, :kind]) %></div>
-          </li>
-          <li class="show-action-label">
-            <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.start_at') %>:</div>
-            <div class="col-sm-9"><%= l(@plenary_session.start_at, format: :long) %></div>
-          </li>
-          <li class="show-action-label">
-            <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.end_at') %>:</div>
-            <div class="col-sm-9"><%= l(@plenary_session.end_at, format: :long) %></div>
-          </li>
-          <li class="show-action-label">
-            <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.is_test') %></div>
-            <div class="col-sm-9"><%= t('enums.items.boolean')[@plenary_session.is_test] %></div>
-          </li>
-
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
+<%= custom_flash_messages warning: {show: @items.blank?, icon: :warning, message: t('info.no_session_items')} %>
 
 <div class="row responsive-padding">
   <div class="col-xs-12">
-    <div class="ibox float-e-margins">
-      <div class="ibox-title">
-        <h5><%= t('activerecord.attributes.plenary_session.members') %></h5>
-      </div>
+    <div class="tabs-container">
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#session"><%= t('activerecord.models.plenary_session.one') %></a></li>
+        <li><a data-toggle="tab" href="#members"><%= t('activerecord.attributes.plenary_session.members') %></a></li>
+        <li><a data-toggle="tab" href="#session-items-list"><%= t('miscellaneous.session_item.list') %></a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="session" class="tab-pane active">
+          <div class="panel-body">
+            <ul class="todo-list">
+              <li class="show-action-label">
+                <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.title') %>:</div>
+                <div class="col-sm-9"><%= @plenary_session.title %></div>
+              </li>
+              <li class="show-action-label">
+                <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.kind') %>:</div>
+                <div class="col-sm-9"><%= t(@plenary_session.kind, scope: [:enums, :specific_items, :plenary_session, :kind]) %></div>
+              </li>
+              <li class="show-action-label">
+                <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.start_at') %>:</div>
+                <div class="col-sm-9"><%= l(@plenary_session.start_at, format: :long) %></div>
+              </li>
+              <li class="show-action-label">
+                <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.end_at') %>:</div>
+                <div class="col-sm-9"><%= l(@plenary_session.end_at, format: :long) %></div>
+              </li>
+              <li class="show-action-label">
+                <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.is_test') %></div>
+                <div class="col-sm-9"><%= t('enums.items.boolean')[@plenary_session.is_test] %></div>
+              </li>
+            </ul>
+          </div>
+        </div>
 
-      <div class="ibox-content">
-        <%= custom_flash_messages info: {show: @members.length.zero?, fixed: true, icon: :info, message: t('info.no_councillors')} %>
+        <div id="members" class="tab-pane">
+          <div class="panel-body">
+            <%= custom_flash_messages info: {show: @members.length.zero?, fixed: true, icon: :info, message: t('info.no_councillors')} %>
 
-        <% if @members.length > 0 %>
-          <table class="table table-striped table-hover">
-            <tbody>
-              <% @members.each_with_index do |member, index| %>
-                <tr>
-                  <td>
-                    <%= index + 1 %>. <%= member.councillor.name %>
-                    <%= content_tag :span, t('miscellaneous.session_member.president'), class: 'label label-primary' if member.is_president %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% end %>
+            <% if @members.length > 0 %>
+              <table class="table table-striped table-hover">
+                <tbody>
+                  <% @members.each_with_index do |member, index| %>
+                    <tr>
+                      <td>
+                        <%= index + 1 %>. <%= member.councillor.name %>
+                        <%= content_tag :span, t('miscellaneous.session_member.president'), class: 'label label-primary' if member.is_president %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% end %>
+          </div>
+        </div>
+
+        <div id="session-items-list" class="tab-pane">
+          <div class="panel-body">
+            <%= custom_flash_messages info: {show: @items.length.zero?, fixed: true, icon: :info, message: t('info.no_session_items')} %>
+
+            <% if @items.length > 0 %>
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th><%= t('activerecord.attributes.session_item.title') %></th>
+                    <th><%= t('activerecord.attributes.session_item.author') %></th>
+                    <th><%= t('activerecord.attributes.session_item.acceptance') %></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @items.each_with_index do |item, index| %>
+                    <tr>
+                      <td><%= index + 1 %>. <%= item.title %></td>
+                      <td><%= item.author.name %></td>
+                      <td><%= t(item.acceptance, scope: [:enums, :specific_items, :session_item, :acceptance]) %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   </div>

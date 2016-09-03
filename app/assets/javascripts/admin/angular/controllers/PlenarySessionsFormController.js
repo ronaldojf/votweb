@@ -17,19 +17,19 @@ angular
     $scope.addMember = function(councillor) {
       if (!councillor) { return; }
 
-      var exitingMember = $scope.plenarySession.members.find(function(member) {
-        return member.councillor_id == councillor.id;
+      $scope.plenarySession.members.push({
+        reference: Math.random().toString(36).substring(3),
+        councillor_id: councillor.id,
+        councillor: councillor
       });
 
-      if (!exitingMember) {
-        $scope.plenarySession.members.push({
-          reference: Math.random().toString(36).substring(3),
-          councillor_id: councillor.id,
-          councillor: councillor
-        });
-      }
-
       $scope.councillorToAdd = undefined;
+    };
+
+    $scope.addItem = function(item) {
+      if (!item) { return; }
+      $scope.plenarySession.items.push(item);
+      $scope.itemToAdd = undefined;
     };
 
     $scope.removeMember = function(member) {
@@ -44,6 +44,14 @@ angular
       }
     };
 
+    $scope.removeItem = function(item) {
+      var exitingItemIndex = $scope.plenarySession.items.findIndex(function(currentItem) {
+        return currentItem.id === item.id;
+      });
+
+      $scope.plenarySession.items.splice(exitingItemIndex, 1);
+    };
+
     $scope.filterAddedCouncillors = function(councillors) {
       return councillors.filter(function(councillor) {
         var member = $scope.plenarySession.members.find(function(member) {
@@ -51,6 +59,16 @@ angular
         });
 
         return !member;
+      });
+    };
+
+    $scope.filterAddedItems = function(itemsList) {
+      return itemsList.filter(function(itemFromList) {
+        var item = $scope.plenarySession.items.find(function(item) {
+          return item.id == itemFromList.id;
+        });
+
+        return !item;
       });
     };
   }]);

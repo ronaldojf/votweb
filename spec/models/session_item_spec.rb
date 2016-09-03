@@ -7,6 +7,7 @@ RSpec.describe SessionItem, type: :model do
   it { is_expected.to validate_presence_of :acceptance }
   it { is_expected.to define_enum_for :acceptance }
   it { is_expected.to belong_to :author }
+  it { is_expected.to belong_to :session }
   it { is_expected.to have_one :poll }
 
   describe '.search' do
