@@ -6,6 +6,10 @@ json.set! :members do
 
     json.set! :councillor do
       json.extract! member.councillor, :id, :name
+
+      json.set! :party do
+        json.extract! member.councillor.party, :id, :abbreviation
+      end
     end
   end
 end

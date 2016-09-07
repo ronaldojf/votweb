@@ -1,7 +1,7 @@
 module ApplicationHelper
   def class_for_item_menu(controller_name)
     @controller_without_namespace ||= params[:controller].split('/').last
-    @controller_without_namespace == controller_name ? 'active' : nil
+    (content_for(:highlight_controller) || @controller_without_namespace) == controller_name ? 'active' : nil
   end
 
   def class_for_subitem_menu(action_name)

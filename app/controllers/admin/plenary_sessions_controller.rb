@@ -15,8 +15,8 @@ class Admin::PlenarySessionsController < Admin::BaseController
 
   def show
     @members = @plenary_session.members
-                  .left_joins(:councillor)
-                  .includes(:councillor)
+                  .left_joins(councillor: :party)
+                  .includes(councillor: :party)
                   .order('councillors.name ASC')
 
     @items = @plenary_session.items

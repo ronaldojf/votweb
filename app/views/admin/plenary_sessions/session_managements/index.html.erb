@@ -1,0 +1,160 @@
+<% content_for :angular_controller, 'SessionManagementController' %>
+<% content_for :highlight_controller, 'plenary_sessions' %>
+
+<% content_for :sub_header do %>
+  <div class="col-sm-6">
+    <h2><%= @plenary_session.title %></h2>
+    <ol class="breadcrumb">
+      <li><%= link_to t('page.modules.home'), [:admin, :root] %></li>
+      <li><%= link_to t('page.modules.plenary_sessions'), [:admin, :plenary_sessions] %></li>
+      <li class="active">
+        <strong><%= t('actions.manage') %></strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-sm-6 text-right">
+    <%= link_to [:admin, @plenary_session], class: 'btn btn-w-s btn-white m-t-md m-l-sm' do %>
+      <i class="fa fa-reply"></i><br/>
+      <%= t('buttons.back') %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= flash_messages %>
+
+<div class="text-right m-b-sm">
+  <a href class="btn btn-white" data-toggle="modal" data-target="#plenary-session-details"><i class="fa fa-info"></i></a>
+</div>
+
+<div class="row responsive-padding" ng-init="init(<%= @plenary_session.id %>)">
+  <div class="col-xs-12">
+    <div class="tabs-container">
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#session-items-list"><%= t('miscellaneous.session_item.list') %></a></li>
+        <li><a data-toggle="tab" href="#polls"><%= t('activerecord.attributes.plenary_session.polls') %></a></li>
+        <li><a data-toggle="tab" href="#queues"><%= t('activerecord.attributes.plenary_session.queues') %></a></li>
+        <li><a data-toggle="tab" href="#members"><%= t('activerecord.attributes.plenary_session.members') %></a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="session-items-list" class="tab-pane active">
+          <div class="panel-body">
+            <!-- Itens da ordem do dia da sessão, com opções para: -->
+            <!--  - iniciar votação para o item -->
+            <!--  - marcar como aprovado, rejeitado ou não votado -->
+
+            <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.items.length > 0'} %>
+
+            <div ng-show="loading || plenarySession.items.length > 0">
+              <div class="m-t-md">
+                <small class="pull-right text-muted" ng-bind-html="'info.records_added_html' | t:{count: plenarySession.items.length || 0} | trust"></small><br>
+                <hr class="m-t-none">
+              </div>
+
+              <div class="table-responsive">
+                <div loading-container="loading">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th><%= t('activerecord.attributes.session_item.title') %></th>
+                        <th><%= t('activerecord.attributes.session_item.author') %></th>
+                        <th><%= t('activerecord.attributes.session_item.acceptance') %></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr ng-repeat="item in plenarySession.items track by item.id" ng-class="{'success': item.acceptance === 'approved', 'danger': item.acceptance === 'rejected'}">
+                        <td>{{$index + 1}}. {{item.title}}</td>
+                        <td>{{item.author.name}}</td>
+                        <td>
+                          <i class="fa" ng-class="{
+                              'fa-check text-navy': item.acceptance === 'approved',
+                              'fa-times text-warning': item.acceptance === 'rejected',
+                              'fa-ellipsis-h text-muted': item.acceptance === 'not_voted'
+                            }"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="polls" class="tab-pane">
+          <div class="panel-body">
+            <!-- Lista de todas as votações realizadas na sessão, em ordem decrescente de criação e botão para iniciar votação avulsa -->
+          </div>
+        </div>
+
+        <div id="queues" class="tab-pane">
+          <div class="panel-body">
+            <!-- Lista de todas as filas de vereadores iniciadas na sessão, em ordem decrescente de criação e botão para iniciar uma nova fila -->
+          </div>
+        </div>
+
+        <div id="members" class="tab-pane">
+          <div class="panel-body">
+            <!-- Lista de todos os vereadores na sessão em ordem alfabética, com marcação se é presidente e se está presente, e botão para iniciar chamada de presença -->
+
+            <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.members.length > 0'} %>
+
+            <div ng-show="loading || plenarySession.members.length > 0">
+              <div class="m-t-md">
+                <small class="pull-right text-muted" ng-bind-html="'info.records_added_html' | t:{count: plenarySession.members.length || 0} | trust"></small><br>
+                <hr class="m-t-none">
+              </div>
+
+              <div class="table-responsive">
+                <div loading-container="loading">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th><%= t('activerecord.attributes.councillor.name') %></th>
+                        <th><%= t('activerecord.attributes.councillor.party_id') %></th>
+                        <th><%= t('activerecord.attributes.session_member.is_president') %></th>
+                        <th><%= t('activerecord.attributes.session_member.is_present') %></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr ng-repeat="member in plenarySession.members track by member.id" ng-class="{'warning': member.is_present === false}">
+                        <td>{{$index + 1}}. {{member.councillor.name}}</td>
+                        <td>{{member.councillor.party.abbreviation}}</td>
+                        <td><i class="fa {{member.is_president ? 'fa-check text-navy' : 'fa-times text-muted'}}"></i></td>
+                        <td>
+                          <i class="fa" ng-class="{
+                            'fa-check text-navy': member.is_present,
+                            'fa-times text-warning': member.is_present === false,
+                            'fa-ellipsis-h text-muted': member.is_present === null
+                          }"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal inmodal" id="plenary-session-details" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content animated fadeIn">
+      <div class="modal-header">
+        <i class="fa fa-bullhorn modal-icon"></i>
+        <h4 class="modal-title"><%= t('activerecord.models.plenary_session.one') %></h4>
+      </div>
+      <div class="modal-body">
+        <%= render partial: 'admin/plenary_sessions/details', locals: { plenary_session: @plenary_session } %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+      </div>
+    </div>
+  </div>
+</div>

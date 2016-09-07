@@ -7,7 +7,14 @@ Rails.application.routes.draw do
         patch :unlock
       end
 
-      resources :roles, :councillors, :parties, :session_items, :plenary_sessions
+      resources :plenary_sessions do
+        scope module: :plenary_sessions do
+          resources :session_managements, only: [:index]
+          # MAIS DAS FUNÇÕES DE GERENCIAMENTO DA SESSÃO (VOTAÇÃO, FILAS, PRESENÇA, ETC...)
+        end
+      end
+
+      resources :roles, :councillors, :parties, :session_items
 
       root 'home#index'
     end

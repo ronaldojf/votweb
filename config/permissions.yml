@@ -4,6 +4,11 @@ default_actions: &default_actions
   - update
   - destroy
 
+Role: *default_actions
+Councillor: *default_actions
+Party: *default_actions
+SessionItem: *default_actions
+
 Administrator:
   - read
   - create
@@ -11,8 +16,9 @@ Administrator:
   - unlock
   - destroy
 
-Role: *default_actions
-Councillor: *default_actions
-Party: *default_actions
-SessionItem: *default_actions
-PlenarySession: *default_actions
+PlenarySession:
+  - read
+  - create
+  - update
+  - manage_session
+  - destroy
