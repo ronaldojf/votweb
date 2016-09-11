@@ -32,6 +32,9 @@ pt-BR:
         zero: 'Nenhum registro adicionado.'
         one: '<strong>1</strong> registro adicionado.'
         other: '<strong>%{count}</strong> registros adicionados.'
+      seconds:
+        one: '1 segundo.'
+        other: '%{count} segundos.'
     errors:
       searching_records: 'Ocorreu um erro ao tentar buscar os registros, tente novamente mais tarde'
     datepicker:

@@ -3,6 +3,7 @@ ruby '2.3.1'
 
 gem 'rails',                  '5.0.0'
 gem 'puma',                   '3.5.2'
+gem 'redis',                  '3.3.1'
 gem 'secure_headers',         '3.4.0'
 gem 'jquery-rails',           '4.1.1'
 gem 'turbolinks',             '5.0.1'

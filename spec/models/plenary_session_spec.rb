@@ -10,6 +10,7 @@ RSpec.describe PlenarySession, type: :model do
   it { is_expected.to have_many :polls }
   it { is_expected.to have_many :members }
   it { is_expected.to have_many :items }
+  it { is_expected.to have_many :queues }
   it { is_expected.to accept_nested_attributes_for :members }
 
   describe '.search' do

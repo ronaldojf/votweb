@@ -190,6 +190,13 @@ pt-BR:
         councillor_id: Vereador
         is_president: Presidente?
         is_present: Presente?
+      poll:
+        description: Descrição
+        process: Processo de votação
+        duration: Duração(segundos)
+        created_at: Criada em
+      queue:
+        created_at: Criada em
 
   enums:
     names: &enum_names
@@ -235,6 +242,11 @@ pt-BR:
         is_present:
           yes: Presente
           no: Ausente
+      poll:
+        process:
+          symbolic: Simbólica
+          named: Nominal
+          secret: Secreta
 
   errors:
     custom_messages:
@@ -251,6 +263,10 @@ pt-BR:
       add_to_session_info: Somente itens não ligados a nenhuma sessão podem ser adicionados
     session_member:
       president: Presidente
+    poll:
+      add: Criar votação
+    queue:
+      add: Criar fila de vereadores(as)
 
   activerecord:
     <<: *models_and_attributes

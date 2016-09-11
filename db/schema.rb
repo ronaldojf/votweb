@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160903123808) do
+ActiveRecord::Schema.define(version: 20160911140627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,9 +52,11 @@ ActiveRecord::Schema.define(version: 20160903123808) do
   end
 
   create_table "councillors_queues", force: :cascade do |t|
-    t.json     "councillors_ids", default: [], null: false
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.json     "councillors_ids",    default: [], null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "plenary_session_id"
+    t.index ["plenary_session_id"], name: "index_councillors_queues_on_plenary_session_id", using: :btree
   end
 
   create_table "parties", force: :cascade do |t|
@@ -149,6 +151,7 @@ ActiveRecord::Schema.define(version: 20160903123808) do
   end
 
   add_foreign_key "councillors", "parties"
+  add_foreign_key "councillors_queues", "plenary_sessions"
   add_foreign_key "permissions", "roles"
   add_foreign_key "polls", "plenary_sessions"
   add_foreign_key "polls", "session_items"

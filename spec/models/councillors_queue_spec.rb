@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe CouncillorsQueue, type: :model do
   it { is_expected.to be_an ApplicationRecord }
+  it { is_expected.to validate_presence_of :plenary_session }
+  it { is_expected.to belong_to :plenary_session }
 
   describe '#add_to_queue' do
     context 'quando for passado um vereador que ainda não foi adicionado à fila' do

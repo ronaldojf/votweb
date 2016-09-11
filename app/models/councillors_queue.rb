@@ -1,5 +1,11 @@
 class CouncillorsQueue < ApplicationRecord
 
+  belongs_to :plenary_session
+
+  after_commit { CouncillorsQueueRelayJob.perform_later(self) }
+
+  validates :plenary_session, presence: true
+
   def add_to_queue(councillor)
     councillor_id = (councillor.try(:id) || councillor).to_i
 

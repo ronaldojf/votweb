@@ -13,12 +13,14 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require action_cable
 //= require bootstrap-sprockets
 //= require js-routes
 //= require i18n/translations
 //= require inspinia/inspinia
 
 //= require base
+
 
 /* Bower Components */
 //= require angular/angular
@@ -30,8 +32,10 @@
 //= require bootstrap-daterangepicker/daterangepicker.js
 //= require angular-daterangepicker/js/angular-daterangepicker.js
 
-//= require angular-chosen-localytics/chosen
+
 //= require ng-rails-csrf
+//= require angular-chosen-localytics/chosen
+//= require ngCable/ngCable
 
 //= require admin/angular/app
 //= require admin/general

@@ -26,7 +26,9 @@
   <a href class="btn btn-white" data-toggle="modal" data-target="#plenary-session-details"><i class="fa fa-info"></i></a>
 </div>
 
-<div class="row responsive-padding" ng-init="init(<%= @plenary_session.id %>)">
+<div class="row responsive-padding" ng-init="init(<%= @plenary_session.id %>);
+                                              pollProcesses = <%= t('enums.specific_items.poll.process').to_json %>;">
+
   <div class="col-xs-12">
     <div class="tabs-container">
       <ul class="nav nav-tabs">
@@ -38,9 +40,9 @@
       <div class="tab-content">
         <div id="session-items-list" class="tab-pane active">
           <div class="panel-body">
-            <!-- Itens da ordem do dia da sessão, com opções para: -->
-            <!--  - iniciar votação para o item -->
-            <!--  - marcar como aprovado, rejeitado ou não votado -->
+<!-- Itens da ordem do dia da sessão, com opções para: -->
+<!--  - iniciar votação para o item -->
+<!--  - marcar como aprovado, rejeitado ou não votado -->
 
             <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.items.length > 0'} %>
 
@@ -83,19 +85,93 @@
 
         <div id="polls" class="tab-pane">
           <div class="panel-body">
-            <!-- Lista de todas as votações realizadas na sessão, em ordem decrescente de criação e botão para iniciar votação avulsa -->
+            <div class="row m-b-md">
+              <div class="col-xs-12 text-right">
+                <%= link_to '', class: 'btn btn-w-s btn-primary', 'data-toggle' => 'modal', 'data-target' => '#add-poll' do %>
+                  <i class="fa fa-plus"></i><br/>
+                  <%= t('buttons.new') %>
+                <% end %>
+              </div>
+            </div>
+
+            <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.polls.length > 0'} %>
+
+            <div ng-show="loading || plenarySession.polls.length > 0">
+              <div class="m-t-md">
+                <small class="pull-right text-muted" ng-bind-html="'info.records_added_html' | t:{count: plenarySession.polls.length || 0} | trust"></small><br>
+                <hr class="m-t-none">
+              </div>
+
+              <div class="table-responsive">
+                <div loading-container="loading">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th><%= t('activerecord.attributes.poll.description') %></th>
+                        <th><%= t('activerecord.attributes.poll.process') %></th>
+                        <th><%= t('activerecord.attributes.poll.duration') %></th>
+                        <th><%= t('activerecord.attributes.poll.created_at') %></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr ng-repeat="poll in (plenarySession.polls | orderBy:'-created_at') track by poll.id">
+                        <td>{{poll.description | truncate:60}}</td>
+                        <td>{{pollProcesses[poll.process]}}</td>
+                        <td>{{ 'info.seconds' | t:{count: poll.duration || 0} }}</td>
+                        <td>{{poll.created_at | date:'medium'}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div id="queues" class="tab-pane">
           <div class="panel-body">
-            <!-- Lista de todas as filas de vereadores iniciadas na sessão, em ordem decrescente de criação e botão para iniciar uma nova fila -->
+            <div class="row m-b-md">
+              <div class="col-xs-12 text-right">
+                <%= link_to '', class: 'btn btn-w-s btn-primary', 'data-toggle' => 'modal', 'data-target' => '#add-queue' do %>
+                  <i class="fa fa-plus"></i><br/>
+                  <%= t('buttons.new') %>
+                <% end %>
+              </div>
+            </div>
+
+            <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.queues.length > 0'} %>
+
+            <div ng-show="loading || plenarySession.queues.length > 0">
+              <div class="m-t-md">
+                <small class="pull-right text-muted" ng-bind-html="'info.records_added_html' | t:{count: plenarySession.queues.length || 0} | trust"></small><br>
+                <hr class="m-t-none">
+              </div>
+
+              <div class="table-responsive">
+                <div loading-container="loading">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th><%= t('activerecord.attributes.queue.created_at') %></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr ng-repeat="queue in (plenarySession.queues | orderBy:'-created_at') track by queue.id">
+                        <td>{{queue.created_at | date:'medium'}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div id="members" class="tab-pane">
           <div class="panel-body">
-            <!-- Lista de todos os vereadores na sessão em ordem alfabética, com marcação se é presidente e se está presente, e botão para iniciar chamada de presença -->
+<!-- Lista de todos os vereadores na sessão em ordem alfabética, com marcação se é presidente e se está presente, e botão para iniciar chamada de presença -->
 
             <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.members.length > 0'} %>
 
@@ -154,6 +230,42 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal inmodal" id="add-poll" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content animated fadeIn">
+      <div class="modal-header">
+        <i class="fa fa-ticket modal-icon"></i>
+        <h4 class="modal-title"><%= t('miscellaneous.poll.add') %></h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+        <button type="button" class="btn btn-primary"><%= t('buttons.add') %></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal inmodal" id="add-queue" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content animated fadeIn">
+      <div class="modal-header">
+        <i class="fa fa-group modal-icon"></i>
+        <h4 class="modal-title"><%= t('miscellaneous.queue.add') %></h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+        <button type="button" class="btn btn-primary"><%= t('buttons.add') %></button>
       </div>
     </div>
   </div>

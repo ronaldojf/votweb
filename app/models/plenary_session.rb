@@ -3,6 +3,7 @@ class PlenarySession < ApplicationRecord
   acts_as_paranoid
 
   has_many :polls
+  has_many :queues, class_name: 'CouncillorsQueue'
   has_many :members, class_name: 'SessionMember'
   has_many :items, class_name: 'SessionItem'
   accepts_nested_attributes_for :members, allow_destroy: true

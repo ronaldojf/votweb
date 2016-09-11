@@ -5,6 +5,8 @@ class Poll < ApplicationRecord
   belongs_to :session_item
   has_many :votes
 
+  after_commit { PollRelayJob.perform_later(self) }
+
   enum process: [:symbolic, :named, :secret]
 
   validates :process, :plenary_session, :duration, presence: true
