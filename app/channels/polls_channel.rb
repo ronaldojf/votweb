@@ -7,12 +7,4 @@ class PollsChannel < ApplicationCable::Channel
   def unsubscribed
     stop_all_streams
   end
-
-  def receive(data)
-    poll = if data['id']
-        PlenarySession.find(params[:room]).polls.find(data['id']).update!(data)
-      else
-        PlenarySession.find(params[:room]).polls.create!(data)
-      end
-  end
 end

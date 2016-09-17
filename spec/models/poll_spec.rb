@@ -15,4 +15,34 @@ RSpec.describe Poll, type: :model do
 
     expect(poll.duration).to eq 5.seconds
   end
+
+  describe '#stop_countdown' do
+    context 'se a data de criação somada à duração ainda for futura' do
+      it 'deve alterar a duração para a quantidade de tempo em segundos que se passou desde que o registro foi criado, até que esse método foi executado' do
+        Timecop.freeze do
+          poll = create :poll, duration: 20
+
+          Timecop.travel 12.seconds.from_now do
+            poll.stop_countdown
+          end
+
+          expect(poll.reload.duration).to eq 12
+        end
+      end
+    end
+
+    context 'se a data de criação somada à duração já tiver passado' do
+      it 'não deve alterar a duração' do
+        Timecop.freeze do
+          poll = create :poll, duration: 20
+
+          Timecop.travel 22.seconds.from_now do
+            poll.stop_countdown
+          end
+
+          expect(poll.reload.duration).to eq 20
+        end
+      end
+    end
+  end
 end

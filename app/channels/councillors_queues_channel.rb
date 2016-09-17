@@ -7,12 +7,4 @@ class CouncillorsQueuesChannel < ApplicationCable::Channel
   def unsubscribed
     stop_all_streams
   end
-
-  def receive(data)
-    queue = if data['id']
-        PlenarySession.find(params[:room]).queues.find(data['id']).update!(data)
-      else
-        PlenarySession.find(params[:room]).queues.create!(data)
-      end
-  end
 end

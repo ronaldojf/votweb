@@ -1,1 +1,1 @@
-json.extract! queue, :id, :councillors_ids, :created_at, :updated_at
+json.extract! queue, :id, :description, :duration, :councillors_ids, :created_at, :updated_at

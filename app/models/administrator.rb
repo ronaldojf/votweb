@@ -1,6 +1,6 @@
 class Administrator < ApplicationRecord
   include Utils::Searching
-  devise :database_authenticatable, :registerable, :trackable, :validatable, :timeoutable, :lockable
+  devise :database_authenticatable, :registerable, :trackable, :validatable, :lockable
 
   has_and_belongs_to_many :roles
 

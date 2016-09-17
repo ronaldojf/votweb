@@ -10,8 +10,15 @@ Rails.application.routes.draw do
       resources :plenary_sessions do
         scope module: :plenary_sessions do
           resources :session_managements, only: [:index]
-          # MAIS DAS FUNÇÕES DE GERENCIAMENTO DA SESSÃO (VOTAÇÃO, FILAS, PRESENÇA, ETC...)
         end
+      end
+
+      resources :polls, only: [:create] do
+        patch :stop, on: :member
+      end
+
+      resources :councillors_queues, only: [:create] do
+        patch :stop, on: :member
       end
 
       resources :roles, :councillors, :parties, :session_items

@@ -71,4 +71,5 @@ group :development, :test do
   gem 'spring-commands-rspec', '1.0.4'
   gem 'byebug',                '8.2.1'
   gem 'spring',                '1.5.0'
+  gem 'timecop',               '0.8.1'
 end

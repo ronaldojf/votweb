@@ -87,7 +87,7 @@
           <div class="panel-body">
             <div class="row m-b-md">
               <div class="col-xs-12 text-right">
-                <%= link_to '', class: 'btn btn-w-s btn-primary', 'data-toggle' => 'modal', 'data-target' => '#add-poll' do %>
+                <%= link_to '', class: 'btn btn-w-s btn-primary', 'ng-click' => 'openPollModal()', 'ng-disabled' => 'loading || countdownRunning' do %>
                   <i class="fa fa-plus"></i><br/>
                   <%= t('buttons.new') %>
                 <% end %>
@@ -111,15 +111,26 @@
                         <th><%= t('activerecord.attributes.poll.process') %></th>
                         <th><%= t('activerecord.attributes.poll.duration') %></th>
                         <th><%= t('activerecord.attributes.poll.created_at') %></th>
+                        <th></th>
                       </tr>
                     </thead>
 
                     <tbody>
-                      <tr ng-repeat="poll in (plenarySession.polls | orderBy:'-created_at') track by poll.id">
-                        <td>{{poll.description | truncate:60}}</td>
+                      <tr ng-repeat="poll in (plenarySession.polls | orderBy:'-created_at') track by poll.id" ng-class="{'info': poll.countdown >= 0}">
+                        <td>
+                          <strong ng-show="poll.countdown >= 0">({{poll.countdown}})</strong>
+                          {{poll.description | truncate:60}}
+                          <span class="text-muted" ng-hide="poll.description"><%= t('info.no_description') %></span>
+                        </td>
                         <td>{{pollProcesses[poll.process]}}</td>
                         <td>{{ 'info.seconds' | t:{count: poll.duration || 0} }}</td>
                         <td>{{poll.created_at | date:'medium'}}</td>
+                        <td class="text-right">
+                          <button class="btn btn-xs btn-warning"
+                              ng-show="!poll.stopped && poll.countdown >= 0"
+                              ng-disabled="poll.stopping"
+                              ng-click="stopPoll(poll)"><%= t('buttons.stop') %></button>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -133,7 +144,7 @@
           <div class="panel-body">
             <div class="row m-b-md">
               <div class="col-xs-12 text-right">
-                <%= link_to '', class: 'btn btn-w-s btn-primary', 'data-toggle' => 'modal', 'data-target' => '#add-queue' do %>
+                <%= link_to '', class: 'btn btn-w-s btn-primary', 'ng-click' => 'openQueueModal()', 'ng-disabled' => 'loading || countdownRunning' do %>
                   <i class="fa fa-plus"></i><br/>
                   <%= t('buttons.new') %>
                 <% end %>
@@ -153,13 +164,28 @@
                   <table class="table table-hover">
                     <thead>
                       <tr>
+                        <th><%= t('activerecord.attributes.queue.description') %></th>
+                        <th><%= t('activerecord.attributes.queue.duration') %></th>
                         <th><%= t('activerecord.attributes.queue.created_at') %></th>
+                        <th></th>
                       </tr>
                     </thead>
 
                     <tbody>
-                      <tr ng-repeat="queue in (plenarySession.queues | orderBy:'-created_at') track by queue.id">
+                      <tr ng-repeat="queue in (plenarySession.queues | orderBy:'-created_at') track by queue.id" ng-class="{'info': queue.countdown >= 0}">
+                        <td>
+                          <strong ng-show="queue.countdown >= 0">({{queue.countdown}})</strong>
+                          {{queue.description | truncate:60}}
+                          <span class="text-muted" ng-hide="queue.description"><%= t('info.no_description') %></span>
+                        </td>
+                        <td>{{ 'info.seconds' | t:{count: queue.duration || 0} }}</td>
                         <td>{{queue.created_at | date:'medium'}}</td>
+                        <td class="text-right">
+                          <button class="btn btn-xs btn-warning"
+                              ng-show="!queue.stopped && queue.countdown >= 0"
+                              ng-disabled="queue.stopping"
+                              ng-click="stopQueue(queue)"><%= t('buttons.stop') %></button>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -238,35 +264,81 @@
 <div class="modal inmodal" id="add-poll" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content animated fadeIn">
-      <div class="modal-header">
-        <i class="fa fa-ticket modal-icon"></i>
-        <h4 class="modal-title"><%= t('miscellaneous.poll.add') %></h4>
-      </div>
-      <div class="modal-body">
+      <form ng-submit="createPoll(newPoll)">
+        <div class="modal-header">
+          <i class="fa fa-ticket modal-icon"></i>
+          <h4 class="modal-title"><%= t('miscellaneous.poll.add') %></h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-inputs">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="poll-process" class="control-label"><%= t('simple_form.required.html') %> <%= t('activerecord.attributes.poll.process') %></label>
+                  <select id="poll-process" class="form-control" ng-model="newPoll.process" ng-options="key as label for (key, label) in pollProcesses"></select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="poll-duration" class="control-label"><%= t('simple_form.required.html') %> <%= t('activerecord.attributes.poll.duration') %></label>
+                  <input type="number" id="poll-duration" min="1" class="form-control" ng-model="newPoll.duration">
+                </div>
+              </div>
+            </div>
 
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="poll-description" class="control-label"><%= t('activerecord.attributes.poll.description') %></label>
+                  <input type="text" id="poll-description" class="form-control" ng-model="newPoll.description">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+          <button type="submit" class="btn btn-primary" ng-disabled="loading || countdownRunning"><%= t('buttons.add') %></button>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
-        <button type="button" class="btn btn-primary"><%= t('buttons.add') %></button>
-      </div>
-    </div>
+    </form>
   </div>
 </div>
 
 <div class="modal inmodal" id="add-queue" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content animated fadeIn">
-      <div class="modal-header">
-        <i class="fa fa-group modal-icon"></i>
-        <h4 class="modal-title"><%= t('miscellaneous.queue.add') %></h4>
-      </div>
-      <div class="modal-body">
+      <form ng-submit="createQueue(newQueue)">
+        <div class="modal-header">
+          <i class="fa fa-group modal-icon"></i>
+          <h4 class="modal-title"><%= t('miscellaneous.queue.add') %></h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-inputs">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="queue-description" class="control-label"><%= t('activerecord.attributes.queue.description') %></label>
+                  <input type="text" id="queue-description" class="form-control" ng-model="newQueue.description">
+                </div>
+              </div>
+            </div>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
-        <button type="button" class="btn btn-primary"><%= t('buttons.add') %></button>
-      </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="queue-duration" class="control-label"><%= t('simple_form.required.html') %> <%= t('activerecord.attributes.queue.duration') %></label>
+                  <input type="number" id="queue-duration" min="1" class="form-control" ng-model="newQueue.duration">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+          <button type="submit" class="btn btn-primary" ng-disabled="loading || countdownRunning"><%= t('buttons.add') %></button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
