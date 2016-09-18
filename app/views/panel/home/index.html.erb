@@ -1,6 +1,9 @@
 <% content_for :angular_controller, 'CouncillorsController' %>
 
-<div class="profile-box">
+<div class="profile-box" ng-cloak ng-init="
+  kinds = <%= t('enums.specific_items.plenary_session.kind').to_json %>;
+  initSessions(<%= @plenary_sessions.to_json(only: [:id, :title, :kind]) %>);">
+
   <div class="profile-box-header">
     <h1>{{tickingClockDateTime | date:'short'}}</h1>
   </div>
@@ -8,9 +11,30 @@
   <div class="profile-box-body">
     <h1 class="text-center text-navy"><%= current_user.name %></h1>
     <hr>
-    <h4 class="text-center">
-      Nenhuma sessão foi encontrada aberta, na qual você seja um participante.
-    </h4>
+    <div class="session-info">
+      <div class="no-sessions" ng-hide="sessions.length > 0">
+        <h4>Não existe nenhuma sessão que inicie hoje, na qual você seja um participante.</h4>
+      </div>
+
+      <div class="session-pick" ng-show="sessions.length > 0 && !currentSession">
+        <h4>Escolha uma das sessões abaixo para se conectar.</h4>
+        <br>
+
+        <ul class="list-unstyled">
+          <li ng-repeat="session in sessions track by session.id">
+            <h4>
+              <a href ng-click="setCurrentSession(session)">
+                [<%= t('activerecord.models.plenary_session.one') %> {{kinds[session.kind]}}] {{session.title}}
+              </a>
+            </h4>
+          </li>
+        </ul>
+      </div>
+
+      <div class="current-session" ng-show="currentSession">
+        <h4>[<%= t('activerecord.models.plenary_session.one') %> {{kinds[currentSession.kind]}}] {{currentSession.title}} <a href ng-click="resetCurrentSession()">(Trocar)</a></h4>
+      </div>
+    </div>
     <hr>
     <h3 class="text-right">
       <%= link_to destroy_session_path(:councillor), method: :delete, data: {confirm: t('confirm.signout')} do %>
@@ -20,12 +44,12 @@
   </div>
 </div>
 
-<div class="poll-box hide">
+<div class="poll-box hide" ng-cloak>
   <button class="btn btn-lg btn-primary">SIM</button>
   <button class="btn btn-lg btn-danger">NÃO</button>
   <button class="btn btn-lg btn-default">ABSTER-SE</button>
 </div>
 
-<div class="confirmation-box hide">
+<div class="confirmation-box hide" ng-cloak>
   <button class="btn btn-lg btn-primary">PARTICIPAR</button>
 </div>

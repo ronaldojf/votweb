@@ -14,6 +14,18 @@ class PlenarySession < ApplicationRecord
 
   scope :not_test, -> { where.not(is_test: true) }
 
+  scope :start_today, -> {
+    where('plenary_sessions.start_at BETWEEN :start AND :end', start: DateTime.current.at_beginning_of_day, end: DateTime.current.at_end_of_day)
+  }
+
+  scope :has_member, -> (councillor) {
+    councillor_id = councillor.try(:id) || councillor
+    where(
+      "(SELECT true FROM session_members WHERE session_members.plenary_session_id = plenary_sessions.id AND session_members.councillor_id = :councillor_id LIMIT 1)",
+      councillor_id: councillor_id
+    )
+  }
+
   scope :by_kind, -> (kind) {
     where(kind: kinds[kind]) if kind.present?
   }

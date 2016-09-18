@@ -131,4 +131,30 @@ RSpec.describe PlenarySession, type: :model do
       end
     end
   end
+
+  describe '.start_today' do
+    it 'deve retornar somente sessões que iniciem hoje' do
+      Timecop.freeze do
+        session1 = create :plenary_session, start_at: 1.day.ago, end_at: DateTime.current
+        session2 = create :plenary_session, start_at: DateTime.current, end_at: 1.day.from_now
+        session3 = create :plenary_session, start_at: 1.day.from_now, end_at: 2.days.from_now
+
+        expect(PlenarySession.start_today).to eq [session2]
+      end
+    end
+  end
+
+  describe '.has_member' do
+    it 'deve retornar somente sessões onde o vereador passado é um participante' do
+      councillor1 = create :councillor
+      councillor2 = create :councillor
+      session1 = create :plenary_session
+      session2 = create :plenary_session
+      create :session_member, councillor: councillor1, plenary_session: session1
+      create :session_member, councillor: councillor2, plenary_session: session2
+
+      expect(PlenarySession.has_member(councillor1)).to eq [session1]
+      expect(PlenarySession.has_member(councillor2)).to eq [session2]
+    end
+  end
 end

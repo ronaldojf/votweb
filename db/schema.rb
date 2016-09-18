@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160918161817) do
+ActiveRecord::Schema.define(version: 20160918202258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,9 @@ ActiveRecord::Schema.define(version: 20160918161817) do
     t.integer  "kind",       default: 0,     null: false
     t.boolean  "is_test",    default: false, null: false
     t.index ["deleted_at"], name: "index_plenary_sessions_on_deleted_at", using: :btree
+    t.index ["is_test"], name: "index_plenary_sessions_on_is_test", using: :btree
+    t.index ["kind"], name: "index_plenary_sessions_on_kind", using: :btree
+    t.index ["start_at", "end_at"], name: "index_plenary_sessions_on_start_at_and_end_at", using: :btree
   end
 
   create_table "polls", force: :cascade do |t|
