@@ -59,6 +59,8 @@ pt-BR:
   login:
     administrator:
       welcome: Administração
+    councillor:
+      welcome: Painel do Vereador
 
   profile:
     edit: Alterar Perfil
@@ -114,6 +116,7 @@ pt-BR:
     plenary_sessions: sessoes
     holds: cadeiras
     session_managements: gerenciar
+    panel: painel
 
   models_and_attributes: &models_and_attributes
     models: &models

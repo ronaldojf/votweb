@@ -1,0 +1,31 @@
+<% content_for :angular_controller, 'CouncillorsController' %>
+
+<div class="profile-box">
+  <div class="profile-box-header">
+    <h1>{{tickingClockDateTime | date:'short'}}</h1>
+  </div>
+
+  <div class="profile-box-body">
+    <h1 class="text-center text-navy"><%= current_user.name %></h1>
+    <hr>
+    <h4 class="text-center">
+      Nenhuma sessão foi encontrada aberta, na qual você seja um participante.
+    </h4>
+    <hr>
+    <h3 class="text-right">
+      <%= link_to destroy_session_path(:councillor), method: :delete, data: {confirm: t('confirm.signout')} do %>
+        <%= t('profile.signout').mb_chars.upcase %>
+      <% end %>
+    </h3>
+  </div>
+</div>
+
+<div class="poll-box hide">
+  <button class="btn btn-lg btn-primary">SIM</button>
+  <button class="btn btn-lg btn-danger">NÃO</button>
+  <button class="btn btn-lg btn-default">ABSTER-SE</button>
+</div>
+
+<div class="confirmation-box hide">
+  <button class="btn btn-lg btn-primary">PARTICIPAR</button>
+</div>

@@ -1,17 +1,3 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
- *
- */
-
 @import 'normalize-rails';
 
 @import 'font-awesome-sprockets';
@@ -19,8 +5,38 @@
 
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
-@import 'inspinia/inspinia';
-@import 'inspinia/plugins/iCheck/custom';
+
+/* INSPINIA - BEGIN */
+  // Plugins
+  @import 'inspinia/plugins/chosen/chosen';
+  @import 'inspinia/plugins/sweetalert/sweetalert';
+
+  // Variables, Mixins
+  @import 'inspinia/base/variables';
+  @import 'inspinia/base/mixins';
+
+  // INSPINIA Theme Elements
+  @import 'inspinia/base/typography';
+  @import 'inspinia/base/navigation';
+  @import 'inspinia/base/top_navigation';
+  @import 'inspinia/base/buttons';
+  @import 'inspinia/base/badgets_labels';
+  @import 'inspinia/base/elements';
+  @import 'inspinia/base/sidebar';
+  @import 'inspinia/base/base';
+  @import 'inspinia/base/pages';
+  @import 'inspinia/base/spinners';
+
+  // INSPINIA Skins
+  @import 'inspinia/base/skins';
+
+  // Media query style
+  @import 'inspinia/base/media';
+
+  @import 'inspinia/animate';
+
+  @import 'inspinia/plugins/iCheck/custom';
+/* INSPINIA - END */
 
 @import 'ng-table/dist/ng-table';
 @import 'ng-cropper/dist/ngCropper.all.min';

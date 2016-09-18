@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
   localized do
     devise_for :administrators, path: :admin, controllers: { registrations: 'admin/registrations' }
+    devise_for :councillors, path: :panel
+
     namespace :admin do
       resources :administrators do
         patch :unlock
@@ -23,6 +25,10 @@ Rails.application.routes.draw do
 
       resources :roles, :councillors, :parties, :session_items
 
+      root 'home#index'
+    end
+
+    namespace :panel do
       root 'home#index'
     end
 

@@ -1,7 +1,34 @@
 @import 'normalize-rails';
-@import 'bootstrap-sprockets';
-@import 'bootstrap';
+
 @import 'font-awesome-sprockets';
 @import 'font-awesome';
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
+@import 'bootstrap-sprockets';
+@import 'bootstrap';
+
+/* INSPINIA - BEGIN */
+  // Variables, Mixins
+  @import "inspinia/base/variables";
+  @import "inspinia/base/mixins";
+
+  // INSPINIA Theme Elements
+  @import "inspinia/base/typography";
+  @import "inspinia/base/navigation";
+  @import "inspinia/base/top_navigation";
+  @import "inspinia/base/buttons";
+  @import "inspinia/base/badgets_labels";
+  @import "inspinia/base/elements";
+  @import "inspinia/base/base";
+  @import "inspinia/base/pages";
+  @import "inspinia/base/spinners";
+
+  // INSPINIA Skins
+  @import "inspinia/base/skins";
+
+  // Media query style
+  @import "inspinia/base/media";
+
+  @import 'inspinia/animate';
+/* INSPINIA - END */
+
 @import 'public/styles';

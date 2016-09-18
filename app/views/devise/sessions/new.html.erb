@@ -5,10 +5,10 @@
     </div>
 
     <div class="ibox-content">
-      <h2 class="font-bold text-center"><%= t('login.administrator.welcome') %></h2>
+      <h2 class="font-bold text-center"><%= t("login.#{resource.is_a?(Councillor) ? 'councillor' : 'administrator'}.welcome") %></h2>
 
       <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'm-t'}) do |f| %>
-        <%= f.input :email, required: true, label: false, input_html: { autofocus: true } %>
+        <%= f.input (resource.is_a?(Councillor) ? :username : :email), required: true, label: false %>
         <%= f.input :password, required: true, label: false %>
 
         <%= flash_messages %>

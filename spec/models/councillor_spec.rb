@@ -103,14 +103,6 @@ RSpec.describe Councillor, type: :model do
     end
   end
 
-  describe '#username=' do
-    it 'deve gravar o nome de usuário em letras minúsculas' do
-      councillor = build :councillor, username: 'UPPER_USERNAME'
-
-      expect(councillor.username).to eq 'upper_username'
-    end
-  end
-
   describe '#email_required?' do
     it 'deve ser falso' do
       councillor = build :councillor
