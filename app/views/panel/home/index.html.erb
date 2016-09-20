@@ -1,0 +1,55 @@
+<% content_for :angular_controller, 'CouncillorsController' %>
+
+<div class="profile-box" ng-cloak ng-hide="currentEvent" ng-init="
+  kinds = <%= t('enums.specific_items.plenary_session.kind').to_json %>;
+  initSessions(<%= @plenary_sessions.to_json(only: [:id, :title, :kind]) %>);">
+
+  <div class="profile-box-header">
+    <h1>{{tickingClockDateTime | date:'short'}}</h1>
+  </div>
+
+  <div class="profile-box-body">
+    <h1 class="text-center text-navy"><%= current_user.name %></h1>
+    <hr>
+    <div class="session-info">
+      <div class="no-sessions" ng-hide="sessions.length > 0">
+        <h4>Não existe nenhuma sessão que inicie hoje, na qual você seja um participante.</h4>
+      </div>
+
+      <div class="session-pick" ng-show="sessions.length > 0 && !currentSession">
+        <h4>Escolha uma das sessões abaixo para se conectar.</h4>
+        <br>
+
+        <ul class="list-unstyled">
+          <li ng-repeat="session in sessions track by session.id">
+            <h4>
+              <a href ng-click="setCurrentSession(session)">
+                [<%= t('activerecord.models.plenary_session.one') %> {{kinds[session.kind]}}] {{session.title}}
+              </a>
+            </h4>
+          </li>
+        </ul>
+      </div>
+
+      <div class="current-session" ng-show="currentSession">
+        <h4>[<%= t('activerecord.models.plenary_session.one') %> {{kinds[currentSession.kind]}}] {{currentSession.title}} <a href ng-click="resetCurrentSession()">(Trocar)</a></h4>
+      </div>
+    </div>
+    <hr>
+    <h3 class="text-right">
+      <%= link_to destroy_session_path(:councillor), method: :delete, data: {confirm: t('confirm.signout')} do %>
+        <%= t('profile.signout').mb_chars.upcase %>
+      <% end %>
+    </h3>
+  </div>
+</div>
+
+<div class="poll-box" ng-show="currentEvent === 'poll'" ng-cloak>
+  <button class="btn btn-lg btn-primary" ng-disabled="loading" ng-click="voteFor('approvation')">SIM</button>
+  <button class="btn btn-lg btn-danger" ng-disabled="loading" ng-click="voteFor('rejection')">NÃO</button>
+  <button class="btn btn-lg btn-default" ng-disabled="loading" ng-click="voteFor('abstention')">ABSTER-SE</button>
+</div>
+
+<div class="confirmation-box" ng-show="currentEvent === 'queue'" ng-cloak>
+  <button class="btn btn-lg btn-primary" ng-disabled="loading" ng-click="participateInQueue()">PARTICIPAR</button>
+</div>

@@ -24,11 +24,6 @@ class Councillor < ApplicationRecord
   }
 
   validates :name, :username, :party, presence: true
-  validates :username, uniqueness: { case_sensitive: false }
-
-  def username=(value)
-    super(value.to_s.downcase)
-  end
 
   def email_required?
     false

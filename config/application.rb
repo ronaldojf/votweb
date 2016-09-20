@@ -18,6 +18,8 @@ Bundler.require(*Rails.groups)
 
 module Votweb
   class Application < Rails::Application
+    config.action_cable.mount_path = '/websocket'
+
     # Do not generate specs for views and requests. Also, do not generate assets.
     config.generators do |g|
       g.helper false

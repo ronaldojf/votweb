@@ -6,6 +6,10 @@ json.set! :members do
 
     json.set! :councillor do
       json.extract! member.councillor, :id, :name
+
+      json.set! :party do
+        json.extract! member.councillor.party, :id, :abbreviation
+      end
     end
   end
 end
@@ -18,4 +22,12 @@ json.set! :items do
       json.extract! item.author, :id, :name
     end
   end
+end
+
+json.set! :polls do
+  json.array! @plenary_session.polls, partial: 'partials/polls/poll', as: :poll
+end
+
+json.set! :queues do
+  json.array! @plenary_session.queues, partial: 'partials/councillors_queues/queue', as: :queue
 end

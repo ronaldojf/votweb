@@ -3,6 +3,7 @@ ruby '2.3.1'
 
 gem 'rails',                  '5.0.0'
 gem 'puma',                   '3.5.2'
+gem 'redis',                  '3.3.1'
 gem 'secure_headers',         '3.4.0'
 gem 'jquery-rails',           '4.1.1'
 gem 'turbolinks',             '5.0.1'
@@ -70,4 +71,5 @@ group :development, :test do
   gem 'spring-commands-rspec', '1.0.4'
   gem 'byebug',                '8.2.1'
   gem 'spring',                '1.5.0'
+  gem 'timecop',               '0.8.1'
 end

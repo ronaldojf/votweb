@@ -32,3 +32,11 @@
     }
   }
 }
+
+@media (max-width: $screen-sm) {
+  .tabs-container {
+    .nav-tabs li a {
+      padding: 10px;
+    }
+  }
+}

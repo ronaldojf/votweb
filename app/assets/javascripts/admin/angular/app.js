@@ -17,6 +17,7 @@ angular.module('votweb', [
     'localytics.directives',
     'ngCropper',
     'daterangepicker',
+    'ngCable',
     'votweb.services',
     'votweb.directives',
     'votweb.filters',
@@ -35,4 +36,11 @@ angular.module('votweb', [
 
 $(document).on('turbolinks:load', function() {
   angular.bootstrap(document.body, ['votweb']);
+});
+
+$(document).on('turbolinks:before-visit', function() {
+  var scope = angular.element(document.body).scope();
+  if (scope) {
+    scope.$destroy();
+  }
 });

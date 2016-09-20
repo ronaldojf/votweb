@@ -1,3 +1,62 @@
-html, body {
-  font-family: "Open Sans", Arial !important;
+.content {
+  color: white;
+  height: 100%;
+
+  .page-wrapper {
+    height: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+  }
+}
+
+.profile-box {
+  .profile-box-header {
+    text-align: center;
+
+    h1 { margin-top: 0px; }
+  }
+
+  .profile-box-body {
+    border-radius: 6px;
+    background: white;
+    color: $nav-bg;
+    padding: 10px;
+
+    h1, h2, h3, h4, h5 { margin: 0px; }
+    hr {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    a:focus, a:active, a:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.poll-box {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+
+  button {
+    width: 45%;
+    height: 45%;
+    margin: 5px;
+    font-size: 6vw;
+  }
+}
+
+.confirmation-box {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+
+  button {
+    width: 100%;
+    height: 100%;
+    font-size: 10vw;
+  }
 }

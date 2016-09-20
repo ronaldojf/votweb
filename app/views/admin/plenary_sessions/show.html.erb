@@ -10,6 +10,11 @@
     </ol>
   </div>
   <div class="col-sm-6 text-right">
+    <%= link_to [:admin, @plenary_session, :session_managements], class: 'btn btn-w-s btn-success m-t-md m-r-sm' do %>
+      <i class="fa fa-cogs"></i><br/>
+      <%= t('buttons.manage') %>
+    <% end if can?(:manage_session, PlenarySession) %>
+
     <%= link_to [:new, :admin, :plenary_session], class: 'btn btn-w-s btn-primary m-t-md' do %>
       <i class="fa fa-plus"></i><br/>
       <%= t('buttons.new') %>
@@ -54,28 +59,7 @@
       <div class="tab-content">
         <div id="session" class="tab-pane active">
           <div class="panel-body">
-            <ul class="todo-list">
-              <li class="show-action-label">
-                <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.title') %>:</div>
-                <div class="col-sm-9"><%= @plenary_session.title %></div>
-              </li>
-              <li class="show-action-label">
-                <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.kind') %>:</div>
-                <div class="col-sm-9"><%= t(@plenary_session.kind, scope: [:enums, :specific_items, :plenary_session, :kind]) %></div>
-              </li>
-              <li class="show-action-label">
-                <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.start_at') %>:</div>
-                <div class="col-sm-9"><%= l(@plenary_session.start_at, format: :long) %></div>
-              </li>
-              <li class="show-action-label">
-                <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.end_at') %>:</div>
-                <div class="col-sm-9"><%= l(@plenary_session.end_at, format: :long) %></div>
-              </li>
-              <li class="show-action-label">
-                <div class="col-sm-3"><%= t('activerecord.attributes.plenary_session.is_test') %></div>
-                <div class="col-sm-9"><%= t('enums.items.boolean')[@plenary_session.is_test] %></div>
-              </li>
-            </ul>
+            <%= render partial: 'admin/plenary_sessions/details', locals: { plenary_session: @plenary_session } %>
           </div>
         </div>
 
@@ -84,18 +68,38 @@
             <%= custom_flash_messages info: {show: @members.length.zero?, fixed: true, icon: :info, message: t('info.no_councillors')} %>
 
             <% if @members.length > 0 %>
-              <table class="table table-striped table-hover">
-                <tbody>
-                  <% @members.each_with_index do |member, index| %>
+              <div class="m-t-md">
+                <small class="pull-right text-muted"><%= t('info.records_added_html', count: @members.length) %></small><br>
+                <hr class="m-t-none">
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
                     <tr>
-                      <td>
-                        <%= index + 1 %>. <%= member.councillor.name %>
-                        <%= content_tag :span, t('miscellaneous.session_member.president'), class: 'label label-primary' if member.is_president %>
-                      </td>
+                      <th><%= t('activerecord.attributes.councillor.name') %></th>
+                      <th><%= t('activerecord.attributes.councillor.party_id') %></th>
+                      <th><%= t('activerecord.attributes.session_member.is_president') %></th>
                     </tr>
-                  <% end %>
-                </tbody>
-              </table>
+                  </thead>
+
+                  <tbody>
+                    <% @members.each_with_index do |member, index| %>
+                      <tr>
+                        <td><%= index + 1 %>. <%= member.councillor.name %></td>
+                        <td><%= member.councillor.party.abbreviation %></td>
+                        <td>
+                          <% if member.is_president %>
+                            <i class="fa fa-check text-navy"></i>
+                          <% else %>
+                            <i class="fa fa-times text-muted"></i>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
             <% end %>
           </div>
         </div>
@@ -105,24 +109,31 @@
             <%= custom_flash_messages info: {show: @items.length.zero?, fixed: true, icon: :info, message: t('info.no_session_items')} %>
 
             <% if @items.length > 0 %>
-              <table class="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th><%= t('activerecord.attributes.session_item.title') %></th>
-                    <th><%= t('activerecord.attributes.session_item.author') %></th>
-                    <th><%= t('activerecord.attributes.session_item.acceptance') %></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @items.each_with_index do |item, index| %>
+              <div class="m-t-md">
+                <small class="pull-right text-muted"><%= t('info.records_added_html', count: @items.length) %></small><br>
+                <hr class="m-t-none">
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
                     <tr>
-                      <td><%= index + 1 %>. <%= item.title %></td>
-                      <td><%= item.author.name %></td>
-                      <td><%= t(item.acceptance, scope: [:enums, :specific_items, :session_item, :acceptance]) %></td>
+                      <th><%= t('activerecord.attributes.session_item.title') %></th>
+                      <th><%= t('activerecord.attributes.session_item.author') %></th>
+                      <th><%= t('activerecord.attributes.session_item.acceptance') %></th>
                     </tr>
-                  <% end %>
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    <% @items.each_with_index do |item, index| %>
+                      <tr>
+                        <td><%= index + 1 %>. <%= item.title %></td>
+                        <td><%= item.author.name %></td>
+                        <td><%= t(item.acceptance, scope: [:enums, :specific_items, :session_item, :acceptance]) %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
             <% end %>
           </div>
         </div>

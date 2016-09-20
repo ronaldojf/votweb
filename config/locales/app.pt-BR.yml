@@ -29,6 +29,7 @@ pt-BR:
     update: Edição
     create: Inserção
     destroy: Exclusão
+    manage: Gerenciar
 
   authorizable_actions:
     read: Ler
@@ -36,6 +37,7 @@ pt-BR:
     update: Editar
     destroy: Excluir
     unlock: Desbloquear acesso
+    manage_session: Gerenciar andamento
 
   buttons:
     close: Fechar
@@ -51,10 +53,14 @@ pt-BR:
     clear_filters: Limpar Filtros
     signin: Entrar
     confirm: Confirmar
+    manage: Gerenciar
+    stop: Encerrar
 
   login:
     administrator:
       welcome: Administração
+    councillor:
+      welcome: Painel do Vereador
 
   profile:
     edit: Alterar Perfil
@@ -68,6 +74,11 @@ pt-BR:
     no_president: Nenhum presidente foi adicionado
     no_member: Nenhum participante foi adicionado
     editing_password: Preencha apenas se deseja alterar...
+    no_description: (Sem descrição)
+    records_added_html:
+      zero: 'Nenhum registro adicionado.'
+      one: '<strong>1</strong> registro adicionado.'
+      other: '<strong>%{count}</strong> registros adicionados.'
 
   warnings:
     unlock_record_html: |
@@ -104,6 +115,8 @@ pt-BR:
     session_items: itens-ordem-dia
     plenary_sessions: sessoes
     holds: cadeiras
+    session_managements: gerenciar
+    panel: painel
 
   models_and_attributes: &models_and_attributes
     models: &models
@@ -134,6 +147,15 @@ pt-BR:
       hold:
         one: Cadeira
         other: Cadeiras
+      poll:
+        one: Votação
+        other: Votações
+      queue:
+        one: Fila
+        other: Filas
+      vote:
+        one: Voto
+        other: Votos
     attributes: &attributes
       user: &user
         email: E-Mail
@@ -176,10 +198,21 @@ pt-BR:
         period: Período de duração
         is_test: 'Sessão teste?'
         members: Participantes
+        queues: Filas
+        polls: Votações
       session_member:
         councillor_id: Vereador
         is_president: Presidente?
         is_present: Presente?
+      poll:
+        description: Descrição
+        process: Processo de votação
+        duration: Duração(segundos)
+        created_at: Criada em
+      queue:
+        description: Descrição
+        created_at: Criada em
+        duration: Duração(segundos)
 
   enums:
     names: &enum_names
@@ -225,6 +258,11 @@ pt-BR:
         is_present:
           yes: Presente
           no: Ausente
+      poll:
+        process:
+          symbolic: Simbólica
+          named: Nominal
+          secret: Secreta
 
   errors:
     custom_messages:
@@ -241,6 +279,10 @@ pt-BR:
       add_to_session_info: Somente itens não ligados a nenhuma sessão podem ser adicionados
     session_member:
       president: Presidente
+    poll:
+      add: Criar votação
+    queue:
+      add: Criar fila de vereadores(as)
 
   activerecord:
     <<: *models_and_attributes

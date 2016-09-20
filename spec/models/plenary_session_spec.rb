@@ -10,6 +10,7 @@ RSpec.describe PlenarySession, type: :model do
   it { is_expected.to have_many :polls }
   it { is_expected.to have_many :members }
   it { is_expected.to have_many :items }
+  it { is_expected.to have_many :queues }
   it { is_expected.to accept_nested_attributes_for :members }
 
   describe '.search' do
@@ -128,6 +129,88 @@ RSpec.describe PlenarySession, type: :model do
 
         expect(PlenarySession.by_test(nil)).to include(plenary_session1, plenary_session2)
       end
+    end
+  end
+
+  describe '.start_or_end_today' do
+    it 'deve retornar somente sessões que iniciem ou terminem hoje' do
+      Timecop.freeze do
+        session1 = create :plenary_session, start_at: 1.day.ago, end_at: 1.day.from_now
+        session2 = create :plenary_session, start_at: DateTime.current, end_at: 1.day.from_now
+        session3 = create :plenary_session, start_at: 1.day.from_now, end_at: 2.days.from_now
+        session4 = create :plenary_session, start_at: 2.days.ago, end_at: 1.day.ago
+        session5 = create :plenary_session, start_at: 1.day.ago, end_at: DateTime.current
+        session6 = create :plenary_session, start_at: DateTime.current, end_at: 1.second.from_now
+
+        expect(PlenarySession.start_or_end_today).to include(session2, session5, session6)
+        expect(PlenarySession.start_or_end_today).to_not include(session1, session3, session4)
+      end
+    end
+  end
+
+  describe '.has_member' do
+    it 'deve retornar somente sessões onde o vereador passado é um participante' do
+      councillor1 = create :councillor
+      councillor2 = create :councillor
+      session1 = create :plenary_session
+      session2 = create :plenary_session
+      create :session_member, councillor: councillor1, plenary_session: session1
+      create :session_member, councillor: councillor2, plenary_session: session2
+
+      expect(PlenarySession.has_member(councillor1)).to eq [session1]
+      expect(PlenarySession.has_member(councillor2)).to eq [session2]
+    end
+  end
+
+  describe '#check_members_presence' do
+    it 'deve avaliar todas as votações e marcar falta para os membros que faltaram em alguma votação, exceto o presidente' do
+      plenary_session = create :plenary_session
+      councillor1 = create :councillor
+      councillor2 = create :councillor
+      councillor3 = create :councillor
+      councillor4 = create :councillor
+      councillor5 = create :councillor
+      member1 = create :session_member, plenary_session: plenary_session, councillor: councillor1, is_president: true, is_present: nil
+      member2 = create :session_member, plenary_session: plenary_session, councillor: councillor2, is_president: false, is_present: nil
+      member3 = create :session_member, plenary_session: plenary_session, councillor: councillor3, is_president: false, is_present: nil
+      member4 = create :session_member, plenary_session: plenary_session, councillor: councillor4, is_president: false, is_present: nil
+      member5 = create :session_member, plenary_session: plenary_session, councillor: councillor5, is_president: false, is_present: nil
+
+
+      poll1 = create :poll, plenary_session: plenary_session, process: :symbolic
+      create :vote, poll: poll1, councillor: councillor2
+      create :vote, poll: poll1, councillor: councillor3
+      create :vote, poll: poll1, councillor: councillor4
+      plenary_session.reload.check_members_presence
+
+      expect(member1.reload.is_present).to be true
+      expect(member2.reload.is_present).to be true
+      expect(member3.reload.is_present).to be true
+      expect(member4.reload.is_present).to be true
+      expect(member5.reload.is_present).to be false
+
+
+      poll2 = create :poll, plenary_session: plenary_session, process: :secret
+      create :vote, poll: poll2
+      plenary_session.reload.check_members_presence
+
+      expect(member1.reload.is_present).to be true
+      expect(member2.reload.is_present).to be true
+      expect(member3.reload.is_present).to be true
+      expect(member4.reload.is_present).to be true
+      expect(member5.reload.is_present).to be false
+
+
+      poll3 = create :poll, plenary_session: plenary_session, process: :symbolic
+      create :vote, poll: poll3, councillor: councillor2
+      create :vote, poll: poll3, councillor: councillor5
+      plenary_session.reload.check_members_presence
+
+      expect(member1.reload.is_present).to be true
+      expect(member2.reload.is_present).to be true
+      expect(member3.reload.is_present).to be false
+      expect(member4.reload.is_present).to be false
+      expect(member5.reload.is_present).to be false
     end
   end
 end

@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html, :json
 
-  layout :layout_by_resource
+  layout 'public/application'
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -31,16 +31,15 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def layout_by_resource
-    if administrator_signed_in?
-      'admin/authenticated'
-    else
-      'admin/application'
-    end
-  end
-
   def after_sign_in_path_for(resource)
-    url_redirect = resource.is_a?(Administrator) ? admin_root_path : root_path
+    url_redirect = if resource.is_a?(Administrator)
+        admin_root_path
+      elsif resource.is_a?(Councillor)
+        panel_root_path
+      else
+        root_path
+      end
+
     request.env['omniauth.origin'] || stored_location_for(resource) || url_redirect
   end
 
