@@ -13,6 +13,15 @@ class Poll < ApplicationRecord
   validates :process, :plenary_session, :duration, presence: true
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
+  def add_vote_for(councillor, vote_type)
+    councillor_id = councillor.try(:id) || councillor
+    type = Vote.kinds[vote_type] || vote_type
+
+    if self.open? && type.present? && !self.votes.where(councillor_id: councillor_id).exists?
+      self.votes.create councillor_id: (self.secret? ? nil : councillor_id), kind: type
+    end
+  end
+
   private
 
   def send_sockets

@@ -97,4 +97,18 @@ RSpec.describe CouncillorsQueue, type: :model do
       end
     end
   end
+
+  describe '#open?' do
+    it "deve retornar 'true' se a votação estiver aberta, contando com os 3 segundos de folga para fechar" do
+      Timecop.freeze do
+        poll1 = build :poll, created_at: 8.seconds.ago, duration: 4
+        poll2 = build :poll, created_at: 8.seconds.ago, duration: 5
+        poll3 = build :poll, created_at: 8.seconds.ago, duration: 6
+
+        expect(poll1).to_not be_open
+        expect(poll2).to be_open
+        expect(poll3).to be_open
+      end
+    end
+  end
 end

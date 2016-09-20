@@ -14,8 +14,9 @@ class PlenarySession < ApplicationRecord
 
   scope :not_test, -> { where.not(is_test: true) }
 
-  scope :start_today, -> {
-    where('plenary_sessions.start_at BETWEEN :start AND :end', start: DateTime.current.at_beginning_of_day, end: DateTime.current.at_end_of_day)
+  scope :start_or_end_today, -> {
+    where('(plenary_sessions.start_at BETWEEN :start AND :end) OR (plenary_sessions.end_at BETWEEN :start AND :end)',
+      start: DateTime.current.at_beginning_of_day, end: DateTime.current.at_end_of_day)
   }
 
   scope :has_member, -> (councillor) {
@@ -37,4 +38,27 @@ class PlenarySession < ApplicationRecord
   validates :title, :kind, :start_at, :end_at, presence: true
   validates :start_at, date: { allow_blank: true }
   validates :end_at, date: { after: :start_at, allow_blank: true }
+
+  def check_members_presence
+    present_councillors_ids = self.members.map { |member| member.councillor_id }.uniq
+
+    self.polls.includes(:votes).each do |poll|
+      unless poll.secret?
+        councillor_ids = poll.votes.map { |vote| vote.councillor_id }
+        present_councillors_ids.select! { |id| councillor_ids.include?(id) }
+      end
+    end
+
+    PlenarySession.transaction do
+      self.members.each do |member|
+        if member.is_president
+          member.is_present = true
+        else
+          member.is_present = present_councillors_ids.include?(member.councillor_id)
+        end
+
+        member.save(validate: false)
+      end
+    end
+  end
 end

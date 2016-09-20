@@ -1,12 +1,15 @@
 //= require_self
 //= require_tree ./controllers/
+//= require_tree ./models/
 
 angular.module('votweb.controllers', []);
+angular.module('votweb.models', []);
 
 angular.module('votweb', [
     'ng-rails-csrf',
     'ngCable',
-    'votweb.controllers'
+    'votweb.controllers',
+    'votweb.models'
 ])
 
   /* Desabilitar interferência do Angular.JS na navegação, evita problemas com TurboLinks */

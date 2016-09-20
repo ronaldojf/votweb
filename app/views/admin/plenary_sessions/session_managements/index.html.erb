@@ -40,10 +40,6 @@
       <div class="tab-content">
         <div id="session-items-list" class="tab-pane active">
           <div class="panel-body">
-<!-- Itens da ordem do dia da sessão, com opções para: -->
-<!--  - iniciar votação para o item -->
-<!--  - marcar como aprovado, rejeitado ou não votado -->
-
             <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.items.length > 0'} %>
 
             <div ng-show="loading || plenarySession.items.length > 0">
@@ -119,6 +115,7 @@
                       <tr ng-repeat="poll in (plenarySession.polls | orderBy:'-created_at') track by poll.id" ng-class="{'info': poll.countdown >= 0}">
                         <td>
                           <strong ng-show="poll.countdown >= 0">({{poll.countdown}})</strong>
+                          <a href>Ver votos</a>
                           {{poll.description | truncate:60}}
                           <span class="text-muted" ng-hide="poll.description"><%= t('info.no_description') %></span>
                         </td>
@@ -197,8 +194,6 @@
 
         <div id="members" class="tab-pane">
           <div class="panel-body">
-<!-- Lista de todos os vereadores na sessão em ordem alfabética, com marcação se é presidente e se está presente, e botão para iniciar chamada de presença -->
-
             <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.members.length > 0'} %>
 
             <div ng-show="loading || plenarySession.members.length > 0">

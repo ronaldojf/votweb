@@ -14,5 +14,10 @@ module Countdown
         self.save(validate: false)
       end
     end
+
+    def open?
+      # 3 segundos de folga
+      (self.created_at + self.duration + 3.seconds) >= DateTime.current
+    end
   end
 end

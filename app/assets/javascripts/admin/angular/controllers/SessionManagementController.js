@@ -11,6 +11,7 @@ angular
     $scope.$on('$destroy', function() {
       if ($scope.pollsChannel) { $scope.pollsChannel.unsubscribe(); }
       if ($scope.queuesChannel) { $scope.queuesChannel.unsubscribe(); }
+      if ($scope.votesChannel) { $scope.votesChannel.unsubscribe(); }
     });
 
     $scope.init = function(plenarySessionId) {
@@ -23,6 +24,7 @@ angular
 
         $scope.setPollsChannel($scope.plenarySession);
         $scope.setQueuesChannel($scope.plenarySession);
+        $scope.setVotesChannel($scope.plenarySession);
       })
       .error(function(errors) {
         console.log(errors);
@@ -39,9 +41,21 @@ angular
       }, function(data) {
         collectionRefresh(plenarySession.polls, data, {
           callback: function(poll) {
-            $scope.setCountdown(poll);
+            $scope.setCountdown(poll, true);
           }
         });
+      });
+    };
+
+    $scope.setVotesChannel = function(plenarySession) {
+      $scope.votesChannel = $scope.cable.subscribe({
+        channel: 'VotesChannel',
+        room: plenarySession.id
+      }, function(data) {
+        var poll = findPoll(data.poll_id);
+        poll.votes = poll.votes || [];
+
+        collectionRefresh(poll.votes, data);
       });
     };
 
@@ -92,6 +106,7 @@ angular
 
     $scope.stopPoll = function(poll) {
       stopCountdown(Poll.stop, poll);
+      verifyMembersPresence();
     };
 
     $scope.stopQueue = function(poll) {
@@ -118,17 +133,18 @@ angular
       }
     };
 
-    $scope.setCountdown = function(object) {
-      var pollEnd = moment(object.created_at).add(object.duration, 'seconds');
+    $scope.setCountdown = function(object, verifyPresence) {
+      var end = moment(object.created_at).add(object.duration, 'seconds');
       clearCountdown(object);
 
-      if (pollEnd.isAfter(moment())) {
+      if (end.isAfter(moment())) {
         object.countdownPromise = $interval(function() {
-          object.countdown = pollEnd.unix() - moment().unix();
+          object.countdown = end.unix() - moment().unix();
           $scope.countdownRunning = true;
 
           if (object.countdown < 0) {
             clearCountdown(object);
+            if (verifyPresence) { verifyMembersPresence(); }
           }
         }, 1000);
       }
@@ -181,11 +197,42 @@ angular
 
     var checkCountdowns = function(plenarySession) {
       for (var i = 0; i < plenarySession.polls.length; i++) {
-        $scope.setCountdown(plenarySession.polls[i]);
+        $scope.setCountdown(plenarySession.polls[i], true);
       };
 
       for (var i = 0; i < plenarySession.queues.length; i++) {
         $scope.setCountdown(plenarySession.queues[i]);
       };
+    };
+
+    var findPoll = function(pollId) {
+      var result;
+
+      for (var i = 0; i < $scope.plenarySession.polls.length; i++) {
+        if ($scope.plenarySession.polls[i].id === pollId) {
+          result = $scope.plenarySession.polls[i];
+          break;
+        }
+      };
+
+      return result;
+    };
+
+    var verifyMembersPresence = function() {
+      PlenarySession.checkMembersPresence($scope.plenarySession.id)
+      .success(function(data) {
+        for (var i1 = 0; i1 < $scope.plenarySession.members.length; i1++) {
+          var currentSession = $scope.plenarySession.members[i1];
+
+          for (var i2 = 0; i2 < data.length; i2++) {
+            if (currentSession.id === data[i2].id) {
+              currentSession.is_present = data[i2].is_present;
+            }
+          }
+        }
+      })
+      .error(function(errors) {
+        console.log(errors);
+      });
     };
   }]);

@@ -1,6 +1,6 @@
 <% content_for :angular_controller, 'CouncillorsController' %>
 
-<div class="profile-box" ng-cloak ng-init="
+<div class="profile-box" ng-cloak ng-hide="currentEvent" ng-init="
   kinds = <%= t('enums.specific_items.plenary_session.kind').to_json %>;
   initSessions(<%= @plenary_sessions.to_json(only: [:id, :title, :kind]) %>);">
 
@@ -44,12 +44,12 @@
   </div>
 </div>
 
-<div class="poll-box hide" ng-cloak>
-  <button class="btn btn-lg btn-primary">SIM</button>
-  <button class="btn btn-lg btn-danger">NÃO</button>
-  <button class="btn btn-lg btn-default">ABSTER-SE</button>
+<div class="poll-box" ng-show="currentEvent === 'poll'" ng-cloak>
+  <button class="btn btn-lg btn-primary" ng-disabled="loading" ng-click="voteFor('approvation')">SIM</button>
+  <button class="btn btn-lg btn-danger" ng-disabled="loading" ng-click="voteFor('rejection')">NÃO</button>
+  <button class="btn btn-lg btn-default" ng-disabled="loading" ng-click="voteFor('abstention')">ABSTER-SE</button>
 </div>
 
-<div class="confirmation-box hide" ng-cloak>
-  <button class="btn btn-lg btn-primary">PARTICIPAR</button>
+<div class="confirmation-box" ng-show="currentEvent === 'queue'" ng-cloak>
+  <button class="btn btn-lg btn-primary" ng-disabled="loading" ng-click="participateInQueue()">PARTICIPAR</button>
 </div>

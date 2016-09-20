@@ -11,7 +11,7 @@ class CouncillorsQueue < ApplicationRecord
   def add_to_queue(councillor)
     councillor_id = (councillor.try(:id) || councillor).to_i
 
-    if councillor_id > 0 && self.councillors_ids.exclude?(councillor_id)
+    if self.open? && councillor_id > 0 && self.councillors_ids.exclude?(councillor_id)
       self.councillors_ids << councillor_id
       self.save
     end
