@@ -5,10 +5,6 @@ RSpec.describe Party, type: :model do
   it { is_expected.to validate_presence_of :name }
   it { is_expected.to validate_presence_of :abbreviation }
   it { is_expected.to validate_uniqueness_of(:abbreviation).case_insensitive }
-  it { is_expected.to have_attached_file(:logo) }
-  it { is_expected.to validate_attachment_presence(:logo) }
-  it { is_expected.to validate_attachment_content_type(:logo).allowing('image/png', 'image/jpg', 'image/jpeg') }
-  it { is_expected.to validate_attachment_size(:logo).less_than(500.kilobytes) }
   it { is_expected.to have_many :councillors }
 
   describe '.search' do

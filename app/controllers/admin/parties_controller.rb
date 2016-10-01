@@ -40,6 +40,6 @@ class Admin::PartiesController < Admin::BaseController
   def party_params
     params
       .require(:party)
-      .permit(:name, :abbreviation, :logo)
+      .permit(:name, :abbreviation)
   end
 end

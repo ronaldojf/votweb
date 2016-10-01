@@ -70,9 +70,6 @@
             <table ng-table="tableParams" template-pagination="/angular-templates/ng-table/paginate" class="table table-striped table-hover">
               <tr class="vertical-middle" data-href="{{party.url}}" ng-repeat="party in $data track by party.id">
 
-                <td class="td-image">
-                  <img ng-src="{{party.logo}}">
-                </td>
                 <td data-title="'<%= t('activerecord.attributes.party.abbreviation') %>'" data-sortable="'abbreviation'">
                   {{party.abbreviation}}
                 </td>

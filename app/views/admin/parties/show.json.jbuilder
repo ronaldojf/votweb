@@ -1,1 +1,1 @@
-json.extract! @party, :id, :name, :abbreviation, :logo, :created_at, :updated_at
+json.extract! @party, :id, :name, :abbreviation, :created_at, :updated_at

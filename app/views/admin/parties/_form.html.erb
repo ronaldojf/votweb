@@ -1,46 +1,15 @@
-<div ng-controller="ImageUploadController">
-  <%= simple_form_for([:admin, @party], multipart: true, html: { 'ng-submit' => 'submitForm($event, this)' }) do |f| %>
-
-    <div class="form-inputs" ng-init="party = <%= @party.to_json(only: [], methods: [:logo]) %>">
-      <div class="row">
-        <div class="col-sm-8">
-          <%= f.input :name, input_html: { autofocus: true } %>
-        </div>
-
-        <div class="col-sm-4">
-          <%= f.input :abbreviation %>
-        </div>
+<%= simple_form_for([:admin, @party]) do |f| %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-sm-8">
+        <%= f.input :name, input_html: { autofocus: true } %>
       </div>
 
-      <div class="row">
-        <div class="col-xs-12" ng-init="originalImageDataUrl = party.logo">
-          <div class="form-group <%= 'has-error' if @party.errors[:logo].first.present? %>">
-            <label class="control-label"><%= t('simple_form.required.html') %> <%= t('activerecord.attributes.party.logo') %></label><br>
-
-            <label for="inputImage" class="btn btn-white">
-              <input type="file" accept="image/*" id="inputImage" class="hide" onchange="angular.element(this).scope().onFile(this.files[0]);">
-              Enviar nova imagem
-            </label>
-
-            <div ng-if="originalImageDataUrl" class="image-crop">
-              <img ng-if="originalImageDataUrl" ng-src="{{originalImageDataUrl}}"
-                    ng-cropper
-                    ng-cropper-proxy="cropperProxy"
-                    ng-cropper-show="'show'"
-                    ng-cropper-hide="'hide'"
-                    ng-cropper-options="cropperOptions">
-            </div>
-
-            <span class="help-block">
-              <%= @party.errors[:logo].first %>
-            </span>
-          </div>
-
-          <input type="hidden" name="party[logo]" ng-value="imageDataUrl">
-        </div>
+      <div class="col-sm-4">
+        <%= f.input :abbreviation %>
       </div>
-
-      <%= f.submit '', class: 'hide', 'ng-click' => 'submitForm($event, this)' %>
     </div>
-  <% end %>
-</div>
+
+    <%= f.submit '', class: 'hide' %>
+  </div>
+<% end %>
