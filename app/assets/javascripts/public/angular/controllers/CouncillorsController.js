@@ -1,8 +1,11 @@
 angular
   .module('votweb.controllers')
   .controller('CouncillorsController', [
-      '$scope', '$interval', '$cable', 'PlenarySession', 'CouncillorsQueue', 'Poll',
-      function($scope, $interval, $cable, PlenarySession, CouncillorsQueue, Poll) {
+      '$scope', '$window', '$interval', '$cable', 'PlenarySession', 'CouncillorsQueue', 'Poll',
+      function($scope, $window, $interval, $cable, PlenarySession, CouncillorsQueue, Poll) {
+
+    var LOCAL_STORAGE_POLL_KEY = 'last_poll_voted';
+    var LOCAL_STORAGE_QUEUE_KEY = 'last_queue_participation';
 
     $scope.loading = false;
     $scope.tickingClockDateTime = new Date();
@@ -30,32 +33,40 @@ angular
 
     $scope.voteFor = function(voteType) {
       if ($scope.loading) { return; }
-      $scope.loading = true;
       var poll = getCurrent('poll');
 
-      Poll.vote($scope.currentSession.id, poll.id, voteType)
-      .error(function(errors) {
-        console.log(errors);
-      })
-      .finally(function() {
-        clearCountdown(poll);
-        $scope.loading = false;
-      });
+      if (String(getInLocalStorage(LOCAL_STORAGE_POLL_KEY)) !== String(poll.id)) {
+        setInLocalStorage(LOCAL_STORAGE_POLL_KEY, poll.id);
+        $scope.loading = true;
+
+        Poll.vote($scope.currentSession.id, poll.id, voteType)
+        .error(function(errors) {
+          console.log(errors);
+        })
+        .finally(function() {
+          clearCountdown(poll);
+          $scope.loading = false;
+        });
+      }
     };
 
     $scope.participateInQueue = function() {
       if ($scope.loading) { return; }
-      $scope.loading = true;
       var queue = getCurrent('queue');
 
-      CouncillorsQueue.participate($scope.currentSession.id, queue.id)
-      .error(function(errors) {
-        console.log(errors);
-      })
-      .finally(function() {
-        clearCountdown(queue);
-        $scope.loading = false;
-      });
+      if (String(getInLocalStorage(LOCAL_STORAGE_QUEUE_KEY)) !== String(queue.id)) {
+        setInLocalStorage(LOCAL_STORAGE_QUEUE_KEY, queue.id);
+        $scope.loading = true;
+
+        CouncillorsQueue.participate($scope.currentSession.id, queue.id)
+        .error(function(errors) {
+          console.log(errors);
+        })
+        .finally(function() {
+          clearCountdown(queue);
+          $scope.loading = false;
+        });
+      }
     };
 
     var setPollsChannel = function(plenarySession) {
@@ -85,10 +96,17 @@ angular
     };
 
     var setCountdown = function(type, object) {
+      var actionNotYetExecuted = true;
       var end = moment(object.created_at).add(object.duration, 'seconds');
       clearCountdown(object);
 
-      if (end.isAfter(moment())) {
+      if (type === 'poll') {
+        actionNotYetExecuted = String(getInLocalStorage(LOCAL_STORAGE_POLL_KEY)) !== String(object.id);
+      } else if (type === 'queue') {
+        actionNotYetExecuted = String(getInLocalStorage(LOCAL_STORAGE_QUEUE_KEY)) !== String(object.id);
+      }
+
+      if (end.isAfter(moment()) && actionNotYetExecuted) {
         $scope.currentEvent = type;
         object.countdownPromise = $interval(function() {
           object.countdown = end.unix() - moment().unix();
@@ -176,6 +194,18 @@ angular
       }
 
       return result;
+    };
+
+    var setInLocalStorage = function(key, value) {
+      if ($window.localStorage) {
+        $window.localStorage.setItem(key, value);
+      }
+    };
+
+    var getInLocalStorage = function(key) {
+      if ($window.localStorage) {
+        return $window.localStorage.getItem(key);
+      }
     };
 
     var tickingClockPromise = $interval(function() {

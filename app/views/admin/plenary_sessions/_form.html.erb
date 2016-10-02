@@ -38,7 +38,7 @@
 
             <div class="row">
               <div class="col-xs-12">
-                <div class="form-group">
+                <div class="form-group <%= 'has-error' if @plenary_session.errors.include?(:start_at) || @plenary_session.errors.include?(:end_at) %>">
                   <label for="session_period" class="control-label">
                     <%= t('simple_form.required.html') %>
                     <%= t('activerecord.attributes.plenary_session.period') %>
@@ -54,6 +54,8 @@
                       <i class="fa fa-calendar"></i>
                     </label>
                   </div>
+
+                  <span class="help-block"><%= @plenary_session.errors[:start_at].try(:first) || @plenary_session.errors[:end_at].try(:first) %></span>
 
                   <input type="hidden" name="plenary_session[start_at]" ng-value="plenarySession.period.startDate.toJSON() || plenarySession.period.startDate">
                   <input type="hidden" name="plenary_session[end_at]" ng-value="plenarySession.period.endDate.toJSON() || plenarySession.period.endDate">

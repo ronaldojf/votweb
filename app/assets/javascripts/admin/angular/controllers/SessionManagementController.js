@@ -1,8 +1,8 @@
 angular
   .module('votweb.controllers')
   .controller('SessionManagementController', [
-      '$scope', '$cable', '$timeout', '$interval', 'PlenarySession', 'Poll', 'CouncillorsQueue',
-      function($scope, $cable, $timeout, $interval, PlenarySession, Poll, CouncillorsQueue) {
+      '$scope', '$cable', '$timeout', '$interval', 'PlenarySession', 'Poll', 'CouncillorsQueue', 'SessionItem',
+      function($scope, $cable, $timeout, $interval, PlenarySession, Poll, CouncillorsQueue, SessionItem) {
 
     $scope.cable = $cable();
     $scope.loading = false;
@@ -77,6 +77,8 @@ angular
 
       if (!$scope.loading && params.duration > 0) {
         $scope.loading = true;
+        angular.element('.nav-tabs [href="#polls"]').tab('show');
+
         Poll.create(params)
         .error(function(errors) {
           console.log(errors);
@@ -113,14 +115,24 @@ angular
       stopCountdown(CouncillorsQueue.stop, poll);
     };
 
-    $scope.openPollModal = function() {
+    $scope.openPollModal = function(description) {
       if (!$scope.countdownRunning) {
         angular.element('#add-poll').modal('show');
-        $scope.newPoll = { process: 'symbolic', duration: 20 };
+        $scope.newPoll = { description: description, process: 'symbolic', duration: 20 };
         $timeout(function() {
           angular.element('#poll-description').focus();
         }, 600);
       }
+    };
+
+    $scope.openPollDetailsModal = function(poll) {
+      angular.element('#poll-details').modal('show');
+      $scope.pollDetails = poll;
+    };
+
+    $scope.openQueueDetailsModal = function(queue) {
+      angular.element('#queue-details').modal('show');
+      $scope.queueDetails = queue;
     };
 
     $scope.openQueueModal = function() {
@@ -130,6 +142,36 @@ angular
         $timeout(function() {
           angular.element('#queue-description').focus();
         }, 600);
+      }
+    };
+
+    $scope.getCouncillor = function(councillorId) {
+      var result;
+
+      for (var i = 0; i < $scope.plenarySession.members.length; i++) {
+        if ($scope.plenarySession.members[i].councillor.id === councillorId) {
+          result = $scope.plenarySession.members[i].councillor;
+          break;
+        }
+      }
+
+      return result;
+    };
+
+    $scope.markSessionItemAs = function(sessionItem, acceptance) {
+      if (!$scope.loading && sessionItem.acceptance !== acceptance) {
+        $scope.loading = true;
+
+        SessionItem.update(sessionItem.id, {acceptance: acceptance})
+        .success(function() {
+          sessionItem.acceptance = acceptance;
+        })
+        .error(function(errors) {
+          console.log(errors);
+        })
+        .finally(function() {
+          $scope.loading = false;
+        });
       }
     };
 

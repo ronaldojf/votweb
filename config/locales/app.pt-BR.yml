@@ -55,6 +55,9 @@ pt-BR:
     confirm: Confirmar
     manage: Gerenciar
     stop: Encerrar
+    details: Detalhes
+    new_poll: Nova votação
+    mark_as: Marcar como
 
   login:
     administrator:
@@ -263,6 +266,11 @@ pt-BR:
           symbolic: Simbólica
           named: Nominal
           secret: Secreta
+      vote:
+        kind:
+          approvation: Aprovação
+          rejection: Rejeição
+          abstention: Abstenção
 
   errors:
     custom_messages:

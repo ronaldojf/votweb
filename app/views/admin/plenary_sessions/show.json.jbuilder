@@ -25,7 +25,7 @@ json.set! :items do
 end
 
 json.set! :polls do
-  json.array! @plenary_session.polls, partial: 'partials/polls/poll', as: :poll
+  json.array! @plenary_session.polls.includes(:votes), partial: 'partials/polls/poll', as: :poll
 end
 
 json.set! :queues do

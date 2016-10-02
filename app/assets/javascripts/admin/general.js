@@ -67,6 +67,14 @@ $(function() {
       $(this).parent().find('input[type=checkbox]').prop('checked', false);
     });
 
+    $('.table-responsive').on('show.bs.dropdown', function() {
+      $('.table-responsive').css('overflow', 'inherit');
+    });
+
+    $('.table-responsive').on('hide.bs.dropdown', function() {
+      $('.table-responsive').css('overflow', 'auto');
+    });
+
     if ($('.chosen-container').length > 0) {
       $('[chosen]').data('chosen').results_none_found = window.I18n.t('js.chosen.results_none_found');
       $('.chosen-container').attr('style', 'width: 100%');
