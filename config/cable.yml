@@ -6,4 +6,4 @@ test:
 
 production:
   adapter: redis
-  url: '<%= REDISTOGO_URL %>'
+  url: "<%= ENV['REDISTOGO_URL'] %>"
