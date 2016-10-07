@@ -1,14 +1,3 @@
-<% if ENV['HEROKU_ENV'].present? %>
-
-async: &async
-  adapter: async
-
-development: *async
-test: *async
-production: *async
-
-<% else %>
-
 redis: &redis
   adapter: redis
   url: redis://localhost:6379
@@ -16,5 +5,3 @@ redis: &redis
 development: *redis
 test: *redis
 production: *redis
-
-<% end %>
