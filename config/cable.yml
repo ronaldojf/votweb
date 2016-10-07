@@ -1,7 +1,9 @@
-redis: &redis
-  adapter: redis
-  url: redis://localhost:6379
+development:
+  adapter: async
 
-development: *redis
-test: *redis
-production: *redis
+test:
+  adapter: async
+
+production:
+  adapter: redis
+  url: '<%= REDISTOGO_URL %>'

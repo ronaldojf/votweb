@@ -5,6 +5,4 @@ require_relative 'config/environment'
 #For more information, see: https://github.com/tylerhunt/rack-canonical-host#usage
 use Rack::CanonicalHost, ENV['CANONICAL_HOST'] if ENV['CANONICAL_HOST']
 
-ActionCable.server.config.allowed_request_origins = [/.*/]
-
 run Rails.application
