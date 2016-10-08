@@ -19,7 +19,7 @@ gem 'sprockets',              '3.6.3'
 
 gem 'devise',                 '4.2.0'
 gem 'js-routes',              '1.2.8'
-gem 'i18n-js',                '3.0.0.rc11'
+gem 'i18n-js',                '3.0.0.rc6'
 gem 'ng-rails-csrf',          '0.1.0'
 gem 'responders',             '2.2.0'
 gem 'route_translator',       '5.0.2'
