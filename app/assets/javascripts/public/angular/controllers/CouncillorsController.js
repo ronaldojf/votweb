@@ -97,7 +97,7 @@ angular
 
     var setCountdown = function(type, object) {
       var actionNotYetExecuted = true;
-      var end = moment(object.created_at).add(object.duration, 'seconds');
+      var end = moment().add(object.countdown, 'seconds');
       clearCountdown(object);
 
       if (type === 'poll') {
@@ -109,9 +109,10 @@ angular
       if (end.isAfter(moment()) && actionNotYetExecuted) {
         $scope.currentEvent = type;
         object.countdownPromise = $interval(function() {
-          object.countdown = end.unix() - moment().unix();
+          // +1 para corrigir tempo de criação do registro e entrega do mesmo por websocket
+          object.countdown = end.unix() - moment().unix() + 1;
 
-          if (object.countdown < 0) {
+          if (object.countdown <= 0) {
             clearCountdown(object);
 
             if (type === 'poll') {
@@ -129,7 +130,6 @@ angular
         $interval.cancel(object.countdownPromise);
       }
       delete object.countdownPromise;
-      delete object.countdown;
       delete $scope.currentEvent;
     };
 

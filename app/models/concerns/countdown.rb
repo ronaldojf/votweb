@@ -6,11 +6,16 @@ module Countdown
       super.try(:seconds) || super
     end
 
-    def stop_countdown
-      countdown = (DateTime.current.to_time - self.created_at).to_i
+    def countdown
+      countdown = (self.created_at + self.duration).to_i - DateTime.current.to_i
+      countdown > 0 ? countdown : 0
+    end
 
-      if countdown > 0 && self.duration.to_i > countdown
-        self.duration = countdown
+    def stop_countdown
+      countdown = self.countdown
+
+      if countdown > 0
+        self.duration -= countdown
         self.save(validate: false)
       end
     end

@@ -25,6 +25,7 @@ class Poll < ApplicationRecord
   private
 
   def send_sockets
-    ActionCable.server.broadcast "plenary_session:#{self.plenary_session_id}:poll", self
+    ActionCable.server.broadcast "plenary_session:#{self.plenary_session_id}:poll",
+      JSON.parse(ApplicationController.render(partial: 'partials/polls/poll', locals: { poll: self }))
   end
 end

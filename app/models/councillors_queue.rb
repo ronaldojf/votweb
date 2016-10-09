@@ -26,6 +26,7 @@ class CouncillorsQueue < ApplicationRecord
   private
 
   def send_sockets
-    ActionCable.server.broadcast "plenary_session:#{self.plenary_session_id}:queue", self
+    ActionCable.server.broadcast "plenary_session:#{self.plenary_session_id}:queue",
+      JSON.parse(ApplicationController.render(partial: 'partials/councillors_queues/queue', locals: { queue: self }))
   end
 end

@@ -131,9 +131,9 @@
                     </thead>
 
                     <tbody>
-                      <tr ng-repeat="poll in (plenarySession.polls | orderBy:'-created_at') track by poll.id" ng-class="{'info': poll.countdown >= 0}">
+                      <tr ng-repeat="poll in (plenarySession.polls | orderBy:'-created_at') track by poll.id" ng-class="{'info': poll.countdownPromise}">
                         <td>
-                          <strong ng-show="poll.countdown >= 0">({{poll.countdown}})</strong>
+                          <strong ng-show="poll.countdownPromise">({{poll.countdown}})</strong>
                           {{poll.description | truncate:60}}
                           <span class="text-muted" ng-hide="poll.description"><%= t('info.no_description') %></span>
                         </td>
@@ -142,7 +142,7 @@
                         <td>{{poll.created_at | date:'medium'}}</td>
                         <td class="text-right">
                           <button class="btn btn-xs btn-warning"
-                              ng-show="!poll.stopped && poll.countdown >= 0"
+                              ng-show="!poll.stopped && poll.countdownPromise"
                               ng-disabled="poll.stopping"
                               ng-click="stopPoll(poll)"><%= t('buttons.stop') %></button>
 
@@ -189,9 +189,9 @@
                     </thead>
 
                     <tbody>
-                      <tr ng-repeat="queue in (plenarySession.queues | orderBy:'-created_at') track by queue.id" ng-class="{'info': queue.countdown >= 0}">
+                      <tr ng-repeat="queue in (plenarySession.queues | orderBy:'-created_at') track by queue.id" ng-class="{'info': queue.countdownPromise}">
                         <td>
-                          <strong ng-show="queue.countdown >= 0">({{queue.countdown}})</strong>
+                          <strong ng-show="queue.countdownPromise">({{queue.countdown}})</strong>
                           {{queue.description | truncate:60}}
                           <span class="text-muted" ng-hide="queue.description"><%= t('info.no_description') %></span>
                         </td>
@@ -199,7 +199,7 @@
                         <td>{{queue.created_at | date:'medium'}}</td>
                         <td class="text-right">
                           <button class="btn btn-xs btn-warning"
-                              ng-show="!queue.stopped && queue.countdown >= 0"
+                              ng-show="!queue.stopped && queue.countdownPromise"
                               ng-disabled="queue.stopping"
                               ng-click="stopQueue(queue)"><%= t('buttons.stop') %></button>
 

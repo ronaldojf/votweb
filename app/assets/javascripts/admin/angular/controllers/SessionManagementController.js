@@ -176,15 +176,16 @@ angular
     };
 
     $scope.setCountdown = function(object, verifyPresence) {
-      var end = moment(object.created_at).add(object.duration, 'seconds');
+      var end = moment().add(object.countdown, 'seconds');
       clearCountdown(object);
 
       if (end.isAfter(moment())) {
         object.countdownPromise = $interval(function() {
-          object.countdown = end.unix() - moment().unix();
+          // +1 para corrigir tempo de criação do registro e entrega do mesmo por websocket
+          object.countdown = end.unix() - moment().unix() + 1;
           $scope.countdownRunning = true;
 
-          if (object.countdown < 0) {
+          if (object.countdown <= 0) {
             clearCountdown(object);
             if (verifyPresence) { verifyMembersPresence(); }
           }
@@ -216,7 +217,6 @@ angular
         $interval.cancel(object.countdownPromise);
       }
       delete object.countdownPromise;
-      delete object.countdown;
       $scope.countdownRunning = false;
     };
 

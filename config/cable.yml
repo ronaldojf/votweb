@@ -1,3 +1,8 @@
+# Adaptador 'async' gera problemas na sincronização dos sockets, se mais que um computador/aparelho abrir conexão websocket
+# para ter mais precisão, usar:
+  # adapter: redis
+  # url: 'redis://localhost:6379'
+
 development:
   adapter: async
 

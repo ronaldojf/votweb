@@ -29,6 +29,8 @@ Rails.application.configure do
   config.action_cable.mount_path = '/websocket'
   config.action_cable.allowed_request_origins = [/.*/]
 
+  config.action_view.logger = nil
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
