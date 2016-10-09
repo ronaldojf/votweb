@@ -197,8 +197,6 @@ angular
       options = options || {};
       var index = collection.map(function(currentObject) { return currentObject.id; }).indexOf(object.id);
 
-      if (options.createOnly && index >= 0) { return; }
-
       if (index >= 0) {
         if (collection[index].deleted_at) {
           collection.splice(index, 1);

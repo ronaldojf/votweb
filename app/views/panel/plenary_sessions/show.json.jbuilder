@@ -2,12 +2,10 @@ json.extract! @plenary_session, :id, :title, :kind
 
 json.set! :polls do
   json.array!(@plenary_session.polls) do |poll|
-    json.extract! poll, :id, :process, :duration, :created_at
+    json.merge! poll.to_builder.attributes!
   end
 end
 
 json.set! :queues do
-  json.array!(@plenary_session.queues) do |queue|
-    json.extract! queue, :id, :duration, :created_at
-  end
+  json.array! @plenary_session.queues, partial: 'partials/councillors_queues/queue', as: :queue
 end
