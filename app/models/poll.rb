@@ -22,10 +22,15 @@ class Poll < ApplicationRecord
     end
   end
 
+  def to_builder
+    Jbuilder.new do |json|
+      json.extract! self, :id, :process, :session_item_id, :description, :countdown, :duration, :created_at, :deleted_at
+    end
+  end
+
   private
 
   def send_sockets
-    ActionCable.server.broadcast "plenary_session:#{self.plenary_session_id}:poll",
-      JSON.parse(ApplicationController.render(partial: 'partials/polls/poll', locals: { poll: self }))
+    ActionCable.server.broadcast "plenary_session:#{self.plenary_session_id}:poll", self.to_builder.attributes!
   end
 end

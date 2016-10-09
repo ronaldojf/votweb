@@ -23,10 +23,15 @@ class CouncillorsQueue < ApplicationRecord
     councillors.sort { |first, second| councillors_order_map[first.id] <=> councillors_order_map[second.id] }
   end
 
+  def to_builder
+    Jbuilder.new do |json|
+      json.extract! self, :id, :description, :countdown, :duration, :councillors_ids, :created_at
+    end
+  end
+
   private
 
   def send_sockets
-    ActionCable.server.broadcast "plenary_session:#{self.plenary_session_id}:queue",
-      JSON.parse(ApplicationController.render(partial: 'partials/councillors_queues/queue', locals: { queue: self }))
+    ActionCable.server.broadcast "plenary_session:#{self.plenary_session_id}:queue", self.to_builder.attributes!
   end
 end

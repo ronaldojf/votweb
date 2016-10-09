@@ -1,7 +1,7 @@
-json.extract! poll, :id, :process, :session_item_id, :description, :countdown, :duration, :created_at, :deleted_at
+json.merge! poll.to_builder.attributes!
 
 json.set! :votes do
   json.array!(poll.votes) do |vote|
-    json.extract! vote, :councillor_id, :kind
+    json.merge! vote.to_builder.attributes!
   end
 end

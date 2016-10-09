@@ -97,7 +97,6 @@ angular
 
     var setCountdown = function(type, object) {
       var actionNotYetExecuted = true;
-      var end = moment().add(object.countdown, 'seconds');
       clearCountdown(object);
 
       if (type === 'poll') {
@@ -106,8 +105,10 @@ angular
         actionNotYetExecuted = String(getInLocalStorage(LOCAL_STORAGE_QUEUE_KEY)) !== String(object.id);
       }
 
-      if (end.isAfter(moment()) && actionNotYetExecuted) {
+      if (object.countdown > 0 && actionNotYetExecuted) {
+        var end = moment().add(object.countdown, 'seconds');
         $scope.currentEvent = type;
+
         object.countdownPromise = $interval(function() {
           // +1 para corrigir tempo de criação do registro e entrega do mesmo por websocket
           object.countdown = end.unix() - moment().unix() + 1;
@@ -121,7 +122,7 @@ angular
               signoutLink.trigger('click.rails');
             }
           }
-        }, 1000);
+        }, 500);
       }
     };
 

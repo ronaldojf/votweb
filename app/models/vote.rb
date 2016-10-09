@@ -10,9 +10,15 @@ class Vote < ApplicationRecord
 
   validates :poll, :kind, presence: true
 
+  def to_builder
+    Jbuilder.new do |json|
+      json.extract! self, :councillor_id, :kind
+    end
+  end
+
   private
 
   def send_sockets
-    ActionCable.server.broadcast "plenary_session:#{self.poll.plenary_session_id}:vote", self
+    ActionCable.server.broadcast "plenary_session:#{self.poll.plenary_session_id}:vote", self.to_builder.attributes!
   end
 end

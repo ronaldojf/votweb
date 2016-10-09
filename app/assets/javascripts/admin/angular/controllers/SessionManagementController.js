@@ -176,10 +176,10 @@ angular
     };
 
     $scope.setCountdown = function(object, verifyPresence) {
-      var end = moment().add(object.countdown, 'seconds');
       clearCountdown(object);
 
-      if (end.isAfter(moment())) {
+      if (object.countdown > 0) {
+        var end = moment().add(object.countdown, 'seconds');
         object.countdownPromise = $interval(function() {
           // +1 para corrigir tempo de criação do registro e entrega do mesmo por websocket
           object.countdown = end.unix() - moment().unix() + 1;
@@ -189,7 +189,7 @@ angular
             clearCountdown(object);
             if (verifyPresence) { verifyMembersPresence(); }
           }
-        }, 1000);
+        }, 500);
       }
     };
 

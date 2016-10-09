@@ -111,4 +111,21 @@ RSpec.describe CouncillorsQueue, type: :model do
       end
     end
   end
+
+  describe '#to_builder' do
+    it 'deve retornar uma instância do JBuilder com os principais atributos do objeto' do
+      Timecop.freeze do
+        queue = build :councillors_queue, description: nil, councillors_ids: [], duration: 20, created_at: DateTime.current
+
+        expect(queue.to_builder.attributes!).to eq({
+          "id"=>nil,
+          "description"=>nil,
+          "countdown"=>20,
+          "duration"=>20,
+          "councillors_ids"=>[],
+          "created_at"=> DateTime.current
+        })
+      end
+    end
+  end
 end

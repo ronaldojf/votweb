@@ -125,4 +125,23 @@ RSpec.describe Poll, type: :model do
       end
     end
   end
+
+  describe '#to_builder' do
+    it 'deve retornar uma instância do JBuilder com os principais atributos do objeto' do
+      Timecop.freeze do
+        poll = build :poll, process: :symbolic, session_item_id: nil, description: nil, duration: 20, created_at: DateTime.current
+
+        expect(poll.to_builder.attributes!).to eq({
+          "id"=>nil,
+          "process"=>"symbolic",
+          "session_item_id"=>nil,
+          "description"=>nil,
+          "countdown"=>20,
+          "duration"=>20,
+          "created_at"=>DateTime.current,
+          "deleted_at"=>nil
+        })
+      end
+    end
+  end
 end
