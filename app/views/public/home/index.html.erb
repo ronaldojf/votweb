@@ -1,4 +1,135 @@
 <% content_for :angular_controller, 'SessionProgressController' %>
 
-<div id="session-progress">
-</div>
+<!-- colorir aprovação, rejeição e astenção -->
+<!-- adicionar gráfico com porcentagens -->
+<!-- fazer auto-scaling no tamanho da fontes de alguns dos textos, conforme quantidade de caracteres no container -->
+<!-- tornar tamanho da página baseado em porcentagem, para deixar que página sempre esteja contida em 100% de altura e largura -->
+
+<section class="session-progress">
+  <div class="header">
+    <h1 class="text-center m-t-none p-t-sm">Título da Sessão</h1>
+    <h2 class="text-center">Descrição da votação</h2>
+  </div>
+
+  <div class="results">
+    <div class="row">
+      <div class="col-xs-5">
+        <table class="table">
+          <tr class="text-center font-bold"><td colspan="3">VOTOS</td></tr>
+          <tr class="text-center font-bold">
+            <td>Aprovação</td>
+            <td>Reprovação</td>
+            <td>Abstenção</td>
+          </tr>
+          <tr class="text-center">
+            <td>11</td>
+            <td>9</td>
+            <td>1</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="col-xs-2 text-center">
+        <span style="font-size: 7.5vw">999</span>
+      </div>
+
+      <div class="col-xs-5">
+        <table class="table">
+          <tr class="text-center font-bold"><td colspan="2">PERCENTUAL</td></tr>
+          <tr class="text-center font-bold">
+            <td>Gráfico</td>
+            <td>Legenda do Gráfico</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-5">
+        <div class="row">
+          <div class="col-xs-6">
+            <strong>Participantes:</strong> 21
+          </div>
+          <div class="col-xs-6">
+            <strong>Total de votos:</strong> 21
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-5 col-xs-offset-2 text-right">
+        <span><strong>Tipo de Votação:</strong> Nominal</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="list">
+    <div class="row">
+      <div class="col-xs-12">
+        <strong>LISTA DE VEREADORES</strong>
+        <table class="table">
+          <tr>
+            <td>
+              <table width="100%">
+                <tr>
+                  <td>VEREADOR 1 - PT</td>
+                  <td>SIM</td>
+                </tr>
+                <tr>
+                  <td>VEREADOR 2 - PSol</td>
+                  <td>NÃO</td>
+                </tr>
+                <tr>
+                  <td>VEREADOR 3 - PCdoB</td>
+                  <td>SIM</td>
+                </tr>
+                <tr>
+                  <td>VEREADOR 4 - PT</td>
+                  <td>SIM</td>
+                </tr>
+                <tr>
+                  <td>VEREADOR 5 - PV</td>
+                  <td>SIM</td>
+                </tr>
+                <tr>
+                  <td>VEREADOR 6 - PSol</td>
+                  <td>ABSTENÇÃO</td>
+                </tr>
+                <tr>
+                  <td>VEREADOR 7 - PDT</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>VEREADOR 8 - PT</td>
+                  <td></td>
+                </tr>
+              </table>
+            </td>
+            <td>
+              <table width="100%">
+                <tr>
+                  <td>VEREADOR 9 - PSol</td>
+                  <td>ABSTENÇÃO</td>
+                </tr>
+                <tr>
+                  <td>VEREADOR 10 - PSol</td>
+                  <td>ABSTENÇÃO</td>
+                </tr>
+                <tr>
+                  <td>VEREADOR 11 - PT</td>
+                  <td>SIM</td>
+                </tr>
+                <tr>
+                  <td>VEREADOR 12 - PT</td>
+                  <td>NÃO</td>
+                </tr>
+              </table>
+            </td>
+            <td>
+              <table width="100%">
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
