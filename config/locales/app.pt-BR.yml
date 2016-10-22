@@ -276,6 +276,7 @@ pt-BR:
     custom_messages:
       current_password_not_match: não confere
       unpermited: Você não tem permissão para acessar o recurso solicitado.
+      only_alphanumeric: somente letras e números
 
   miscellaneous:
     councillor:

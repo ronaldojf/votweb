@@ -5,6 +5,9 @@ class Councillor < ApplicationRecord
 
   belongs_to :party
 
+  validates :name, :username, :party, presence: true
+  validates :username, uniqueness: { case_sensitive: false }, format: { with: /\A[[:alnum:]]+\z/, message: I18n.t('errors.custom_messages.only_alphanumeric') }
+
   searching :name, :username
 
   scope :active, -> { where(is_active: true) }
@@ -22,8 +25,6 @@ class Councillor < ApplicationRecord
   scope :by_holder, -> (is_holder) {
     where(is_holder: is_holder.to_s == 'true') if !is_holder.nil? && is_holder.to_s.present?
   }
-
-  validates :name, :username, :party, presence: true
 
   def email_required?
     false
