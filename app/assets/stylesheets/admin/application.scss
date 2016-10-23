@@ -38,9 +38,11 @@
   @import 'inspinia/plugins/iCheck/custom';
 /* INSPINIA - END */
 
-@import 'ng-table/dist/ng-table';
-@import 'angular-chosen-localytics/chosen-spinner';
-@import 'bootstrap-daterangepicker/daterangepicker.scss';
+/* BOWER COMPONENTS - BEGIN */
+  @import 'ng-table/dist/ng-table';
+  @import 'angular-chosen-localytics/chosen-spinner';
+  @import 'bootstrap-daterangepicker/daterangepicker.scss';
+/* BOWER COMPONENTS - END */
 
 @import 'admin/ngtable';
 @import 'admin/styles';

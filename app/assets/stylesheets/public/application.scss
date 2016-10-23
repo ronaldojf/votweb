@@ -8,27 +8,31 @@
 
 /* INSPINIA - BEGIN */
   // Variables, Mixins
-  @import "inspinia/base/variables";
-  @import "inspinia/base/mixins";
+  @import 'inspinia/base/variables';
+  @import 'inspinia/base/mixins';
 
   // INSPINIA Theme Elements
-  @import "inspinia/base/typography";
-  @import "inspinia/base/navigation";
-  @import "inspinia/base/top_navigation";
-  @import "inspinia/base/buttons";
-  @import "inspinia/base/badgets_labels";
-  @import "inspinia/base/elements";
-  @import "inspinia/base/base";
-  @import "inspinia/base/pages";
-  @import "inspinia/base/spinners";
+  @import 'inspinia/base/typography';
+  @import 'inspinia/base/navigation';
+  @import 'inspinia/base/top_navigation';
+  @import 'inspinia/base/buttons';
+  @import 'inspinia/base/badgets_labels';
+  @import 'inspinia/base/elements';
+  @import 'inspinia/base/base';
+  @import 'inspinia/base/pages';
+  @import 'inspinia/base/spinners';
 
   // INSPINIA Skins
-  @import "inspinia/base/skins";
+  @import 'inspinia/base/skins';
 
   // Media query style
-  @import "inspinia/base/media";
+  @import 'inspinia/base/media';
 
   @import 'inspinia/animate';
 /* INSPINIA - END */
+
+/* BOWER COMPONENTS - BEGIN */
+  @import 'c3/c3';
+/* BOWER COMPONENTS - END */
 
 @import 'public/styles';

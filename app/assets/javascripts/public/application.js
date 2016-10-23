@@ -17,6 +17,8 @@
 //= require angular-locale-pt-br/angular-locale_pt-br
 //= require moment/moment.js
 //= require moment/locale/pt-br.js
+//= require d3/d3.js
+//= require c3/c3.js
 
 //= require ng-rails-csrf
 //= require ngCable/ngCable

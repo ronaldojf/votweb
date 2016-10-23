@@ -1,9 +1,45 @@
 angular
   .module('votweb.controllers')
-  .controller('SessionProgressController', ['$scope', '$interval', '$cable', 'PlenarySession', function($scope, $interval, $cable, PlenarySession) {
+  .controller('SessionProgressController', ['$scope', '$interval', '$cable', '$timeout', 'PlenarySession',
+      function($scope, $interval, $cable, $timeout, PlenarySession) {
 
-    $scope.tickingClockDateTime = new Date();
     $scope.cable = $cable();
+    $scope.windowHeight = window.outerHeight;
+
+    var calculatePieChartHeight = function() { return window.top.outerHeight * .30; };
+    angular.element(window).on('resize', function() { $scope.pieChartHeight = calculatePieChartHeight(); });
+
+    // Usar $scope.pieChart.focus('SIM') para a metade com maior porcentagem
+    $scope.pieChart = c3.generate({
+      bindto: '#pie',
+      size: {
+        height: calculatePieChartHeight()
+      },
+      data: {
+        type: 'pie',
+        columns: [
+          ['SIM', 11],
+          ['NÃO', 9],
+          ['ABSTENÇÃO', 1]
+        ],
+        colors: {
+          'SIM': '#1ab394',
+          'NÃO': '#ed5565',
+          'ABSTENÇÃO': '#c2c2c2'
+        }
+      }
+    });
+
+    $scope.$watch('pieChartHeight', function(newHeight) {
+      if (!$scope.isApplyingNewHeight) {
+        $scope.isApplyingNewHeight = true;
+
+        $timeout(function() {
+          $scope.pieChart.resize({height: $scope.pieChartHeight});
+          $scope.isApplyingNewHeight = false;
+        }, 1000);
+      }
+    });
 
     $scope.initSessions = function(sessions) {
       $scope.sessions = sessions;
@@ -157,8 +193,4 @@ angular
         setCountdown(plenarySession.queues[i]);
       };
     };
-
-    var tickingClockPromise = $interval(function() {
-      $scope.tickingClockDateTime = new Date();
-    }, 1000);
   }]);
