@@ -42,8 +42,15 @@ class Admin::CouncillorsController < Admin::BaseController
   end
 
   def councillor_params
-    params
+    result = params
       .require(:councillor)
       .permit(:name, :username, :password, :password_confirmation, :party_id, :is_active, :is_holder)
+
+      if result[:password].blank?
+        result.delete(:password)
+        result.delete(:password_confirmation)
+      end
+
+    result
   end
 end
