@@ -1,5 +1,7 @@
 .p-t-sm { padding-top: 10px; }
 
+.inline-block { display: inline-block; }
+
 .content {
   color: white;
   height: 100%;
@@ -86,6 +88,11 @@
 
   .list {
     margin-top: 20px;
+
+    .title {
+      border-bottom: 1px solid white;
+      padding-bottom: 5px;
+    }
   }
 
   #pie {

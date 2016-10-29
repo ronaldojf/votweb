@@ -4,11 +4,11 @@
 <!-- contagem regressiva maior que 999 fica 999 -->
 <!-- lista de vereadores com o número da posição na frente -->
 <!-- lista de vereadores de voto coloridos de acordo com o voto -->
-<!-- lista de vereadores iniciando no centro da tela -->
 
 <section class="session-progress" ng-cloak
     ng-class="{'page-wrapper': !currentSession}"
     ng-init="kinds = <%= t('enums.specific_items.plenary_session.kind').to_json %>;
+            pollProcesses = <%= t('enums.specific_items.poll.process').to_json %>;
             initSessions(<%= @plenary_sessions.to_json(only: [:id, :title, :kind]) %>);">
 
   <div class="plenary-session-choose-box" ng-hide="currentSession">
@@ -41,139 +41,82 @@
     </div>
   </div>
 
-  <div class="poll" ng-show="currentSession">
-    <div class="header">
-      <h1 class="text-center m-t-none p-t-sm">
-        [<%= t('activerecord.models.plenary_session.one') %> {{kinds[currentSession.kind]}}] {{currentSession.title}}
-      </h1>
-      <h2 class="text-center">Descrição da votação</h2>
-    </div>
+  <div class="header" ng-if="currentSession">
+    <h1 class="text-center m-t-none p-t-sm">
+      [<%= t('activerecord.models.plenary_session.one') %> {{kinds[currentSession.kind]}}] {{currentSession.title}}
+    </h1>
+    <h2 class="text-center" ng-show="currentEvent && (currentPoll.description || currentQueue.description)">
+      {{currentPoll.description || currentQueue.description}}
+    </h2>
+  </div>
 
+  <div ng-show="currentSession && currentEvent">
     <div class="results">
       <div class="row">
         <div class="col-xs-5">
-          <table class="table">
-            <tr class="text-center font-bold"><td colspan="3">VOTOS</td></tr>
-            <tr class="text-center font-bold">
-              <td class="text-navy">SIM</td>
-              <td class="text-danger">NÃO</td>
-              <td class="text-muted">ABSTENÇÃO</td>
-            </tr>
-            <tr class="text-center font-lg">
-              <td class="text-navy">11</td>
-              <td class="text-danger">9</td>
-              <td class="text-muted">1</td>
-            </tr>
-          </table>
+          <div ng-show="currentEvent === 'poll'">
+            <table class="table">
+              <tr class="text-center font-bold"><td colspan="3">VOTOS</td></tr>
+              <tr class="text-center font-bold">
+                <td class="{{voteClasses['approvation']}}">{{voteTypes.approvation}}</td>
+                <td class="{{voteClasses['rejection']}}">{{voteTypes.rejection}}</td>
+                <td class="{{voteClasses['abstention']}}">{{voteTypes.abstention}}</td>
+              </tr>
+              <tr class="text-center font-lg">
+                <td class="{{voteClasses['approvation']}}">{{ currentPoll.approvationCount || 0 }}</td>
+                <td class="{{voteClasses['rejection']}}">{{ currentPoll.rejectionCount || 0 }}</td>
+                <td class="{{voteClasses['abstention']}}">{{ currentPoll.abstentionCount || 0 }}</td>
+              </tr>
+            </table>
+          </div>
         </div>
 
-        <div class="col-xs-2 text-center font-lg">999</div>
+        <div class="col-xs-2 text-center font-lg">{{currentPoll.countdown || 0}}</div>
 
         <div class="col-xs-5">
-          <table class="table">
-            <tr class="text-center font-bold"><td colspan="2">PERCENTUAL</td></tr>
-            <tr class="text-center font-bold"><td><div id="pie"></div></td></tr>
-          </table>
+          <div ng-show="currentEvent === 'poll'">
+            <table class="table">
+              <tr class="text-center font-bold"><td colspan="2">PERCENTUAL</td></tr>
+              <tr class="text-center font-bold"><td><div id="pie"></div></td></tr>
+            </table>
+          </div>
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" ng-show="currentEvent === 'poll'">
         <div class="col-xs-5">
           <div class="row">
             <div class="col-xs-6">
-              <strong>Participantes:</strong> 21
+              <strong>Participantes:</strong> {{currentSession.councillors.length}}
             </div>
             <div class="col-xs-6">
-              <strong>Total de votos:</strong> 21
+              <strong>Total de votos:</strong> {{currentPoll.votes.length}}
             </div>
           </div>
         </div>
         <div class="col-xs-5 col-xs-offset-2 text-right">
-          <span><strong>Tipo de Votação:</strong> Nominal</span>
+          <span><strong>Tipo de Votação:</strong> {{pollProcesses[currentPoll.process]}}</span>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="list" ng-show="currentSession">
+  <div class="list" ng-if="isToShowCouncillorsList()">
     <div class="row">
-      <div class="col-xs-12">
-        <strong>LISTA DE VEREADORES</strong>
-        <table class="table">
-          <tr>
-            <td>
-              <table width="100%">
-                <tr>
-                  <td>VEREADOR 1 - PT</td>
-                  <td>SIM</td>
-                </tr>
-                <tr>
-                  <td>VEREADOR 2 - PSol</td>
-                  <td>NÃO</td>
-                </tr>
-                <tr>
-                  <td>VEREADOR 3 - PCdoB</td>
-                  <td>SIM</td>
-                </tr>
-                <tr>
-                  <td>VEREADOR 4 - PT</td>
-                  <td>SIM</td>
-                </tr>
-                <tr>
-                  <td>VEREADOR 5 - PV</td>
-                  <td>SIM</td>
-                </tr>
-                <tr>
-                  <td>VEREADOR 6 - PSol</td>
-                  <td>ABSTENÇÃO</td>
-                </tr>
-                <tr>
-                  <td>VEREADOR 7 - PDT</td>
-                  <td>SIM</td>
-                </tr>
-                <tr>
-                  <td>VEREADOR 8 - PT</td>
-                  <td>SIM</td>
-                </tr>
-                </tr>
-                <tr>
-                  <td>VEREADOR 9 - PT</td>
-                  <td>SIM</td>
-                </tr>
-                </tr>
-                <tr>
-                  <td>VEREADOR 10 - PT</td>
-                  <td>SIM</td>
-                </tr>
-                </tr>
-              </table>
-            </td>
-            <td>
-              <table width="100%">
-                <tr>
-                  <td>VEREADOR 11 - PSol</td>
-                  <td>ABSTENÇÃO</td>
-                </tr>
-                <tr>
-                  <td>VEREADOR 12 - PSol</td>
-                  <td>ABSTENÇÃO</td>
-                </tr>
-                <tr>
-                  <td>VEREADOR 13 - PT</td>
-                  <td>SIM</td>
-                </tr>
-                <tr>
-                  <td>VEREADOR 14 - PT</td>
-                  <td>NÃO</td>
-                </tr>
-              </table>
-            </td>
-            <td>
-              <table width="100%">
-              </table>
-            </td>
-          </tr>
-        </table>
+      <div class="col-xs-12 text-center">
+        <p class="title"><strong>LISTA DE VEREADORES</strong></p>
+        <ol ng-repeat="members in currentSession.splittedMembers track by $index"
+            class="text-left inline-block"
+            ng-class="{'list-unstyled': currentEvent === 'poll'}"
+            start="{{($index * members.length) + 1}}">
+
+          <li ng-repeat="member in members track by $index" class="font-bold">
+            <span class="{{currentEvent === 'poll' ? voteClasses[voteKind = getCouncillorCurrentVote(member.councillor.id).kind] : ''}}">
+              <span ng-if="currentEvent === 'poll'">{{'[' + voteTypes[voteKind] + ']'}}</span>
+              {{member.councillor.name.toUpperCase()}} - {{member.councillor.party.abbreviation}}
+            </span>
+          </li>
+        </ol>
       </div>
     </div>
   </div>

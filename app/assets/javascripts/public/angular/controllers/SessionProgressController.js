@@ -1,15 +1,19 @@
 angular
   .module('votweb.controllers')
-  .controller('SessionProgressController', ['$scope', '$interval', '$cable', '$timeout', 'PlenarySession',
-      function($scope, $interval, $cable, $timeout, PlenarySession) {
+  .controller('SessionProgressController', ['$scope', '$interval', '$cable', '$timeout', '$filter', 'PlenarySession',
+      function($scope, $interval, $cable, $timeout, $filter, PlenarySession) {
 
     $scope.cable = $cable();
     $scope.windowHeight = window.outerHeight;
+    $scope.currentPoll = {};
+    $scope.currentQueue = {};
+    $scope.voteTypes = {approvation: 'SIM', rejection: 'NÃO', abstention: 'ABSTENÇÃO'};
+    $scope.voteClasses = {approvation: 'text-navy', rejection: 'text-danger', abstention: 'text-muted'};
 
+    var inactivityCountdownPromise;
     var calculatePieChartHeight = function() { return window.top.outerHeight * .30; };
     angular.element(window).on('resize', function() { $scope.pieChartHeight = calculatePieChartHeight(); });
 
-    // Usar $scope.pieChart.focus('SIM') para a metade com maior porcentagem
     $scope.pieChart = c3.generate({
       bindto: '#pie',
       size: {
@@ -18,9 +22,9 @@ angular
       data: {
         type: 'pie',
         columns: [
-          ['SIM', 11],
-          ['NÃO', 9],
-          ['ABSTENÇÃO', 1]
+          [$scope.voteTypes.approvation, 0],
+          [$scope.voteTypes.rejection, 0],
+          [$scope.voteTypes.abstention, 0]
         ],
         colors: {
           'SIM': '#1ab394',
@@ -41,6 +45,28 @@ angular
       }
     });
 
+    $scope.$watchCollection('currentPoll.votes', function(newVotes, oldVotes) {
+      if ((newVotes || []).length !== (oldVotes || []).length) {
+        $scope.currentPoll.approvationCount = $filter('filter')(newVotes, {kind: 'approvation'}).length;
+        $scope.currentPoll.rejectionCount = $filter('filter')(newVotes, {kind: 'rejection'}).length;
+        $scope.currentPoll.abstentionCount = $filter('filter')(newVotes, {kind: 'abstention'}).length;
+
+        $scope.pieChart.load({
+          columns: [
+            [$scope.voteTypes.approvation, $scope.currentPoll.approvationCount],
+            [$scope.voteTypes.rejection, $scope.currentPoll.rejectionCount],
+            [$scope.voteTypes.abstention, $scope.currentPoll.abstentionCount]
+          ]
+        });
+      }
+    });
+
+    $scope.$watchCollection('currentSession.members', function(newMembers, oldMembers) {
+      if ((newMembers || []).length !== (oldMembers || []).length) {
+        $scope.currentSession.splittedMembers = $filter('chunk')(newMembers, 10);
+      }
+    });
+
     $scope.initSessions = function(sessions) {
       $scope.sessions = sessions;
 
@@ -54,23 +80,19 @@ angular
       getPlenarySession($scope.currentSession.id);
     };
 
-    $scope.resetCurrentSession = function() {
-      $scope.currentSession = undefined;
-
-      if ($scope.pollsChannel) { $scope.pollsChannel.unsubscribe(); }
-      if ($scope.queuesChannel) { $scope.queuesChannel.unsubscribe(); }
-      if ($scope.votesChannel) { $scope.votesChannel.unsubscribe(); }
+    $scope.isToShowCouncillorsList = function() {
+      return $scope.currentSession && ($scope.currentEvent === 'queue' || $scope.currentPoll.process === 'named');
     };
 
-    $scope.findCouncillor = function(councillorId) {
+    $scope.getCouncillorCurrentVote = function(councillorId) {
       var result;
 
-      for (var i = 0; i < $scope.currentSession.members.length; i++) {
-        if ($scope.currentSession.members[i].councillor.id === councillorId) {
-          result = $scope.currentSession.members[i].councillor;
+      for (var i = 0; i < ($scope.currentPoll.votes || []).length; i++) {
+        if ($scope.currentPoll.votes[i].councillor_id === councillorId) {
+          result = $scope.currentPoll.votes[i];
           break;
         }
-      }
+      };
 
       return result;
     };
@@ -100,7 +122,7 @@ angular
       }, function(data) {
         collectionRefresh(plenarySession.polls, data, {
           callback: function(poll) {
-            setCountdown(poll);
+            setCountdown('poll', poll);
           }
         });
       });
@@ -111,7 +133,7 @@ angular
         channel: 'VotesChannel',
         room: plenarySession.id
       }, function(data) {
-        var poll = findPoll(data.poll_id);
+        var poll = getPoll(data.poll_id);
         poll.votes = poll.votes || [];
 
         collectionRefresh(poll.votes, data);
@@ -125,13 +147,13 @@ angular
       }, function(data) {
         collectionRefresh(plenarySession.queues, data, {
           callback: function(queue) {
-            setCountdown(queue);
+            setCountdown('queue', queue);
           }
         });
       });
     };
 
-    var findPoll = function(pollId) {
+    var getPoll = function(pollId) {
       var result;
 
       for (var i = 0; i < $scope.currentSession.polls.length; i++) {
@@ -144,17 +166,22 @@ angular
       return result;
     };
 
-    var setCountdown = function(object) {
+    var setCountdown = function(type, object) {
       clearCountdown(object);
 
       if (object.countdown > 0) {
         var end = moment().add(object.countdown, 'seconds');
+        inactivityCountdown('off');
+        $scope[type === 'poll' ? 'currentPoll' : 'currentQueue'] = object;
+
         object.countdownPromise = $interval(function() {
           // +1 para corrigir tempo de criação do registro e entrega do mesmo por websocket
           object.countdown = end.unix() - moment().unix() + 1;
+          $scope.currentEvent = type;
 
           if (object.countdown <= 0) {
             clearCountdown(object);
+            inactivityCountdown('on');
           }
         }, 500);
       }
@@ -182,15 +209,43 @@ angular
         $interval.cancel(object.countdownPromise);
       }
       delete object.countdownPromise;
+      $scope.currentPoll = {};
+      $scope.currentQueue = {};
     };
 
     var checkCountdowns = function(plenarySession) {
       for (var i = 0; i < plenarySession.polls.length; i++) {
-        setCountdown(plenarySession.polls[i], true);
+        setCountdown('poll', plenarySession.polls[i], true);
       };
 
       for (var i = 0; i < plenarySession.queues.length; i++) {
-        setCountdown(plenarySession.queues[i]);
+        setCountdown('queue', plenarySession.queues[i]);
       };
+    };
+
+    var getCurrent = function(type) {
+      var result;
+      var collection = type === 'poll' ? $scope.currentSession.polls : $scope.currentSession.queues;
+
+      for (var i = 0; i < collection.length; i++) {
+        if (collection[i].countdownPromise) {
+          result = collection[i];
+          break;
+        }
+      }
+
+      return result;
+    };
+
+    var inactivityCountdown = function(turnTo) {
+      $timeout.clear(inactivityCountdownPromise);
+
+      if (turnTo === 'on') {
+        inactivityCountdownPromise = $timeout(function() {
+          delete $scope.currentEvent;
+          $scope.currentPoll = {};
+          $scope.currentQueue = {};
+        }, 5 * 60 * 1000); // 5 minutos
+      }
     };
   }]);
