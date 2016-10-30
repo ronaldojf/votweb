@@ -1,10 +1,5 @@
 <% content_for :angular_controller, 'SessionProgressController' %>
 
-<!-- comunicar com back-end -->
-<!-- contagem regressiva maior que 999 fica 999 -->
-<!-- lista de vereadores com o número da posição na frente -->
-<!-- lista de vereadores de voto coloridos de acordo com o voto -->
-
 <section class="session-progress" ng-cloak
     ng-class="{'page-wrapper': !currentSession}"
     ng-init="kinds = <%= t('enums.specific_items.plenary_session.kind').to_json %>;
@@ -17,7 +12,7 @@
         <h4>Não existe nenhuma sessão que inicie hoje.</h4>
       </div>
 
-      <div class="session-pick" ng-show="sessions.length > 0 && !currentSession">
+      <div class="session-pick" ng-show="sessions.length > 0">
         <h4>Escolha uma das sessões abaixo para se conectar.</h4>
         <br>
 
@@ -30,13 +25,6 @@
             </h4>
           </li>
         </ul>
-      </div>
-
-      <div class="current-session" ng-show="currentSession">
-        <h4>
-          [<%= t('activerecord.models.plenary_session.one') %> {{kinds[currentSession.kind]}}]
-          {{currentSession.title}} <a href ng-click="resetCurrentSession()">(Trocar)</a>
-        </h4>
       </div>
     </div>
   </div>
@@ -55,7 +43,7 @@
       <div class="row">
         <div class="col-xs-5">
           <div ng-show="currentEvent === 'poll'">
-            <table class="table">
+            <table class="table votes-count">
               <tr class="text-center font-bold"><td colspan="3">VOTOS</td></tr>
               <tr class="text-center font-bold">
                 <td class="{{voteClasses['approvation']}}">{{voteTypes.approvation}}</td>
@@ -71,7 +59,12 @@
           </div>
         </div>
 
-        <div class="col-xs-2 text-center font-lg">{{currentPoll.countdown || 0}}</div>
+        <div class="col-xs-2 text-center font-lg">
+          {{
+            ((currentPoll.countdown || currentQueue.countdown || 0) > 999) ? 999 :
+              (currentPoll.countdown || currentQueue.countdown || 0)
+          }}
+        </div>
 
         <div class="col-xs-5">
           <div ng-show="currentEvent === 'poll'">
@@ -87,7 +80,7 @@
         <div class="col-xs-5">
           <div class="row">
             <div class="col-xs-6">
-              <strong>Participantes:</strong> {{currentSession.councillors.length}}
+              <strong>Participantes:</strong> {{currentSession.members.length}}
             </div>
             <div class="col-xs-6">
               <strong>Total de votos:</strong> {{currentPoll.votes.length}}
@@ -105,18 +98,51 @@
     <div class="row">
       <div class="col-xs-12 text-center">
         <p class="title"><strong>LISTA DE VEREADORES</strong></p>
-        <ol ng-repeat="members in currentSession.splittedMembers track by $index"
-            class="text-left inline-block"
-            ng-class="{'list-unstyled': currentEvent === 'poll'}"
-            start="{{($index * members.length) + 1}}">
+        <div ng-if="currentEvent === 'poll'">
+          <ol ng-repeat="members in currentSession.splittedMembers track by $index"
+              class="text-left inline-block list-unstyled">
+            <li ng-repeat="member in members track by $index" class="font-bold">
+              <span class="{{voteClasses[voteKind = getCouncillorCurrentVote(member.councillor.id).kind]}}">
+                <span ng-if="voteTypes[voteKind]">{{'[' + voteTypes[voteKind] + ']'}}</span>
+                {{member.councillor.name.toUpperCase()}} - {{member.councillor.party.abbreviation}}
+              </span>
+            </li>
+          </ol>
+        </div>
 
-          <li ng-repeat="member in members track by $index" class="font-bold">
-            <span class="{{currentEvent === 'poll' ? voteClasses[voteKind = getCouncillorCurrentVote(member.councillor.id).kind] : ''}}">
-              <span ng-if="currentEvent === 'poll'">{{'[' + voteTypes[voteKind] + ']'}}</span>
-              {{member.councillor.name.toUpperCase()}} - {{member.councillor.party.abbreviation}}
-            </span>
-          </li>
-        </ol>
+        <div ng-if="currentEvent === 'queue'">
+          <ol ng-repeat="councillors in currentQueue.splittedCouncillors track by $index"
+              class="text-left inline-block"
+              start="{{($index * ($index > 0 ? currentQueue.splittedCouncillors[$index - 1].length : 0)) + 1}}">
+            <li ng-repeat="councillor in councillors track by $index" class="font-bold">
+              {{councillor.name.toUpperCase()}} - {{councillor.party.abbreviation}}
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal inmodal" id="fullscreen-request" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content animated fadeIn">
+        <div class="modal-body">
+          <h3 class="text-center"><%= t('requests.activate_fullscreen') %></h3>
+        </div>
+        <div class="modal-footer">
+          <div class="row">
+            <div class="col-xs-6">
+              <button type="button" class="btn btn-block btn-danger" data-dismiss="modal">
+                <%= t('buttons.deny').mb_chars.upcase %>
+              </button>
+            </div>
+            <div class="col-xs-6">
+              <button type="button" class="btn btn-block btn-primary" data-dismiss="modal" request-fullscreen>
+                <%= t('buttons.accept').mb_chars.upcase %>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

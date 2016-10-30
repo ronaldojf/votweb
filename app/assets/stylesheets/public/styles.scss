@@ -1,6 +1,9 @@
 .p-t-sm { padding-top: 10px; }
 
-.inline-block { display: inline-block; }
+.inline-block {
+  display: inline-block;
+  vertical-align: top;
+}
 
 .content {
   color: white;
@@ -95,6 +98,12 @@
     }
   }
 
+  .results {
+    table.votes-count {
+      td { width: 33.333%; }
+    }
+  }
+
   #pie {
     .c3-tooltip td {
       color: #555;
@@ -118,5 +127,9 @@
     a:focus, a:active, a:hover {
       text-decoration: underline;
     }
+  }
+
+  .list {
+    ol { padding: 0 3vh; }
   }
 }

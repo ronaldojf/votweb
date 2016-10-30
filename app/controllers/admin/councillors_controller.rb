@@ -1,5 +1,5 @@
 class Admin::CouncillorsController < Admin::BaseController
-  before_action :set_councillor, only: [:show, :edit, :update, :destroy]
+  before_action :set_councillor, only: [:show, :edit, :update]
 
   def index
     respond_to do |format|
@@ -28,11 +28,6 @@ class Admin::CouncillorsController < Admin::BaseController
   def update
     @councillor.update(councillor_params)
     respond_with :admin, @councillor
-  end
-
-  def destroy
-    @councillor.destroy
-    respond_with @councillor, location: -> { admin_councillors_path }
   end
 
   private

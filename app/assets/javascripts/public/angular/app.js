@@ -1,9 +1,11 @@
 //= require_self
 //= require_tree ./filters/
+//= require_tree ./directives/
 //= require_tree ./controllers/
 //= require_tree ./models/
 
 angular.module('votweb.filters', []);
+angular.module('votweb.directives', []);
 angular.module('votweb.controllers', []);
 angular.module('votweb.models', []);
 
@@ -11,6 +13,7 @@ angular.module('votweb', [
     'ng-rails-csrf',
     'ngCable',
     'votweb.filters',
+    'votweb.directives',
     'votweb.controllers',
     'votweb.models'
 ])

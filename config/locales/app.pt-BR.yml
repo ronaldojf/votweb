@@ -19,6 +19,7 @@ pt-BR:
       session_items: Itens da ordem do dia
       plenary_sessions: Sessões
       holds: Cadeiras
+      session_managements: Gerenciamento de sessão
     footers:
       short_html: '<strong>%{app}</strong> &copy; %{year}'
 
@@ -58,6 +59,8 @@ pt-BR:
     details: Detalhes
     new_poll: Nova votação
     mark_as: Marcar como
+    accept: Sim
+    deny: Não
 
   login:
     administrator:
@@ -82,6 +85,9 @@ pt-BR:
       zero: 'Nenhum registro adicionado.'
       one: '<strong>1</strong> registro adicionado.'
       other: '<strong>%{count}</strong> registros adicionados.'
+
+  requests:
+    activate_fullscreen: 'Ativar visualização em tela cheia?'
 
   warnings:
     unlock_record_html: |
@@ -274,8 +280,9 @@ pt-BR:
 
   errors:
     custom_messages:
-      current_password_not_match: não confere
       unpermited: Você não tem permissão para acessar o recurso solicitado.
+      cant_delete_party_with_councillors: Não é possivel excluir esse partido enquanto houverem vereadores atrelados ao mesmo.
+      current_password_not_match: não confere
       only_alphanumeric: somente letras e números
 
   miscellaneous:

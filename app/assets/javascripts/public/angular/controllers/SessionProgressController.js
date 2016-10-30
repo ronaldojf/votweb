@@ -11,59 +11,52 @@ angular
     $scope.voteClasses = {approvation: 'text-navy', rejection: 'text-danger', abstention: 'text-muted'};
 
     var inactivityCountdownPromise;
-    var calculatePieChartHeight = function() { return window.top.outerHeight * .30; };
-    angular.element(window).on('resize', function() { $scope.pieChartHeight = calculatePieChartHeight(); });
 
-    $scope.pieChart = c3.generate({
-      bindto: '#pie',
-      size: {
-        height: calculatePieChartHeight()
-      },
-      data: {
-        type: 'pie',
-        columns: [
-          [$scope.voteTypes.approvation, 0],
-          [$scope.voteTypes.rejection, 0],
-          [$scope.voteTypes.abstention, 0]
-        ],
-        colors: {
-          'SIM': '#1ab394',
-          'NÃO': '#ed5565',
-          'ABSTENÇÃO': '#c2c2c2'
-        }
-      }
-    });
-
-    $scope.$watch('pieChartHeight', function(newHeight) {
-      if (!$scope.isApplyingNewHeight) {
-        $scope.isApplyingNewHeight = true;
-
-        $timeout(function() {
-          $scope.pieChart.resize({height: $scope.pieChartHeight});
-          $scope.isApplyingNewHeight = false;
-        }, 1000);
-      }
+    angular.element(window).on('resize', function() { recreatePieChart(); });
+    $scope.$watchGroup(['currentSession', 'currentEvent'], function() {
+      recreatePieChart();
     });
 
     $scope.$watchCollection('currentPoll.votes', function(newVotes, oldVotes) {
       if ((newVotes || []).length !== (oldVotes || []).length) {
-        $scope.currentPoll.approvationCount = $filter('filter')(newVotes, {kind: 'approvation'}).length;
-        $scope.currentPoll.rejectionCount = $filter('filter')(newVotes, {kind: 'rejection'}).length;
-        $scope.currentPoll.abstentionCount = $filter('filter')(newVotes, {kind: 'abstention'}).length;
+        $scope.currentPoll.approvationCount = $filter('filter')(newVotes || [], {kind: 'approvation'}).length;
+        $scope.currentPoll.rejectionCount = $filter('filter')(newVotes || [], {kind: 'rejection'}).length;
+        $scope.currentPoll.abstentionCount = $filter('filter')(newVotes || [], {kind: 'abstention'}).length;
 
-        $scope.pieChart.load({
-          columns: [
-            [$scope.voteTypes.approvation, $scope.currentPoll.approvationCount],
-            [$scope.voteTypes.rejection, $scope.currentPoll.rejectionCount],
-            [$scope.voteTypes.abstention, $scope.currentPoll.abstentionCount]
-          ]
-        });
+        if ($scope.pieChart) {
+          $scope.pieChart.load({
+            columns: [
+              [$scope.voteTypes.approvation, $scope.currentPoll.approvationCount],
+              [$scope.voteTypes.rejection, $scope.currentPoll.rejectionCount],
+              [$scope.voteTypes.abstention, $scope.currentPoll.abstentionCount]
+            ]
+          });
+
+          refreshPieChartColumnsVisibility();
+        }
       }
     });
 
     $scope.$watchCollection('currentSession.members', function(newMembers, oldMembers) {
       if ((newMembers || []).length !== (oldMembers || []).length) {
         $scope.currentSession.splittedMembers = $filter('chunk')(newMembers, 10);
+      }
+    });
+
+    $scope.$watchCollection('currentQueue.councillors_ids', function(newCouncillorsIds, oldCouncillorsIds) {
+      if ($scope.currentQueue && (newCouncillorsIds || []).length !== (oldCouncillorsIds || []).length) {
+        var councillors = [];
+        angular.forEach(newCouncillorsIds, function(councillorId) {
+          for (var i = 0; i < $scope.currentSession.members.length; i++) {
+            var councillor = $scope.currentSession.members[i].councillor;
+
+            if (councillorId === councillor.id) {
+              councillors.push(councillor);
+            }
+          }
+        });
+
+        $scope.currentQueue.splittedCouncillors = $filter('chunk')(councillors, 10);
       }
     });
 
@@ -97,6 +90,39 @@ angular
       return result;
     };
 
+    var recreatePieChart = function() {
+      if (!$scope.isApplyingNewHeight) {
+        $scope.isApplyingNewHeight = true;
+
+        $timeout(function() {
+          if ($scope.pieChart) { $scope.pieChart.destroy(); }
+
+          $scope.pieChart = c3.generate({
+            bindto: '#pie',
+            size: {
+              height: window.top.outerHeight * .30
+            },
+            data: {
+              type: 'pie',
+              columns: [
+                [$scope.voteTypes.approvation, ($scope.currentPoll.approvationCount || 0)],
+                [$scope.voteTypes.rejection, ($scope.currentPoll.rejectionCount || 0)],
+                [$scope.voteTypes.abstention, ($scope.currentPoll.abstentionCount || 0)]
+              ],
+              colors: {
+                'SIM': '#1ab394',
+                'NÃO': '#ed5565',
+                'ABSTENÇÃO': '#c2c2c2'
+              }
+            }
+          });
+
+          refreshPieChartColumnsVisibility();
+          $scope.isApplyingNewHeight = false;
+        }, 500);
+      }
+    };
+
     var getPlenarySession = function(plenarySessionId) {
       PlenarySession.details(plenarySessionId)
       .success(function(data) {
@@ -109,6 +135,8 @@ angular
 
           checkCountdowns($scope.currentSession);
         }
+
+        angular.element('#fullscreen-request').modal();
       })
       .error(function(errors) {
         console.log(errors);
@@ -172,6 +200,7 @@ angular
       if (object.countdown > 0) {
         var end = moment().add(object.countdown, 'seconds');
         inactivityCountdown('off');
+        resetCurrentEvent();
         $scope[type === 'poll' ? 'currentPoll' : 'currentQueue'] = object;
 
         object.countdownPromise = $interval(function() {
@@ -209,8 +238,6 @@ angular
         $interval.cancel(object.countdownPromise);
       }
       delete object.countdownPromise;
-      $scope.currentPoll = {};
-      $scope.currentQueue = {};
     };
 
     var checkCountdowns = function(plenarySession) {
@@ -238,14 +265,22 @@ angular
     };
 
     var inactivityCountdown = function(turnTo) {
-      $timeout.clear(inactivityCountdownPromise);
+      $timeout.cancel(inactivityCountdownPromise);
 
       if (turnTo === 'on') {
-        inactivityCountdownPromise = $timeout(function() {
-          delete $scope.currentEvent;
-          $scope.currentPoll = {};
-          $scope.currentQueue = {};
-        }, 5 * 60 * 1000); // 5 minutos
+        inactivityCountdownPromise = $timeout(resetCurrentEvent, 5 * 60 * 1000); // 5 minutos
       }
+    };
+
+    var resetCurrentEvent = function() {
+      delete $scope.currentEvent;
+      $scope.currentPoll = {};
+      $scope.currentQueue = {};
+    };
+
+    var refreshPieChartColumnsVisibility = function() {
+      $scope.pieChart[($scope.currentPoll.approvationCount || 0) > 0 ? 'show' : 'hide']($scope.voteTypes.approvation);
+      $scope.pieChart[($scope.currentPoll.rejectionCount || 0) > 0 ? 'show' : 'hide']($scope.voteTypes.rejection);
+      $scope.pieChart[($scope.currentPoll.abstentionCount || 0) > 0 ? 'show' : 'hide']($scope.voteTypes.abstention);
     };
   }]);

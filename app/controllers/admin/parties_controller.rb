@@ -27,8 +27,12 @@ class Admin::PartiesController < Admin::BaseController
   end
 
   def destroy
-    @party.destroy
-    respond_with @party, location: -> { admin_parties_path }
+    if @party.councillors.exists?
+      redirect_to admin_party_path(@party), alert: I18n.t('errors.custom_messages.cant_delete_party_with_councillors')
+    else
+      @party.destroy
+      respond_with @party, location: -> { admin_parties_path }
+    end
   end
 
   private
