@@ -1,3 +1,10 @@
+.p-t-sm { padding-top: 10px; }
+
+.inline-block {
+  display: inline-block;
+  vertical-align: top;
+}
+
 .content {
   color: white;
   height: 100%;
@@ -58,5 +65,71 @@
     width: 100%;
     height: 100%;
     font-size: 10vw;
+  }
+}
+
+.session-progress {
+  &.page-wrapper {
+    .plenary-session-choose-box {
+      padding: 30px;
+    }
+  }
+
+  padding: 0 10px;
+  font-size: 2vh;
+
+  h1 { font-size: 4vh; }
+  h2 { font-size: 3vh; }
+
+  .font-lg {
+    font-size: 7.5vw;
+  }
+
+  #header {
+    margin-bottom: 10px;
+  }
+
+  .list {
+    margin-top: 20px;
+
+    .title {
+      border-bottom: 1px solid white;
+      padding-bottom: 5px;
+    }
+  }
+
+  .results {
+    table.votes-count {
+      td { width: 33.333%; }
+    }
+  }
+
+  #pie {
+    .c3-tooltip td {
+      color: #555;
+    }
+
+    .c3-legend-item {
+      fill: white;
+    }
+
+    .c3-chart-arc.c3-target text {
+      font-size: 2vh;
+    }
+  }
+
+  .plenary-session-choose-box {
+    border-radius: 6px;
+    background: white;
+    color: $nav-bg;
+    padding: 10px;
+
+    a:focus, a:active, a:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .list {
+    ol { padding: 0 3vh; }
   }
 }

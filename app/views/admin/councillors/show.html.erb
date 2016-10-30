@@ -20,12 +20,6 @@
       <%= t('buttons.edit') %>
     <% end if can?(:update, Councillor) %>
 
-    <%= link_to [:admin, @councillor], class: 'btn btn-w-s btn-danger m-t-md',
-          method: :delete, data: {confirm: t('confirm.delete_record')} do %>
-      <i class="fa fa-trash"></i><br/>
-      <%= t('buttons.destroy') %>
-    <% end if can?(:destroy, Councillor) %>
-
     <%= link_to [:admin, :councillors], class: 'btn btn-w-s btn-white m-t-md m-l-sm' do %>
       <i class="fa fa-reply"></i><br/>
       <%= t('buttons.back') %>

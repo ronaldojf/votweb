@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     end
 
     namespace :panel do
-      resources :plenary_sessions, only: [:show] do
+      resources :plenary_sessions, only: [] do
         scope module: :plenary_sessions do
           resources :councillors_queues, only: [:update]
           resources :polls, only: [:update]
@@ -42,6 +42,7 @@ Rails.application.routes.draw do
     end
 
     scope module: :public do
+      resources :plenary_sessions, only: [:show]
       root 'home#index'
     end
   end
