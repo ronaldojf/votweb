@@ -27,7 +27,6 @@ class Admin::PlenarySessionsController < Admin::BaseController
   def new
     @plenary_session = PlenarySession.new
     @plenary_session.start_at = DateTime.current.next_week(:monday).change(hour: 19, minute: 0, second: 0)
-    @plenary_session.end_at = @plenary_session.start_at + 2.5.hours
 
     last_president_id = SessionMember.where(is_president: true).last.try(:councillor_id)
     Councillor.active.holder.each do |councillor|
@@ -61,7 +60,7 @@ class Admin::PlenarySessionsController < Admin::BaseController
     result = params
               .require(:plenary_session)
               .permit(
-                :title, :kind, :start_at, :end_at, :is_test, item_ids: [],
+                :title, :kind, :start_at, :is_test, item_ids: [],
                 members_attributes: [:id, :councillor_id, :is_president, :_destroy],
               )
 

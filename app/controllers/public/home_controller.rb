@@ -1,5 +1,5 @@
 class Public::HomeController < Public::BaseController
   def index
-    @plenary_sessions = PlenarySession.start_or_end_today
+    @plenary_sessions = PlenarySession.starts_today
   end
 end

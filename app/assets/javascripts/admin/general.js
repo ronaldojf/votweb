@@ -1,16 +1,9 @@
+'use strict';
+
 $(function() {
   window.App = function() {
     this.defaults();
     this.binds();
-    this.activeMenu();
-  };
-
-  App.prototype.controllerActual = function() {
-    return $('body').data('controller');
-  };
-
-  App.prototype.activeMenu = function() {
-    $('a[data-controller=' + this.controllerActual() + ']').parent('li').addClass('active');
   };
 
   App.prototype.markDirty = function() {
@@ -92,7 +85,9 @@ $(function() {
 });
 
 $(document).on('turbolinks:load', function() {
-  window.app = new window.App();
+  setTimeout(function() {
+    window.app = new window.App();
+  });
 
   if ($('[fake-password]').length > 0 && !$($('[fake-password]').parent()).hasClass('has-error')) {
     window.fakePassword = Math.random().toString(36).substring(8);
@@ -118,6 +113,26 @@ $(document).on('turbolinks:load', function() {
       });
     });
   }
+
+  $('.datetimepicker').each(function() {
+    var target = $(this);
+    var initialValue = target.val();
+
+    target.wrap('<div class="input-group date"></div>');
+    $(target.parent()).append(
+      '<label for="' + target.attr('id') + '" class="input-group-addon">' +
+      '<i class="fa fa-calendar"></i>' +
+      '</label>'
+    );
+
+    target.datetimepicker({
+      useCurrent: false
+    });
+
+    if (initialValue) {
+      target.data('DateTimePicker').date(new Date(initialValue));
+    }
+  });
 
   $.rails.allowAction = function(link) {
     if (!link.attr('data-confirm')) {

@@ -15,9 +15,7 @@ json.set! :members do
 end
 
 json.set! :polls do
-  json.array!(@plenary_session.polls) do |poll|
-    json.merge! poll.to_builder.attributes!
-  end
+  json.array! @plenary_session.polls.includes(:votes), partial: 'partials/polls/poll', as: :poll
 end
 
 json.set! :queues do

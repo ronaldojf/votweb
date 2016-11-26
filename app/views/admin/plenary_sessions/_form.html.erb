@@ -3,11 +3,11 @@
 <%= simple_form_for([:admin, @plenary_session]) do |f| %>
 
   <div class="form-inputs" ng-init="
-    init(<%= @plenary_session.to_json(only: [:is_test, :start_at, :end_at]) %>);
+    init(<%= @plenary_session.to_json(only: [:is_test, :start_at]) %>);
     acceptances = <%= t('enums.specific_items.session_item.acceptance').to_json %>;
     activeCouncillors = <%= Councillor.active.order(name: :asc).to_json(only: [:id, :name]) %>;
     orphanItems = <%= SessionItem.where(plenary_session_id: nil).includes(:author).to_json(only: [:id, :title, :acceptance], include: [author: {only: [:name]}]) %>;
-    plenarySession.items = <%= (@plenary_session.items || []).to_json(only: [:id, :title, :acceptance], include: [author: {only: [:name]}]) %>;
+    plenarySession.items = <%= (@plenary_session.items.includes(:author) || []).to_json(only: [:id, :title, :acceptance], include: [author: {only: [:name]}]) %>;
     plenarySession.members = <%= (
       @plenary_session.new_record? ?
         @plenary_session.members :
@@ -24,42 +24,21 @@
         <div id="session" class="tab-pane active">
           <div class="panel-body">
             <div class="row">
-              <div class="col-xs-12 col-sm-8">
+              <div class="col-xs-12">
                 <%= f.input :title, input_html: { autofocus: true } %>
-              </div>
-
-              <div class="col-xs-12 col-sm-4">
-                <%= f.input :kind,
-                            collection: t('enums.specific_items.plenary_session.kind').invert,
-                            include_blank: true,
-                            input_html: {chosen: '', 'data-placeholder' => t('activerecord.attributes.plenary_session.kind')} %>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-xs-12">
-                <div class="form-group <%= 'has-error' if @plenary_session.errors.include?(:start_at) || @plenary_session.errors.include?(:end_at) %>">
-                  <label for="session_period" class="control-label">
-                    <%= t('simple_form.required.html') %>
-                    <%= t('activerecord.attributes.plenary_session.period') %>
-                  </label>
+              <div class="col-xs-12 col-sm-6">
+                <%= f.input :kind,
+                collection: t('enums.specific_items.plenary_session.kind').invert,
+                include_blank: true,
+                input_html: {chosen: '', 'data-placeholder' => t('activerecord.attributes.plenary_session.kind')} %>
+              </div>
 
-                  <div class="input-group date">
-                    <input date-range-picker type="text" id="session_period" class="form-control"
-                          placeholder="<%= t('activerecord.attributes.plenary_session.period') %>"
-                          ng-model="plenarySession.period"
-                          options="dateRangePickerOptions">
-
-                    <label for="session_period" class="input-group-addon">
-                      <i class="fa fa-calendar"></i>
-                    </label>
-                  </div>
-
-                  <span class="help-block"><%= @plenary_session.errors[:start_at].try(:first) || @plenary_session.errors[:end_at].try(:first) %></span>
-
-                  <input type="hidden" name="plenary_session[start_at]" ng-value="plenarySession.period.startDate.toJSON() || plenarySession.period.startDate">
-                  <input type="hidden" name="plenary_session[end_at]" ng-value="plenarySession.period.endDate.toJSON() || plenarySession.period.endDate">
-                </div>
+              <div class="col-xs-12 col-sm-6">
+                <%= f.input :start_at, as: :string, input_html: { class: 'datetimepicker' } %>
               </div>
             </div>
 

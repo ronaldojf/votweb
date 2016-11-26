@@ -5,7 +5,6 @@ RSpec.describe PlenarySession, type: :model do
   it { is_expected.to validate_presence_of :title }
   it { is_expected.to validate_presence_of :kind }
   it { is_expected.to validate_presence_of :start_at }
-  it { is_expected.to validate_presence_of :end_at }
   it { is_expected.to define_enum_for :kind }
   it { is_expected.to have_many :polls }
   it { is_expected.to have_many :members }
@@ -132,18 +131,17 @@ RSpec.describe PlenarySession, type: :model do
     end
   end
 
-  describe '.start_or_end_today' do
-    it 'deve retornar somente sessões que iniciem ou terminem hoje' do
+  describe '.starts_today' do
+    it 'deve retornar somente sessões que iniciem hoje' do
       Timecop.freeze do
-        session1 = create :plenary_session, start_at: 1.day.ago, end_at: 1.day.from_now
-        session2 = create :plenary_session, start_at: DateTime.current, end_at: 1.day.from_now
-        session3 = create :plenary_session, start_at: 1.day.from_now, end_at: 2.days.from_now
-        session4 = create :plenary_session, start_at: 2.days.ago, end_at: 1.day.ago
-        session5 = create :plenary_session, start_at: 1.day.ago, end_at: DateTime.current
-        session6 = create :plenary_session, start_at: DateTime.current, end_at: 1.second.from_now
+        session1 = create :plenary_session, start_at: 1.day.ago
+        session2 = create :plenary_session, start_at: DateTime.current.at_beginning_of_day
+        session3 = create :plenary_session, start_at: DateTime.current
+        session4 = create :plenary_session, start_at: DateTime.current.at_end_of_day
+        session5 = create :plenary_session, start_at: 1.day.from_now
 
-        expect(PlenarySession.start_or_end_today).to include(session2, session5, session6)
-        expect(PlenarySession.start_or_end_today).to_not include(session1, session3, session4)
+        expect(PlenarySession.starts_today).to include(session2, session3, session4)
+        expect(PlenarySession.starts_today).to_not include(session1, session5)
       end
     end
   end

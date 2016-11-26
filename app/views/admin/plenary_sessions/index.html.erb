@@ -101,9 +101,6 @@
                 <td data-title="'<%= t('activerecord.attributes.plenary_session.start_at') %>'" data-sortable="'plenary_sessions.start_at'">
                   {{plenary_session.start_at | date:'medium'}}
                 </td>
-                <td data-title="'<%= t('activerecord.attributes.plenary_session.end_at') %>'" data-sortable="'plenary_sessions.end_at'">
-                  {{plenary_session.end_at | date:'medium'}}
-                </td>
                 <td data-title="'<%= t('activerecord.attributes.plenary_session.is_test') %>'" data-sortable="'plenary_sessions.is_test'">
                   {{testStatuses[plenary_session.is_test]}}
                 </td>

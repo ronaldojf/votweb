@@ -7,7 +7,6 @@ RSpec.describe Poll, type: :model do
   it { is_expected.to validate_presence_of :duration }
   it { is_expected.to define_enum_for :process }
   it { is_expected.to belong_to :plenary_session }
-  it { is_expected.to belong_to :session_item }
   it { is_expected.to have_many :votes }
 
   it "deve retornar 'duration' como tempo de duração em segundos" do
@@ -129,12 +128,13 @@ RSpec.describe Poll, type: :model do
   describe '#to_builder' do
     it 'deve retornar uma instância do JBuilder com os principais atributos do objeto' do
       Timecop.freeze do
-        poll = build :poll, process: :symbolic, session_item_id: nil, description: nil, duration: 20, created_at: DateTime.current
+        plenary_session = create :plenary_session
+        poll = build :poll, plenary_session: plenary_session, process: :symbolic, description: nil, duration: 20, created_at: DateTime.current
 
         expect(poll.to_builder.attributes!).to eq({
           "id"=>nil,
           "process"=>"symbolic",
-          "session_item_id"=>nil,
+          "plenary_session_id"=>plenary_session.id,
           "description"=>nil,
           "countdown"=>20,
           "duration"=>20,

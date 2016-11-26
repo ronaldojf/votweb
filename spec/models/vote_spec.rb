@@ -10,9 +10,9 @@ RSpec.describe Vote, type: :model do
 
   describe '#to_builder' do
     it 'deve retornar uma instância do JBuilder com os principais atributos do objeto' do
-      vote = build :vote, councillor_id: 1, poll_id: 1, kind: :rejection
+      vote = build :vote, id: 1, councillor_id: 1, poll_id: 1, kind: :rejection
 
-      expect(vote.to_builder.attributes!).to eq({"councillor_id"=>1, "poll_id"=>1, "kind"=>"rejection"})
+      expect(vote.to_builder.attributes!).to eq({"id" => 1, "councillor_id"=>1, "poll_id"=>1, "kind"=>"rejection"})
     end
   end
 end

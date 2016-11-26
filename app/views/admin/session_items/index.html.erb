@@ -43,7 +43,7 @@
             <div class="form-inputs">
               <div class="row m-b-sm">
                 <div class="col-xs-12 col-sm-8 m-t-xs">
-                  <input type="text" id="filter" placeholder="<%= t([:title], scope: [:activerecord, :attributes, :session_item]).join('/') %>"
+                  <input type="text" id="filter" placeholder="<%= t([:title, :abstract], scope: [:activerecord, :attributes, :session_item]).join('/') %>"
                       class="form-control input-md" ng-model="filters.search_query" autocomplete="off" autofocus>
                 </div>
 

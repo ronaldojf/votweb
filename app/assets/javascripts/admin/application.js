@@ -23,9 +23,7 @@
 //= require ng-table/dist/ng-table.min
 //= require moment/moment.js
 //= require moment/locale/pt-br.js
-//= require bootstrap-daterangepicker/daterangepicker.js
-//= require angular-daterangepicker/js/angular-daterangepicker.js
-
+//= require eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min
 
 //= require ng-rails-csrf
 //= require angular-chosen-localytics/chosen

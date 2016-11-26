@@ -24,6 +24,7 @@ class Admin::SessionItemsController < Admin::BaseController
   end
 
   def update
+    puts session_item_params
     @session_item.update(session_item_params)
     respond_with :admin, @session_item
   end
@@ -42,6 +43,6 @@ class Admin::SessionItemsController < Admin::BaseController
   def session_item_params
     params
       .require(:session_item)
-      .permit(:title, :councillor_id, :acceptance)
+      .permit(:title, :abstract, :councillor_id, :acceptance)
   end
 end

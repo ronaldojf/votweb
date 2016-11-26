@@ -7,16 +7,20 @@ pt-BR:
       send_instructions: 'Dentro de minutos, você receberá um e-mail com instruções para a confirmação da sua conta.'
       send_paranoid_instructions: 'Se o seu endereço de e-mail estiver cadastrado, você receberá uma mensagem com instruções para confirmação da sua conta.'
     failure:
+      #customized messages for a model
+      councillor:
+        invalid: 'Usuário e/ou senha incorretos.'
+        not_found_in_database: 'Usuário e/ou senha incorretos.'
       already_authenticated: 'Você já está logado.'
       inactive: 'Sua conta ainda não foi ativada ou foi bloqueada.'
-      invalid: 'Email e/ou senha incorretos.'
+      invalid: 'E-mail e/ou senha incorretos.'
       invalid_token: 'Token inválido ou a senha já foi trocada!'
       locked: 'Sua conta está bloqueada.'
-      not_found_in_database: 'Email e/ou senha incorretos.'
+      not_found_in_database: 'E-mail e/ou senha incorretos.'
       timeout: 'Sua sessão expirou, por favor, efetue login novamente para continuar.'
       unauthenticated: 'Para continuar, efetue login ou registre-se.'
       unconfirmed: 'Antes de continuar, confirme a sua conta.'
-      last_attempt: 'Email e/ou senha incorretos. Atenção! Sua conta será bloqueada se você errar a próxima tentativa!'
+      last_attempt: 'E-mail e/ou senha incorretos. Atenção! Sua conta será bloqueada se você errar a próxima tentativa!'
     mailer:
       confirmation_instructions:
         subject: 'Instruções de confirmação'
@@ -49,14 +53,6 @@ pt-BR:
       send_instructions: 'Dentro de minutos, você receberá um email com instruções para o desbloqueio da sua conta.'
       send_paranoid_instructions: 'Se sua conta existir, você receberá um e-mail com instruções para desbloqueá-la em alguns minutos.'
       unlocked: 'Sua conta foi desbloqueada com sucesso. Efetue login para continuar.'
-
-    #customized messages for a model
-    person_registrations:
-      person:
-        signed_up_but_unconfirmed: 'Uma mensagem com um link de confirmação foi enviada para o seu endereço de e-mail. Por favor, abra o link para confirmar a sua conta.'
-    teacher_registrations:
-      teacher:
-        signed_up_but_unconfirmed: 'Uma mensagem com um link de confirmação foi enviada para o seu endereço de e-mail. Por favor, abra o link para confirmar a sua conta.'
 
   errors:
     messages:

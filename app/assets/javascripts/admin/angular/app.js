@@ -15,7 +15,6 @@ angular.module('votweb', [
     'ngTable',
     'ng-rails-csrf',
     'localytics.directives',
-    'daterangepicker',
     'ngCable',
     'votweb.services',
     'votweb.directives',

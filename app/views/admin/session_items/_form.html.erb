@@ -20,6 +20,12 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.input :abstract, as: :text, input_html: { class: 'resize-vertical', rows: 3 } %>
+      </div>
+    </div>
+
     <%= f.submit '', class: 'hide' %>
   </div>
 <% end %>

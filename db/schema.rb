@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161001133948) do
+ActiveRecord::Schema.define(version: 20161126173050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,7 +81,6 @@ ActiveRecord::Schema.define(version: 20161001133948) do
   create_table "plenary_sessions", force: :cascade do |t|
     t.string   "title"
     t.datetime "start_at"
-    t.datetime "end_at"
     t.datetime "deleted_at"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
@@ -90,13 +89,11 @@ ActiveRecord::Schema.define(version: 20161001133948) do
     t.index ["deleted_at"], name: "index_plenary_sessions_on_deleted_at", using: :btree
     t.index ["is_test"], name: "index_plenary_sessions_on_is_test", using: :btree
     t.index ["kind"], name: "index_plenary_sessions_on_kind", using: :btree
-    t.index ["start_at", "end_at"], name: "index_plenary_sessions_on_start_at_and_end_at", using: :btree
   end
 
   create_table "polls", force: :cascade do |t|
     t.integer  "process",            default: 0, null: false
     t.integer  "plenary_session_id"
-    t.integer  "session_item_id"
     t.string   "description"
     t.integer  "duration"
     t.datetime "deleted_at"
@@ -104,7 +101,6 @@ ActiveRecord::Schema.define(version: 20161001133948) do
     t.datetime "updated_at",                     null: false
     t.index ["deleted_at"], name: "index_polls_on_deleted_at", using: :btree
     t.index ["plenary_session_id"], name: "index_polls_on_plenary_session_id", using: :btree
-    t.index ["session_item_id"], name: "index_polls_on_session_item_id", using: :btree
   end
 
   create_table "roles", force: :cascade do |t|
@@ -122,6 +118,7 @@ ActiveRecord::Schema.define(version: 20161001133948) do
     t.datetime "updated_at",                     null: false
     t.integer  "acceptance",         default: 0, null: false
     t.integer  "plenary_session_id"
+    t.string   "abstract"
     t.index ["councillor_id"], name: "index_session_items_on_councillor_id", using: :btree
     t.index ["deleted_at"], name: "index_session_items_on_deleted_at", using: :btree
     t.index ["plenary_session_id"], name: "index_session_items_on_plenary_session_id", using: :btree
@@ -156,7 +153,6 @@ ActiveRecord::Schema.define(version: 20161001133948) do
   add_foreign_key "councillors_queues", "plenary_sessions"
   add_foreign_key "permissions", "roles"
   add_foreign_key "polls", "plenary_sessions"
-  add_foreign_key "polls", "session_items"
   add_foreign_key "session_items", "councillors"
   add_foreign_key "session_items", "plenary_sessions"
   add_foreign_key "session_members", "councillors"

@@ -3,7 +3,6 @@ class Poll < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :plenary_session
-  belongs_to :session_item
   has_many :votes
 
   after_commit :send_sockets
@@ -24,7 +23,7 @@ class Poll < ApplicationRecord
 
   def to_builder
     Jbuilder.new do |json|
-      json.extract! self, :id, :process, :session_item_id, :description, :countdown, :duration, :created_at, :deleted_at
+      json.extract! self, :id, :process, :plenary_session_id, :description, :countdown, :duration, :created_at, :deleted_at
     end
   end
 

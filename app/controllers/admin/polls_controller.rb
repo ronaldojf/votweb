@@ -27,7 +27,7 @@ class Admin::PollsController < Admin::BaseController
   def poll_params
     params
       .require(:poll)
-      .permit(:description, :process, :duration, :plenary_session_id, :session_item_id)
+      .permit(:description, :process, :duration, :plenary_session_id)
   end
 
   def authorize_session_resources

@@ -14,9 +14,8 @@ class PlenarySession < ApplicationRecord
 
   scope :not_test, -> { where.not(is_test: true) }
 
-  scope :start_or_end_today, -> {
-    where('(plenary_sessions.start_at BETWEEN :start AND :end) OR (plenary_sessions.end_at BETWEEN :start AND :end)',
-      start: DateTime.current.at_beginning_of_day, end: DateTime.current.at_end_of_day)
+  scope :starts_today, -> {
+    where('plenary_sessions.start_at BETWEEN :start AND :end', start: DateTime.current.at_beginning_of_day, end: DateTime.current.at_end_of_day)
   }
 
   scope :has_member, -> (councillor) {
@@ -35,9 +34,8 @@ class PlenarySession < ApplicationRecord
     where(is_test: is_test.to_s == 'true') if !is_test.nil? && is_test.to_s.present?
   }
 
-  validates :title, :kind, :start_at, :end_at, presence: true
+  validates :title, :kind, :start_at, presence: true
   validates :start_at, date: { allow_blank: true }
-  validates :end_at, date: { after: :start_at, allow_blank: true }
 
   def check_members_presence
     present_councillors_ids = self.members.map { |member| member.councillor_id }.uniq

@@ -58,6 +58,10 @@
             <div class="col-sm-3"><%= t('activerecord.attributes.session_item.acceptance') %>:</div>
             <div class="col-sm-9"><%= t(@session_item.acceptance, scope: [:enums, :specific_items, :session_item, :acceptance]) %></div>
           </li>
+          <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.session_item.abstract') %>:</div>
+            <div class="col-sm-9"><%= sanitize @session_item.abstract.to_s.gsub("\n", "<br>"), allow: %w(br) %></div>
+          </li>
 
         </ul>
       </div>

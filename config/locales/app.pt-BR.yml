@@ -199,11 +199,11 @@ pt-BR:
         author: Autor
         author_id: Autor
         acceptance: Aceitação
+        abstract: Ementa
       plenary_session:
         title: Título
         kind: Tipo
         start_at: Início em
-        end_at: Término em
         period: Período de duração
         is_test: 'Sessão teste?'
         members: Participantes

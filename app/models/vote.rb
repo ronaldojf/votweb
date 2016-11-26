@@ -12,7 +12,7 @@ class Vote < ApplicationRecord
 
   def to_builder
     Jbuilder.new do |json|
-      json.extract! self, :councillor_id, :poll_id, :kind
+      json.extract! self, :id, :councillor_id, :poll_id, :kind
     end
   end
 
