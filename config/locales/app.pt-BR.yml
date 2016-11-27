@@ -293,6 +293,7 @@ pt-BR:
       add: Adicionar item da ordem do dia
       list: Ordem do dia
       add_to_session_info: Somente itens não ligados a nenhuma sessão podem ser adicionados
+      no_author: Poder Executivo
     session_member:
       president: Presidente
     poll:

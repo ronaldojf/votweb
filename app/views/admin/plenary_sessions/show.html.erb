@@ -127,7 +127,7 @@
                     <% @items.each_with_index do |item, index| %>
                       <tr>
                         <td><%= index + 1 %>. <%= item.title %></td>
-                        <td><%= item.author.name %></td>
+                        <td><%= item.author.try(:name) || t('miscellaneous.session_item.no_author') %></td>
                         <td><%= t(item.acceptance, scope: [:enums, :specific_items, :session_item, :acceptance]) %></td>
                       </tr>
                     <% end %>

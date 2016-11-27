@@ -19,7 +19,11 @@ json.set! :items do
     json.extract! item, :id, :title, :acceptance
 
     json.set! :author do
-      json.extract! item.author, :id, :name
+      if item.author.present?
+        json.extract! item.author, :id, :name
+      else
+        json.name I18n.t('miscellaneous.session_item.no_author')
+      end
     end
   end
 end

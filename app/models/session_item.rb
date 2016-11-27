@@ -13,5 +13,5 @@ class SessionItem < ApplicationRecord
     where(acceptance: acceptances[acceptance]) if acceptance.present?
   }
 
-  validates :title, :abstract, :author, :acceptance, presence: true
+  validates :title, :abstract, :acceptance, presence: true
 end

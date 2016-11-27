@@ -4,7 +4,6 @@ RSpec.describe SessionItem, type: :model do
   it { is_expected.to be_an ApplicationRecord }
   it { is_expected.to validate_presence_of :title }
   it { is_expected.to validate_presence_of :abstract }
-  it { is_expected.to validate_presence_of :author }
   it { is_expected.to validate_presence_of :acceptance }
   it { is_expected.to define_enum_for :acceptance }
   it { is_expected.to belong_to :author }

@@ -127,7 +127,7 @@
                   <tbody>
                     <tr ng-repeat="item in (plenarySession.items | orderBy:'title') track by $index">
                       <td>{{item.title}}</td>
-                      <td>{{item.author.name}}</td>
+                      <td>{{item.author.name || '<%= t('miscellaneous.session_item.no_author') %>'}}</td>
                       <td>{{acceptances[item.acceptance]}}</td>
                       <td class="text-right">
                         <a href class="btn btn-xs btn-danger" ng-click="removeItem(item)"><i class="fa fa-trash"></i></a>

@@ -20,8 +20,8 @@ pt-BR:
         birth_date: Data de Nascimento
         phone: Digite o Telefone
         description: Digite a Descrição
-      # administrator:
-      #   name: Digite o Nome
+    # administrator:
+    #   name: Digite o Nome
     # labels:
     #   defaults:
     #     password: 'Password'
@@ -30,7 +30,9 @@ pt-BR:
     #       email: 'E-mail to sign in.'
     #     edit:
     #       email: 'E-mail.'
-    # hints:
-    #   defaults:
-    #     username: 'User name to sign in.'
-    #     password: 'No special characters, please.'
+    hints:
+      # defaults:
+      #   username: 'User name to sign in.'
+      #   password: 'No special characters, please.'
+      session_item:
+        author: 'Deixe em branco caso o autor seja o Poder Executivo.'
