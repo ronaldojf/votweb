@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       resources :plenary_sessions do
         scope module: :plenary_sessions do
           resources :session_managements, only: [:index] do
-            post :check_members_presence, on: :collection
+            post :check_members_attendance, on: :collection
           end
         end
       end

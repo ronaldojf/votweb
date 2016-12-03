@@ -27,7 +27,7 @@ class Admin::CouncillorsQueuesController < Admin::BaseController
   def councillors_queue_params
     params
       .require(:councillors_queue)
-      .permit(:plenary_session_id, :description, :duration)
+      .permit(:plenary_session_id, :kind, :description, :duration, :override_attendance)
   end
 
   def authorize_session_resources

@@ -61,6 +61,7 @@ pt-BR:
     mark_as: Marcar como
     accept: Sim
     deny: Não
+    attendance: Chamada
 
   login:
     administrator:
@@ -300,6 +301,8 @@ pt-BR:
       add: Criar votação
     queue:
       add: Criar fila de vereadores(as)
+      attendance: Chamada de presença
+      override_attendance: Sobrescrever todas as faltas já atribuídas?
 
   activerecord:
     <<: *models_and_attributes

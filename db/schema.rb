@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161126173050) do
+ActiveRecord::Schema.define(version: 20161203170846) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,12 +53,14 @@ ActiveRecord::Schema.define(version: 20161126173050) do
   end
 
   create_table "councillors_queues", force: :cascade do |t|
-    t.json     "councillors_ids",    default: [], null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.json     "councillors_ids",     default: [],    null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.integer  "plenary_session_id"
     t.integer  "duration"
     t.string   "description"
+    t.integer  "kind",                default: 0,     null: false
+    t.boolean  "override_attendance", default: false, null: false
     t.index ["plenary_session_id"], name: "index_councillors_queues_on_plenary_session_id", using: :btree
   end
 

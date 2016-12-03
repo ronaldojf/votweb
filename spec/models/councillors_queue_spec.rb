@@ -4,6 +4,8 @@ RSpec.describe CouncillorsQueue, type: :model do
   it { is_expected.to be_an ApplicationRecord }
   it { is_expected.to validate_presence_of :plenary_session }
   it { is_expected.to validate_presence_of :duration }
+  it { is_expected.to validate_presence_of :kind }
+  it { is_expected.to define_enum_for :kind }
   it { is_expected.to belong_to :plenary_session }
 
   it "deve retornar 'duration' como tempo de duração em segundos" do
@@ -118,12 +120,13 @@ RSpec.describe CouncillorsQueue, type: :model do
         queue = build :councillors_queue, description: nil, councillors_ids: [], duration: 20, created_at: DateTime.current
 
         expect(queue.to_builder.attributes!).to eq({
-          "id"=>nil,
-          "description"=>nil,
-          "countdown"=>20,
-          "duration"=>20,
-          "councillors_ids"=>[],
-          "created_at"=> DateTime.current
+          'id'=>nil,
+          'kind'=>'normal',
+          'description'=>nil,
+          'countdown'=>20,
+          'duration'=>20,
+          'councillors_ids'=>[],
+          'created_at'=> DateTime.current
         })
       end
     end

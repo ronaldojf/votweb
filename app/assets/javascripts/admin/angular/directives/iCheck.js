@@ -9,9 +9,11 @@ angular
           var value;
           value = $attrs['value'];
 
+          element.parents('label').addClass('icheck-label');
+
           $scope.$watch($attrs['ngModel'], function(newValue){
             $(element).iCheck('update');
-          })
+          });
 
           return $(element).iCheck({
             checkboxClass: 'icheckbox_square-green',

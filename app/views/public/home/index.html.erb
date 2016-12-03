@@ -110,12 +110,23 @@
           </ol>
         </div>
 
-        <div ng-if="currentEvent === 'queue'">
+        <div ng-if="currentEvent === 'queue' && currentQueue.kind !== 'attendance'">
           <ol ng-repeat="councillors in currentQueue.splittedCouncillors track by $index"
               class="text-left inline-block"
               start="{{($index * ($index > 0 ? currentQueue.splittedCouncillors[$index - 1].length : 0)) + 1}}">
             <li ng-repeat="councillor in councillors track by $index" class="font-bold">
               {{councillor.name.toUpperCase()}} - {{councillor.party.abbreviation}}
+            </li>
+          </ol>
+        </div>
+
+        <div ng-if="currentEvent === 'queue' && currentQueue.kind === 'attendance'">
+          <ol ng-repeat="members in currentSession.splittedMembers track by $index"
+              class="text-left inline-block list-unstyled">
+            <li ng-repeat="member in members track by $index" class="font-bold">
+              <span class="text-{{currentQueue.councillors_ids.indexOf(member.councillor.id) >= 0 ? 'navy' : 'danger'}}">
+                {{member.councillor.name.toUpperCase()}} - {{member.councillor.party.abbreviation}}
+              </span>
             </li>
           </ol>
         </div>

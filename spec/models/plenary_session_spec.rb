@@ -160,55 +160,123 @@ RSpec.describe PlenarySession, type: :model do
     end
   end
 
-  describe '#check_members_presence' do
-    it 'deve avaliar todas as votações e marcar falta para os membros que faltaram em alguma votação, exceto o presidente' do
+  describe '#check_members_attendance' do
+    it 'deve avaliar todas as votações e chamadas e marcar falta para os membros que faltaram em alguma votação ou chamada, exceto o presidente' do
       plenary_session = create :plenary_session
       councillor1 = create :councillor
       councillor2 = create :councillor
       councillor3 = create :councillor
       councillor4 = create :councillor
       councillor5 = create :councillor
+      councillor6 = create :councillor
       member1 = create :session_member, plenary_session: plenary_session, councillor: councillor1, is_president: true, is_present: nil
       member2 = create :session_member, plenary_session: plenary_session, councillor: councillor2, is_president: false, is_present: nil
       member3 = create :session_member, plenary_session: plenary_session, councillor: councillor3, is_president: false, is_present: nil
       member4 = create :session_member, plenary_session: plenary_session, councillor: councillor4, is_president: false, is_present: nil
       member5 = create :session_member, plenary_session: plenary_session, councillor: councillor5, is_president: false, is_present: nil
+      member6 = create :session_member, plenary_session: plenary_session, councillor: councillor6, is_president: false, is_present: nil
 
 
       poll1 = create :poll, plenary_session: plenary_session, process: :symbolic
       create :vote, poll: poll1, councillor: councillor2
       create :vote, poll: poll1, councillor: councillor3
       create :vote, poll: poll1, councillor: councillor4
-      plenary_session.reload.check_members_presence
+      create :vote, poll: poll1, councillor: councillor6
+      plenary_session.reload.check_members_attendance
 
       expect(member1.reload.is_present).to be true
       expect(member2.reload.is_present).to be true
       expect(member3.reload.is_present).to be true
       expect(member4.reload.is_present).to be true
       expect(member5.reload.is_present).to be false
+      expect(member6.reload.is_present).to be true
 
 
-      poll2 = create :poll, plenary_session: plenary_session, process: :secret
+      poll2 = create :poll, plenary_session: plenary_session, process: :secret # Votação secreta não conta
       create :vote, poll: poll2
-      plenary_session.reload.check_members_presence
+      plenary_session.reload.check_members_attendance
 
       expect(member1.reload.is_present).to be true
       expect(member2.reload.is_present).to be true
       expect(member3.reload.is_present).to be true
       expect(member4.reload.is_present).to be true
       expect(member5.reload.is_present).to be false
+      expect(member6.reload.is_present).to be true
 
 
       poll3 = create :poll, plenary_session: plenary_session, process: :symbolic
       create :vote, poll: poll3, councillor: councillor2
       create :vote, poll: poll3, councillor: councillor5
-      plenary_session.reload.check_members_presence
+      create :vote, poll: poll3, councillor: councillor6
+      plenary_session.reload.check_members_attendance
 
       expect(member1.reload.is_present).to be true
       expect(member2.reload.is_present).to be true
       expect(member3.reload.is_present).to be false
       expect(member4.reload.is_present).to be false
       expect(member5.reload.is_present).to be false
+      expect(member6.reload.is_present).to be true
+
+
+      create :councillors_queue, plenary_session: plenary_session, kind: :attendance, councillors_ids: [councillor2.id]
+      create :councillors_queue, plenary_session: plenary_session, councillors_ids: [] # Se não for chamada, não conta
+      plenary_session.reload.check_members_attendance
+
+      expect(member1.reload.is_present).to be true
+      expect(member2.reload.is_present).to be true
+      expect(member3.reload.is_present).to be false
+      expect(member4.reload.is_present).to be false
+      expect(member5.reload.is_present).to be false
+      expect(member6.reload.is_present).to be false
+
+
+      # Sobrescreve todos os resultados anteriores
+      create :councillors_queue, plenary_session: plenary_session, kind: :attendance, override_attendance: true, councillors_ids: [councillor3.id, councillor4.id, councillor5.id]
+      plenary_session.reload.check_members_attendance
+
+      expect(member1.reload.is_present).to be true
+      expect(member2.reload.is_present).to be false
+      expect(member3.reload.is_present).to be true
+      expect(member4.reload.is_present).to be true
+      expect(member5.reload.is_present).to be true
+      expect(member6.reload.is_present).to be false
+
+
+      poll4 = create :poll, plenary_session: plenary_session, process: :symbolic
+      create :vote, poll: poll4, councillor: councillor4
+      create :vote, poll: poll4, councillor: councillor5
+      create :vote, poll: poll4, councillor: councillor6
+      plenary_session.reload.check_members_attendance
+
+      expect(member1.reload.is_present).to be true
+      expect(member2.reload.is_present).to be false
+      expect(member3.reload.is_present).to be false
+      expect(member4.reload.is_present).to be true
+      expect(member5.reload.is_present).to be true
+      expect(member6.reload.is_present).to be false
+
+
+      create :councillors_queue, plenary_session: plenary_session, kind: :attendance, councillors_ids: [councillor4.id]
+      plenary_session.reload.check_members_attendance
+
+      expect(member1.reload.is_present).to be true
+      expect(member2.reload.is_present).to be false
+      expect(member3.reload.is_present).to be false
+      expect(member4.reload.is_present).to be true
+      expect(member5.reload.is_present).to be false
+      expect(member6.reload.is_present).to be false
+
+
+      # Sobrescreve todos os resultados anteriores
+      create :councillors_queue, plenary_session: plenary_session, kind: :attendance, override_attendance: true, councillors_ids: [councillor2.id]
+      plenary_session.reload.check_members_attendance
+
+      expect(member1.reload.is_present).to be true
+      expect(member2.reload.is_present).to be true
+      expect(member3.reload.is_present).to be false
+      expect(member4.reload.is_present).to be false
+      expect(member5.reload.is_present).to be false
+      expect(member6.reload.is_present).to be false
     end
   end
 end

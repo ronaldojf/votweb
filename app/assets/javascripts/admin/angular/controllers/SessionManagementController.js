@@ -66,7 +66,7 @@ angular
       }, function(data) {
         collectionRefresh(plenarySession.queues, data, {
           callback: function(queue) {
-            $scope.setCountdown(queue);
+            $scope.setCountdown(queue, queue.kind === 'attendance');
           }
         });
       });
@@ -90,11 +90,16 @@ angular
       }
     };
 
-    $scope.createQueue = function(queue) {
-      var params = angular.extend(queue || {}, {plenary_session_id: $scope.plenarySession.id});
+    $scope.createQueue = function(queue, attendanceDescription) {
+      var params = angular.extend(queue || {}, {
+        plenary_session_id: $scope.plenarySession.id,
+        description: (queue.kind === 'attendance' ? attendanceDescription : queue.description)
+      });
 
       if (!$scope.loading && params.duration > 0) {
         $scope.loading = true;
+        angular.element('.nav-tabs [href="#queues"]').tab('show');
+
         CouncillorsQueue.create(params)
         .error(function(errors) {
           console.log(errors);
@@ -108,11 +113,15 @@ angular
 
     $scope.stopPoll = function(poll) {
       stopCountdown(Poll.stop, poll);
-      verifyMembersPresence();
+      verifyMembersAttendance();
     };
 
-    $scope.stopQueue = function(poll) {
-      stopCountdown(CouncillorsQueue.stop, poll);
+    $scope.stopQueue = function(queue) {
+      stopCountdown(CouncillorsQueue.stop, queue);
+
+      if (queue.kind === 'attendance') {
+        verifyMembersAttendance();
+      }
     };
 
     $scope.openPollModal = function(description) {
@@ -135,12 +144,12 @@ angular
       $scope.queueDetails = queue;
     };
 
-    $scope.openQueueModal = function() {
+    $scope.openQueueModal = function(kind) {
       if (!$scope.countdownRunning) {
         angular.element('#add-queue').modal('show');
-        $scope.newQueue = { duration: 20 };
+        $scope.newQueue = { duration: 20, kind: (kind || 'normal') };
         $timeout(function() {
-          angular.element('#queue-description').focus();
+          angular.element('#queue-' + (kind === 'attendance' ? 'duration' : 'description')).focus();
         }, 600);
       }
     };
@@ -187,7 +196,7 @@ angular
 
           if (object.countdown <= 0) {
             clearCountdown(object);
-            if (verifyPresence) { verifyMembersPresence(); }
+            if (verifyPresence) { verifyMembersAttendance(); }
           }
         }, 500);
       }
@@ -258,8 +267,8 @@ angular
       return result;
     };
 
-    var verifyMembersPresence = function() {
-      PlenarySession.checkMembersPresence($scope.plenarySession.id)
+    var verifyMembersAttendance = function() {
+      PlenarySession.checkMembersAttendance($scope.plenarySession.id)
       .success(function(data) {
         for (var i1 = 0; i1 < $scope.plenarySession.members.length; i1++) {
           var currentSession = $scope.plenarySession.members[i1];

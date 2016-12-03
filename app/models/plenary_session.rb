@@ -37,24 +37,30 @@ class PlenarySession < ApplicationRecord
   validates :title, :kind, :start_at, presence: true
   validates :start_at, date: { allow_blank: true }
 
-  def check_members_presence
-    present_councillors_ids = self.members.map { |member| member.councillor_id }.uniq
+  def check_members_attendance
+    attendance_queue_base = self.queues.attendance.where(override_attendance: true).order(created_at: :desc).first
+    present_councillors_ids = attendance_queue_base.present? ? attendance_queue_base.councillors_ids : self.members.map { |member| member.councillor_id }
 
-    self.polls.includes(:votes).each do |poll|
-      unless poll.secret?
-        councillor_ids = poll.votes.map { |vote| vote.councillor_id }
-        present_councillors_ids.select! { |id| councillor_ids.include?(id) }
-      end
+    self.queues.attendance
+        .where(":start IS NULL OR councillors_queues.created_at > :start", start: attendance_queue_base.try(:created_at))
+        .each do |queue|
+
+      present_councillors_ids.select! { |id| queue.councillors_ids.include?(id) }
+    end
+
+    self.polls
+        .where.not(process: Poll.processes[:secret])
+        .where(":start IS NULL OR polls.created_at > :start", start: attendance_queue_base.try(:created_at))
+        .includes(:votes)
+        .each do |poll|
+
+      councillor_ids = poll.votes.map { |vote| vote.councillor_id }
+      present_councillors_ids.select! { |id| councillor_ids.include?(id) }
     end
 
     PlenarySession.transaction do
       self.members.each do |member|
-        if member.is_president
-          member.is_present = true
-        else
-          member.is_present = present_councillors_ids.include?(member.councillor_id)
-        end
-
+        member.is_present = member.is_president ? true : present_councillors_ids.include?(member.councillor_id)
         member.save(validate: false)
       end
     end

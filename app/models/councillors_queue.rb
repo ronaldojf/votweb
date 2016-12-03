@@ -5,7 +5,9 @@ class CouncillorsQueue < ApplicationRecord
 
   after_commit :send_sockets
 
-  validates :plenary_session, :duration, presence: true
+  enum kind: [:normal, :attendance]
+
+  validates :plenary_session, :duration, :kind, presence: true
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   def add_to_queue(councillor)
@@ -25,7 +27,7 @@ class CouncillorsQueue < ApplicationRecord
 
   def to_builder
     Jbuilder.new do |json|
-      json.extract! self, :id, :description, :countdown, :duration, :councillors_ids, :created_at
+      json.extract! self, :id, :kind, :description, :countdown, :duration, :councillors_ids, :created_at
     end
   end
 
