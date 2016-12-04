@@ -1,4 +1,15 @@
 <div class="panel-body">
+  <div class="row m-b-md hidden-print">
+    <div class="col-xs-12 text-right">
+      <%= link_to '', class: 'btn btn-w-s btn-white',
+          'ng-show' => '!loading && plenarySession.items.length > 0',
+          'onclick' => "$(this).parents('.panel-body:first').print({title: 'VotWEB | #{@plenary_session.title} | ORDEM DO DIA'})" do %>
+        <i class="fa fa-print"></i><br/>
+        <%= t('buttons.print') %>
+      <% end %>
+    </div>
+  </div>
+
   <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.items.length > 0'} %>
 
   <div ng-show="loading || plenarySession.items.length > 0">
@@ -15,7 +26,7 @@
               <th><%= t('activerecord.attributes.session_item.title') %></th>
               <th><%= t('activerecord.attributes.session_item.author') %></th>
               <th><%= t('activerecord.attributes.session_item.acceptance') %></th>
-              <th></th>
+              <th class="hidden-print"></th>
             </tr>
           </thead>
 
@@ -23,14 +34,8 @@
             <tr ng-repeat="item in plenarySession.items track by item.id" ng-class="{'success': item.acceptance === 'approved', 'danger': item.acceptance === 'rejected'}">
               <td>{{$index + 1}}. {{item.title}}</td>
               <td>{{item.author.name}}</td>
-              <td>
-                <i class="fa" ng-class="{
-                    'fa-check text-navy': item.acceptance === 'approved',
-                    'fa-times text-warning': item.acceptance === 'rejected',
-                    'fa-ellipsis-h text-muted': item.acceptance === 'not_voted'
-                  }"></i>
-              </td>
-              <td class="text-right">
+              <td>{{acceptances[item.acceptance]}}</td>
+              <td class="text-right hidden-print">
                 <button class="btn btn-xs btn-primary" ng-click="openPollModal(item.title)" ng-show="item.acceptance === 'not_voted'">
                   <%= t('buttons.new_poll') %>
                 </button>

@@ -63,6 +63,7 @@ pt-BR:
     accept: Sim
     deny: Não
     attendance: Chamada
+    print: Imprimir
 
   login:
     administrator:

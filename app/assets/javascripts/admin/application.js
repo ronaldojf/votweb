@@ -16,7 +16,6 @@
 
 //= require base
 
-
 /* Bower Components */
 //= require angular/angular
 //= require angular-locale-pt-br/angular-locale_pt-br
@@ -24,6 +23,7 @@
 //= require moment/moment.js
 //= require moment/locale/pt-br.js
 //= require eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min
+//= require jQuery.print/jQuery.print.js
 
 //= require ng-rails-csrf
 //= require angular-chosen-localytics/chosen

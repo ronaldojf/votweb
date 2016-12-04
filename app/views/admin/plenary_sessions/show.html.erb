@@ -106,6 +106,18 @@
 
         <div id="session-items-list" class="tab-pane">
           <div class="panel-body">
+            <% unless @items.length.zero? %>
+              <div class="row m-b-md hidden-print">
+                <div class="col-xs-12 text-right">
+                  <%= link_to '', class: 'btn btn-w-s btn-white',
+                      'onclick' => "$(this).parents('.panel-body:first').print({title: 'VotWEB | #{@plenary_session.title} | ORDEM DO DIA'})" do %>
+                    <i class="fa fa-print"></i><br/>
+                    <%= t('buttons.print') %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+
             <%= custom_flash_messages info: {show: @items.length.zero?, fixed: true, icon: :info, message: t('info.no_session_items')} %>
 
             <% if @items.length > 0 %>

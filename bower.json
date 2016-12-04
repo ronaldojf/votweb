@@ -22,7 +22,8 @@
     "ng-table": "~0.8",
     "c3": "^0.4.11",
     "moment": "^2.17.0",
-    "eonasdan-bootstrap-datetimepicker": "^4.17.43"
+    "eonasdan-bootstrap-datetimepicker": "^4.17.43",
+    "jQuery.print": "^1.5.0"
   },
   "resolutions": {
     "angular": "^1.5.8"
