@@ -1,8 +1,8 @@
 angular
   .module('votweb.controllers')
   .controller('CouncillorsController', [
-      '$scope', '$window', '$interval', '$cable', 'PlenarySession', 'CouncillorsQueue', 'Poll',
-      function($scope, $window, $interval, $cable, PlenarySession, CouncillorsQueue, Poll) {
+      '$scope', '$window', '$interval', '$cable', 'PlenarySession', 'CouncillorsQueue', 'Poll', 'Subscription',
+      function($scope, $window, $interval, $cable, PlenarySession, CouncillorsQueue, Poll, Subscription) {
 
     var LOCAL_STORAGE_POLL_KEY = 'last_poll_voted';
     var LOCAL_STORAGE_QUEUE_KEY = 'last_queue_participation';
@@ -67,6 +67,55 @@ angular
           $scope.loading = false;
         });
       }
+    };
+
+    $scope.findSubscriptionByKind = function(kind) {
+      var subscription;
+
+      for (var i = 0; i < ($scope.currentSession.subscriptions || []).length; i++) {
+        if ($scope.currentSession.subscriptions[i].kind === kind) {
+          subscription = $scope.currentSession.subscriptions[i];
+          break;
+        }
+      }
+
+      return subscription;
+    };
+
+    $scope.subscribeIn = function(kind) {
+      if ($scope.loading) { return; }
+      $scope.loading = true;
+
+      Subscription.create($scope.currentSession.id, kind)
+      .success(function(data) {
+        $scope.currentSession.subscriptions.push(data);
+      })
+      .error(function(errors) {
+        console.log(errors);
+      })
+      .finally(function() {
+        $scope.loading = false;
+      });
+    };
+
+    $scope.unsubscribeFrom = function(kind) {
+      if ($scope.loading) { return; }
+      $scope.loading = true;
+
+      var subscription = $scope.findSubscriptionByKind(kind);
+      Subscription.destroy($scope.currentSession.id, subscription.id)
+      .success(function() {
+        var index = $scope.currentSession.subscriptions.indexOf(subscription);
+        if (index >= 0) {
+          $scope.currentSession.subscriptions.splice(index, 1);
+        }
+      })
+      .error(function(errors) {
+        console.log(errors);
+      })
+      .finally(function() {
+        $scope.loading = false;
+      });
     };
 
     var setPollsChannel = function(plenarySession) {

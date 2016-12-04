@@ -27,7 +27,8 @@
 </div>
 
 <div class="row responsive-padding" ng-init="init(<%= @plenary_session.id %>);
-                                              pollProcesses = <%= t('enums.specific_items.poll.process').to_json %>;">
+                                              pollProcesses = <%= t('enums.specific_items.poll.process').to_json %>;
+                                              subscriptionKinds = <%= t('enums.specific_items.subscription.kind').to_json %>;">
 
   <div class="col-xs-12">
     <div class="tabs-container">
@@ -36,6 +37,7 @@
         <li><a data-toggle="tab" href="#members"><%= t('activerecord.attributes.plenary_session.members') %></a></li>
         <li><a data-toggle="tab" href="#polls"><%= t('activerecord.attributes.plenary_session.polls') %></a></li>
         <li><a data-toggle="tab" href="#queues"><%= t('activerecord.attributes.plenary_session.queues') %></a></li>
+        <li><a data-toggle="tab" href="#subscriptions"><%= t('activerecord.attributes.plenary_session.subscriptions') %></a></li>
         <li><a data-toggle="tab" href="#countdowns"><%= t('activerecord.attributes.plenary_session.countdowns') %></a></li>
       </ul>
       <div class="tab-content">
@@ -53,6 +55,10 @@
 
         <div id="queues" class="tab-pane">
           <%= render partial: 'admin/plenary_sessions/session_managements/partials/tab_queues' %>
+        </div>
+
+        <div id="subscriptions" class="tab-pane">
+          <%= render partial: 'admin/plenary_sessions/session_managements/partials/tab_subscriptions' %>
         </div>
 
         <div id="countdowns" class="tab-pane">

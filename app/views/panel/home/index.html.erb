@@ -32,7 +32,23 @@
       </div>
 
       <div class="current-session" ng-show="currentSession">
-        <h4>[<%= t('activerecord.models.plenary_session.one') %> {{kinds[currentSession.kind]}}] {{currentSession.title}} <a href ng-click="resetCurrentSession()">(Trocar)</a></h4>
+        <h4 class="p-sm">
+          [<%= t('activerecord.models.plenary_session.one') %> {{kinds[currentSession.kind]}}]
+          {{currentSession.title}}
+          <a href ng-click="resetCurrentSession()">(Trocar)</a>
+        </h4>
+        <div ng-if="currentSession.subscriptions">
+          <hr>
+          <p><strong>Inscrever-se para falar sobre:</strong></p>
+          <% t('enums.specific_items.subscription.kind').each do |kind, label| %>
+            <button class="btn {{findSubscriptionByKind('<%= kind %>') ? 'btn-success active' : 'btn-white'}}"
+                ng-click="findSubscriptionByKind('<%= kind %>') ? unsubscribeFrom('<%= kind %>') : subscribeIn('<%= kind %>')"
+                ng-disabled="loading">
+
+              <%= label %>
+            </button>
+          <% end %>
+        </div>
       </div>
     </div>
     <hr>

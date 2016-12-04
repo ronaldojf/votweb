@@ -58,6 +58,7 @@ pt-BR:
     stop: Encerrar
     details: Detalhes
     new_poll: Nova votação
+    new_countdown: Nova contagem regressiva
     mark_as: Marcar como
     accept: Sim
     deny: Não
@@ -169,6 +170,9 @@ pt-BR:
       countdown:
         one: Contagem regressiva
         other: Contagens regressivas
+      subscription:
+        one: Inscrição
+        other: Inscrições
     attributes: &attributes
       user: &user
         email: E-Mail
@@ -214,6 +218,7 @@ pt-BR:
         queues: Filas
         polls: Votações
         countdowns: Contagens regressivas
+        subscriptions: Inscrições
       session_member:
         councillor_id: Vereador
         is_president: Presidente?
@@ -230,6 +235,10 @@ pt-BR:
       countdown:
         description: Descrição
         duration: Duração(segundos)
+        created_at: Criada em
+      subscription:
+        councillor_id: Vereador
+        kind: Tipo
         created_at: Criada em
 
   enums:
@@ -286,6 +295,11 @@ pt-BR:
           approvation: Aprovação
           rejection: Rejeição
           abstention: Abstenção
+      subscription:
+        kind:
+          expedient: Expediente político
+          notice: Comunicações
+          explanation: Explicações
 
   errors:
     custom_messages:
@@ -303,6 +317,7 @@ pt-BR:
       list: Ordem do dia
       add_to_session_info: Somente itens não ligados a nenhuma sessão podem ser adicionados
       no_author: Poder Executivo
+      no_session: Nenhuma sessão adicionou este item ainda
     session_member:
       president: Presidente
     poll:

@@ -25,3 +25,9 @@ end
 json.set! :countdowns do
   json.array! @plenary_session.countdowns, partial: 'partials/countdowns/countdown', as: :countdown
 end
+
+if respond_to?(:current_councillor)
+  json.set! :subscriptions do
+    json.array! @plenary_session.subscriptions.where(councillor_id: current_councillor.id), partial: 'partials/subscriptions/subscription', as: :subscription
+  end
+end

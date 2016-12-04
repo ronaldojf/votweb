@@ -132,14 +132,14 @@ RSpec.describe Poll, type: :model do
         poll = build :poll, plenary_session: plenary_session, process: :symbolic, description: nil, duration: 20, created_at: DateTime.current
 
         expect(poll.to_builder.attributes!).to eq({
-          'id'=>nil,
-          'process'=>'symbolic',
-          'plenary_session_id'=>plenary_session.id,
-          'description'=>nil,
-          'countdown'=>20,
-          'duration'=>20,
-          'created_at'=>DateTime.current,
-          'deleted_at'=>nil
+          'id' => nil,
+          'process' => 'symbolic',
+          'plenary_session_id' => plenary_session.id,
+          'description' => nil,
+          'countdown' => 20,
+          'duration' => 20,
+          'created_at' => DateTime.current,
+          'deleted_at' => nil
         })
       end
     end

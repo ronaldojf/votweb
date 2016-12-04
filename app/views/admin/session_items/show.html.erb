@@ -51,18 +51,28 @@
             <div class="col-sm-9"><%= @session_item.title %></div>
           </li>
           <li class="show-action-label">
+            <div class="col-sm-3"><%= t('activerecord.attributes.session_item.acceptance') %>:</div>
+            <div class="col-sm-9"><%= t(@session_item.acceptance, scope: [:enums, :specific_items, :session_item, :acceptance]) %></div>
+          </li>
+          <li class="show-action-label">
             <div class="col-sm-3"><%= t('activerecord.attributes.session_item.author') %>:</div>
             <div class="col-sm-9">
               <% if @session_item.author.present? %>
                 <%= link_to @session_item.author.name, admin_councillor_path(@session_item.author) %>
               <% else %>
-                <%= t('miscellaneous.session_item.no_author') %>
+                <span class="text-muted"><%= t('miscellaneous.session_item.no_author') %></span>
               <% end %>
             </div>
           </li>
           <li class="show-action-label">
-            <div class="col-sm-3"><%= t('activerecord.attributes.session_item.acceptance') %>:</div>
-            <div class="col-sm-9"><%= t(@session_item.acceptance, scope: [:enums, :specific_items, :session_item, :acceptance]) %></div>
+            <div class="col-sm-3"><%= t('activerecord.models.plenary_session.one') %>:</div>
+            <div class="col-sm-9">
+              <% if @session_item.session.present? %>
+                <%= link_to(@session_item.session.title, admin_plenary_session_path(@session_item.session)) %>
+              <% else %>
+                <span class="text-muted"><%= t('miscellaneous.session_item.no_session') %></span>
+              <% end %>
+            </div>
           </li>
           <li class="show-action-label">
             <div class="col-sm-3"><%= t('activerecord.attributes.session_item.abstract') %>:</div>

@@ -4,6 +4,7 @@ class Councillor < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :party
+  has_many :subscriptions
 
   validates :name, :username, :party, presence: true
   validates :username, uniqueness: { case_sensitive: false }, format: { with: /\A[[:alnum:]]+\z/, message: I18n.t('errors.custom_messages.only_alphanumeric') }

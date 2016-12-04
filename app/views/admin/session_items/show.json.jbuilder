@@ -7,3 +7,9 @@ json.set! :author do
     json.name I18n.t('miscellaneous.session_item.no_author')
   end
 end
+
+json.set! :session do
+  if @session_item.session.present?
+    json.extract! @session_item.session, :id, :title
+  end
+end

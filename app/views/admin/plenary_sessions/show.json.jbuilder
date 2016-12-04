@@ -39,3 +39,7 @@ end
 json.set! :countdowns do
   json.array! @plenary_session.countdowns, partial: 'partials/countdowns/countdown', as: :countdown
 end
+
+json.set! :subscriptions do
+  json.array! @plenary_session.subscriptions, partial: 'partials/subscriptions/subscription', as: :subscription
+end

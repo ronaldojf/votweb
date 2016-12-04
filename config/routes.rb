@@ -39,6 +39,7 @@ Rails.application.routes.draw do
         scope module: :plenary_sessions do
           resources :councillors_queues, only: [:update]
           resources :polls, only: [:update]
+          resources :subscriptions, only: [:create, :destroy]
         end
       end
 

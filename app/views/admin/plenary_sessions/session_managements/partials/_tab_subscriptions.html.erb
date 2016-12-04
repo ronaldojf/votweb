@@ -1,0 +1,39 @@
+<div class="panel-body">
+  <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.subscriptions.length > 0'} %>
+
+  <div ng-show="loading || plenarySession.subscriptions.length > 0">
+    <div class="m-t-md">
+      <small class="pull-right text-muted" ng-bind-html="'info.records_added_html' | t:{count: plenarySession.subscriptions.length || 0} | trust"></small><br>
+      <hr class="m-t-none">
+    </div>
+
+    <div class="table-responsive">
+      <div loading-container="loading">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th><%= t('activerecord.attributes.subscription.kind') %></th>
+              <th><%= t('activerecord.attributes.subscription.councillor_id') %></th>
+              <th><%= t('activerecord.attributes.subscription.created_at') %></th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody ng-if="plenarySession.subscriptions">
+            <tr ng-repeat="subscription in (plenarySession.subscriptions | orderBy:['kind_index', 'created_at']) track by subscription.id">
+              <td>{{$index + 1}}. {{subscriptionKinds[subscription.kind]}}</td>
+              <td>{{subscription.councillor.name}} ({{subscription.councillor.party.abbreviation}})</td>
+              <td>{{subscription.created_at | date:'medium'}}</td>
+              <td class="text-right">
+                <button class="btn btn-xs btn-primary"
+                    ng-click="openCountdownRecordModal(subscriptionKinds[subscription.kind] + ' - ' + subscription.councillor.name + ' (' + subscription.councillor.party.abbreviation + ')')">
+                  <%= t('buttons.new_countdown') %>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

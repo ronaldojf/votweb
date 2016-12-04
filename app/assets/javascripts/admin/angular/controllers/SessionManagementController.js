@@ -13,6 +13,7 @@ angular
       if ($scope.queuesChannel) { $scope.queuesChannel.unsubscribe(); }
       if ($scope.votesChannel) { $scope.votesChannel.unsubscribe(); }
       if ($scope.countdownsRecordChannel) { $scope.countdownsRecordChannel.unsubscribe(); }
+      if ($scope.subscriptionsChannel) { $scope.subscriptionsChannel.unsubscribe(); }
     });
 
     $scope.init = function(plenarySessionId) {
@@ -21,12 +22,14 @@ angular
       PlenarySession.details(plenarySessionId)
       .success(function(data) {
         $scope.plenarySession = data;
+        setAttributesForSubscriptions($scope.plenarySession);
         checkCountdowns($scope.plenarySession);
 
         $scope.setPollsChannel($scope.plenarySession);
         $scope.setQueuesChannel($scope.plenarySession);
         $scope.setVotesChannel($scope.plenarySession);
         $scope.setCountdownsRecordChannel($scope.plenarySession);
+        $scope.setSubscriptionChannel($scope.plenarySession);
       })
       .error(function(errors) {
         console.log(errors);
@@ -87,6 +90,21 @@ angular
       });
     };
 
+    $scope.setSubscriptionChannel = function(plenarySession) {
+      $scope.subscriptionsChannel = $scope.cable.subscribe({
+        channel: 'SubscriptionsChannel',
+        room: plenarySession.id
+      }, function(data) {
+        setAttributesForSubscription(data);
+
+        collectionRefresh(plenarySession.subscriptions, data, {
+          callback: function(subscription) {
+            $scope.setCountdown(subscription);
+          }
+        });
+      });
+    };
+
     $scope.createPoll = function(poll) {
       var params = angular.extend(poll || {}, {plenary_session_id: $scope.plenarySession.id});
 
@@ -131,6 +149,7 @@ angular
 
       if (!$scope.loading && params.duration > 0) {
         $scope.loading = true;
+        angular.element('.nav-tabs [href="#countdowns"]').tab('show');
 
         Countdown.create(params)
         .error(function(errors) {
@@ -193,7 +212,7 @@ angular
     $scope.openCountdownRecordModal = function(description) {
       if (!$scope.countdownRunning) {
         angular.element('#add-countdown').modal('show');
-        $scope.newCountdownRecord = { description: description, duration: 20 };
+        $scope.newCountdownRecord = { description: description, duration: 120 };
         $timeout(function() {
           angular.element('#countdown-description').focus();
         }, 600);
@@ -203,7 +222,7 @@ angular
     $scope.getCouncillor = function(councillorId) {
       var result;
 
-      for (var i = 0; i < $scope.plenarySession.members.length; i++) {
+      for (var i = 0; i < (($scope.plenarySession || {}).members || []).length; i++) {
         if ($scope.plenarySession.members[i].councillor.id === councillorId) {
           result = $scope.plenarySession.members[i].councillor;
           break;
@@ -253,7 +272,7 @@ angular
       var index = collection.map(function(currentObject) { return currentObject.id; }).indexOf(object.id);
 
       if (index >= 0) {
-        if (collection[index].deleted_at) {
+        if (object.deleted_at || object._destroyed) {
           collection.splice(index, 1);
         } else {
           angular.extend(collection[index], object);
@@ -315,6 +334,17 @@ angular
       };
 
       return result;
+    };
+
+    var setAttributesForSubscriptions = function(plenarySession) {
+      for (var i = 0; i < plenarySession.subscriptions.length; i++) {
+        setAttributesForSubscription(plenarySession.subscriptions[i]);
+      }
+    };
+
+    var setAttributesForSubscription = function(subscription) {
+      subscription.councillor = $scope.getCouncillor(subscription.councillor_id);
+      subscription.kind_index = Object.keys($scope.subscriptionKinds).indexOf(subscription.kind);
     };
 
     var verifyMembersAttendance = function() {
