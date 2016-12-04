@@ -33,8 +33,8 @@
     <h1 class="text-center m-t-none p-t-sm">
       [<%= t('activerecord.models.plenary_session.one') %> {{kinds[currentSession.kind]}}] {{currentSession.title}}
     </h1>
-    <h2 class="text-center" ng-show="currentEvent && (currentPoll.description || currentQueue.description)">
-      {{currentPoll.description || currentQueue.description}}
+    <h2 class="text-center" ng-show="currentEvent && (currentObject().description)">
+      {{currentObject().description}}
     </h2>
   </div>
 
@@ -60,10 +60,7 @@
         </div>
 
         <div class="col-xs-2 text-center font-lg">
-          {{
-            ((currentPoll.countdown || currentQueue.countdown || 0) > 999) ? 999 :
-              (currentPoll.countdown || currentQueue.countdown || 0)
-          }}
+          {{ ((currentObject().countdown || 0) > 999) ? 999 : (currentObject().countdown || 0) }}
         </div>
 
         <div class="col-xs-5">

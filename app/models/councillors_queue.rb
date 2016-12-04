@@ -1,5 +1,5 @@
 class CouncillorsQueue < ApplicationRecord
-  include Countdown
+  include CountdownHelpers
 
   belongs_to :plenary_session
 
@@ -27,7 +27,7 @@ class CouncillorsQueue < ApplicationRecord
 
   def to_builder
     Jbuilder.new do |json|
-      json.extract! self, :id, :kind, :description, :countdown, :duration, :councillors_ids, :created_at
+      json.extract! self, :id, :plenary_session_id, :kind, :description, :countdown, :duration, :councillors_ids, :created_at
     end
   end
 

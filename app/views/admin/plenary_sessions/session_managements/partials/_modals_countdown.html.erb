@@ -1,0 +1,37 @@
+<div class="modal inmodal" id="add-countdown" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content animated fadeIn">
+      <form ng-submit="createCountdownRecord(newCountdownRecord)">
+        <div class="modal-header">
+          <i class="fa fa-clock-o modal-icon"></i>
+          <h4 class="modal-title"><%= t('miscellaneous.countdown.add') %></h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-inputs">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="countdown-description" class="control-label"><%= t('activerecord.attributes.countdown.description') %></label>
+                  <input type="text" id="countdown-description" class="form-control" ng-model="newCountdownRecord.description">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="countdown-duration" class="control-label"><%= t('simple_form.required.html') %> <%= t('activerecord.attributes.countdown.duration') %></label>
+                  <input type="number" id="countdown-duration" min="1" class="form-control" ng-model="newCountdownRecord.duration">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+          <button type="submit" class="btn btn-primary" ng-disabled="loading || countdownRunning"><%= t('buttons.add') %></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

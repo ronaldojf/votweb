@@ -1,0 +1,49 @@
+<div class="panel-body">
+  <div class="row m-b-md">
+    <div class="col-xs-12 text-right">
+      <%= link_to '', class: 'btn btn-w-s btn-success', 'ng-click' => "openQueueModal('attendance')", 'ng-disabled' => 'loading || countdownRunning' do %>
+        <i class="fa fa-list-ul"></i><br/>
+        <%= t('buttons.attendance') %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.members.length > 0'} %>
+
+  <div ng-show="loading || plenarySession.members.length > 0">
+    <div class="m-t-md">
+      <small class="pull-right text-muted" ng-bind-html="'info.records_added_html' | t:{count: plenarySession.members.length || 0} | trust"></small><br>
+      <hr class="m-t-none">
+    </div>
+
+    <div class="table-responsive">
+      <div loading-container="loading">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th><%= t('activerecord.attributes.councillor.name') %></th>
+              <th><%= t('activerecord.attributes.councillor.party_id') %></th>
+              <th><%= t('activerecord.attributes.session_member.is_president') %></th>
+              <th><%= t('activerecord.attributes.session_member.is_present') %></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr ng-repeat="member in plenarySession.members track by member.id" ng-class="{'warning': member.is_present === false}">
+              <td>{{$index + 1}}. {{member.councillor.name}}</td>
+              <td>{{member.councillor.party.abbreviation}}</td>
+              <td><i class="fa {{member.is_president ? 'fa-check text-navy' : 'fa-times text-muted'}}"></i></td>
+              <td>
+                <i class="fa" ng-class="{
+                  'fa-check text-navy': member.is_present,
+                  'fa-times text-warning': member.is_present === false,
+                  'fa-ellipsis-h text-muted': member.is_present === null
+                }"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

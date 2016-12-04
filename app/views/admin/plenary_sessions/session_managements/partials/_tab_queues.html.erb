@@ -1,0 +1,56 @@
+<div class="panel-body">
+  <div class="row m-b-md">
+    <div class="col-xs-12 text-right">
+      <%= link_to '', class: 'btn btn-w-s btn-primary', 'ng-click' => 'openQueueModal()', 'ng-disabled' => 'loading || countdownRunning' do %>
+      <i class="fa fa-plus"></i><br/>
+      <%= t('buttons.new') %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.queues.length > 0'} %>
+
+  <div ng-show="loading || plenarySession.queues.length > 0">
+    <div class="m-t-md">
+      <small class="pull-right text-muted" ng-bind-html="'info.records_added_html' | t:{count: plenarySession.queues.length || 0} | trust"></small><br>
+      <hr class="m-t-none">
+    </div>
+
+    <div class="table-responsive">
+      <div loading-container="loading">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th><%= t('activerecord.attributes.queue.description') %></th>
+              <th><%= t('activerecord.attributes.queue.duration') %></th>
+              <th><%= t('activerecord.attributes.queue.created_at') %></th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr ng-repeat="queue in (plenarySession.queues | orderBy:'-created_at') track by queue.id" ng-class="{'info': queue.countdownPromise}">
+              <td>
+                <strong ng-show="queue.countdownPromise">({{queue.countdown}})</strong>
+                {{queue.description | truncate:60}}
+                <span class="text-muted" ng-hide="queue.description"><%= t('info.no_description') %></span>
+              </td>
+              <td>{{ 'info.seconds' | t:{count: queue.duration || 0} }}</td>
+              <td>{{queue.created_at | date:'medium'}}</td>
+              <td class="text-right">
+                <button class="btn btn-xs btn-warning"
+                ng-show="!queue.stopped && queue.countdownPromise"
+                ng-disabled="queue.stopping"
+                ng-click="stopQueue(queue)"><%= t('buttons.stop') %></button>
+
+                <button class="btn btn-xs btn-white" ng-click="openQueueDetailsModal(queue)"><%= t('buttons.details') %></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render partial: 'admin/plenary_sessions/session_managements/partials/modals_queue' %>

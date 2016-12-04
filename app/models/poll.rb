@@ -1,5 +1,5 @@
 class Poll < ApplicationRecord
-  include Countdown
+  include CountdownHelpers
   acts_as_paranoid
 
   belongs_to :plenary_session

@@ -1,8 +1,8 @@
 angular
   .module('votweb.controllers')
   .controller('SessionManagementController', [
-      '$scope', '$cable', '$timeout', '$interval', 'PlenarySession', 'Poll', 'CouncillorsQueue', 'SessionItem',
-      function($scope, $cable, $timeout, $interval, PlenarySession, Poll, CouncillorsQueue, SessionItem) {
+      '$scope', '$cable', '$timeout', '$interval', 'PlenarySession', 'Poll', 'CouncillorsQueue', 'SessionItem', 'Countdown',
+      function($scope, $cable, $timeout, $interval, PlenarySession, Poll, CouncillorsQueue, SessionItem, Countdown) {
 
     $scope.cable = $cable();
     $scope.loading = false;
@@ -12,6 +12,7 @@ angular
       if ($scope.pollsChannel) { $scope.pollsChannel.unsubscribe(); }
       if ($scope.queuesChannel) { $scope.queuesChannel.unsubscribe(); }
       if ($scope.votesChannel) { $scope.votesChannel.unsubscribe(); }
+      if ($scope.countdownsRecordChannel) { $scope.countdownsRecordChannel.unsubscribe(); }
     });
 
     $scope.init = function(plenarySessionId) {
@@ -25,6 +26,7 @@ angular
         $scope.setPollsChannel($scope.plenarySession);
         $scope.setQueuesChannel($scope.plenarySession);
         $scope.setVotesChannel($scope.plenarySession);
+        $scope.setCountdownsRecordChannel($scope.plenarySession);
       })
       .error(function(errors) {
         console.log(errors);
@@ -72,6 +74,19 @@ angular
       });
     };
 
+    $scope.setCountdownsRecordChannel = function(plenarySession) {
+      $scope.countdownsRecordChannel = $scope.cable.subscribe({
+        channel: 'CountdownsChannel',
+        room: plenarySession.id
+      }, function(data) {
+        collectionRefresh(plenarySession.countdowns, data, {
+          callback: function(countdown) {
+            $scope.setCountdown(countdown);
+          }
+        });
+      });
+    };
+
     $scope.createPoll = function(poll) {
       var params = angular.extend(poll || {}, {plenary_session_id: $scope.plenarySession.id});
 
@@ -111,6 +126,23 @@ angular
       }
     };
 
+    $scope.createCountdownRecord = function(countdown) {
+      var params = angular.extend(countdown || {}, {plenary_session_id: $scope.plenarySession.id});
+
+      if (!$scope.loading && params.duration > 0) {
+        $scope.loading = true;
+
+        Countdown.create(params)
+        .error(function(errors) {
+          console.log(errors);
+        })
+        .finally(function() {
+          $scope.loading = false;
+          angular.element('#add-countdown').modal('hide');
+        });
+      }
+    };
+
     $scope.stopPoll = function(poll) {
       stopCountdown(Poll.stop, poll);
       verifyMembersAttendance();
@@ -122,6 +154,10 @@ angular
       if (queue.kind === 'attendance') {
         verifyMembersAttendance();
       }
+    };
+
+    $scope.stopCountdownRecord = function(countdownRecord) {
+      stopCountdown(Countdown.stop, countdownRecord);
     };
 
     $scope.openPollModal = function(description) {
@@ -150,6 +186,16 @@ angular
         $scope.newQueue = { duration: 20, kind: (kind || 'normal') };
         $timeout(function() {
           angular.element('#queue-' + (kind === 'attendance' ? 'duration' : 'description')).focus();
+        }, 600);
+      }
+    };
+
+    $scope.openCountdownRecordModal = function(description) {
+      if (!$scope.countdownRunning) {
+        angular.element('#add-countdown').modal('show');
+        $scope.newCountdownRecord = { description: description, duration: 20 };
+        $timeout(function() {
+          angular.element('#countdown-description').focus();
         }, 600);
       }
     };
@@ -250,7 +296,11 @@ angular
       };
 
       for (var i = 0; i < plenarySession.queues.length; i++) {
-        $scope.setCountdown(plenarySession.queues[i]);
+        $scope.setCountdown(plenarySession.queues[i], plenarySession.queues[i].kind === 'attendance');
+      };
+
+      for (var i = 0; i < plenarySession.countdowns.length; i++) {
+        $scope.setCountdown(plenarySession.countdowns[i]);
       };
     };
 

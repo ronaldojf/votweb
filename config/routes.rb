@@ -25,6 +25,10 @@ Rails.application.routes.draw do
         patch :stop, on: :member
       end
 
+      resources :countdowns, only: [:create] do
+        patch :stop, on: :member
+      end
+
       resources :roles, :councillors, :parties, :session_items
 
       root 'home#index'

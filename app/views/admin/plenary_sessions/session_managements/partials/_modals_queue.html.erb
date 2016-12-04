@@ -1,0 +1,90 @@
+<div class="modal inmodal" id="add-queue" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content animated fadeIn">
+      <form ng-submit="createQueue(newQueue, '<%= t('miscellaneous.queue.attendance') %>')">
+        <div class="modal-header">
+          <i class="fa modal-icon {{newQueue.kind === 'attendance' ? 'fa-list-ul' : 'fa-group'}}"></i>
+          <h4 class="modal-title">
+            {{newQueue.kind === 'attendance' ? '<%= t('miscellaneous.queue.attendance') %>' : '<%= t('miscellaneous.queue.add') %>'}}
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-inputs">
+            <div class="row" ng-hide="newQueue.kind === 'attendance'">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="queue-description" class="control-label"><%= t('activerecord.attributes.queue.description') %></label>
+                  <input type="text" id="queue-description" class="form-control" ng-model="newQueue.description">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="queue-duration" class="control-label"><%= t('simple_form.required.html') %> <%= t('activerecord.attributes.queue.duration') %></label>
+                  <input type="number" id="queue-duration" min="1" class="form-control" ng-model="newQueue.duration">
+                </div>
+              </div>
+            </div>
+
+            <div class="row" ng-show="newQueue.kind === 'attendance'">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>
+                    <input type="checkbox" ng-model="newQueue.override_attendance" icheck>
+                    <%= t('miscellaneous.queue.override_attendance') %>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+          <button type="submit" class="btn btn-primary" ng-disabled="loading || countdownRunning"><%= t('buttons.add') %></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal inmodal" id="queue-details" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content animated fadeIn">
+      <div class="modal-header">
+        <i class="fa modal-icon {{newQueue.kind === 'attendance' ? 'fa-list-ul' : 'fa-group'}}"></i>
+        <h4 class="modal-title">
+          {{queueDetails.kind === 'attendance' ? '<%= t('miscellaneous.queue.attendance') %>' : '<%= t('activerecord.models.queue.one') %>'}}
+        </h4>
+        <span class="font-bold" ng-hide="queueDetails.kind === 'attendance'">
+          {{queueDetails.description}}
+          <span class="text-muted" ng-hide="queueDetails.description"><%= t('info.no_description') %></span>
+        </span>
+      </div>
+      <div class="modal-body">
+        <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {
+            'ng-hide' => "queueDetails.councillors_ids.length > 0 || queueDetails.kind === 'attendance'"
+          } %>
+
+        <ol ng-if="queueDetails.kind !== 'attendance'">
+          <li ng-repeat="councillorId in queueDetails.councillors_ids">
+            {{queueDetails.councillors[councillorId] = getCouncillor(councillorId);''}}
+            ({{queueDetails.councillors[councillorId].party.abbreviation}}) <strong>{{queueDetails.councillors[councillorId].name}}</strong>
+          </li>
+        </ol>
+
+        <ol ng-if="queueDetails.kind === 'attendance'">
+          <li ng-repeat="member in plenarySession.members track by member.id"
+              class="text-{{queueDetails.councillors_ids.indexOf(member.councillor.id) >= 0 ? 'navy' : 'danger'}}">
+
+            ({{member.councillor.party.abbreviation}}) <strong>{{member.councillor.name}}</strong>
+          </li>
+        </ol>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+      </div>
+    </div>
+  </div>
+</div>

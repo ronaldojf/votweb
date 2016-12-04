@@ -6,6 +6,7 @@ class PlenarySession < ApplicationRecord
   has_many :queues, class_name: 'CouncillorsQueue'
   has_many :members, class_name: 'SessionMember'
   has_many :items, class_name: 'SessionItem'
+  has_many :countdowns
   accepts_nested_attributes_for :members, allow_destroy: true
 
   enum kind: [:ordinary, :extraordinary, :solemn, :special]

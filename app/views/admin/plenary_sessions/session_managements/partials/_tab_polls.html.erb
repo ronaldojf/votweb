@@ -1,0 +1,58 @@
+<div class="panel-body">
+  <div class="row m-b-md">
+    <div class="col-xs-12 text-right">
+      <%= link_to '', class: 'btn btn-w-s btn-primary', 'ng-click' => 'openPollModal()', 'ng-disabled' => 'loading || countdownRunning' do %>
+      <i class="fa fa-plus"></i><br/>
+      <%= t('buttons.new') %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.polls.length > 0'} %>
+
+  <div ng-show="loading || plenarySession.polls.length > 0">
+    <div class="m-t-md">
+      <small class="pull-right text-muted" ng-bind-html="'info.records_added_html' | t:{count: plenarySession.polls.length || 0} | trust"></small><br>
+      <hr class="m-t-none">
+    </div>
+
+    <div class="table-responsive">
+      <div loading-container="loading">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th><%= t('activerecord.attributes.poll.description') %></th>
+              <th><%= t('activerecord.attributes.poll.process') %></th>
+              <th><%= t('activerecord.attributes.poll.duration') %></th>
+              <th><%= t('activerecord.attributes.poll.created_at') %></th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr ng-repeat="poll in (plenarySession.polls | orderBy:'-created_at') track by poll.id" ng-class="{'info': poll.countdownPromise}">
+              <td>
+                <strong ng-show="poll.countdownPromise">({{poll.countdown}})</strong>
+                {{poll.description | truncate:60}}
+                <span class="text-muted" ng-hide="poll.description"><%= t('info.no_description') %></span>
+              </td>
+              <td>{{pollProcesses[poll.process]}}</td>
+              <td>{{ 'info.seconds' | t:{count: poll.duration || 0} }}</td>
+              <td>{{poll.created_at | date:'medium'}}</td>
+              <td class="text-right">
+                <button class="btn btn-xs btn-warning"
+                ng-show="!poll.stopped && poll.countdownPromise"
+                ng-disabled="poll.stopping"
+                ng-click="stopPoll(poll)"><%= t('buttons.stop') %></button>
+
+                <button class="btn btn-xs btn-white" ng-click="openPollDetailsModal(poll)"><%= t('buttons.details') %></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render partial: 'admin/plenary_sessions/session_managements/partials/modals_poll' %>

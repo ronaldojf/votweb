@@ -1,4 +1,4 @@
-module Countdown
+module CountdownHelpers
   extend ActiveSupport::Concern
 
   included do

@@ -7,8 +7,10 @@ angular
     $scope.windowHeight = window.outerHeight;
     $scope.currentPoll = {};
     $scope.currentQueue = {};
+    $scope.currentCountdownRecord = {};
     $scope.voteTypes = {approvation: 'SIM', rejection: 'NÃO', abstention: 'ABSTENÇÃO'};
     $scope.voteClasses = {approvation: 'text-navy', rejection: 'text-danger', abstention: 'text-muted'};
+    $scope.objectsByEvent = {poll: $scope.currentPoll, queue: $scope.currentQueue, countdownRecord: $scope.currentCountdownRecord};
 
     var inactivityCountdownPromise;
 
@@ -90,6 +92,10 @@ angular
       return result;
     };
 
+    $scope.currentObject = function() {
+      return $scope.objectsByEvent[$scope.currentEvent];
+    };
+
     var recreatePieChart = function() {
       if (!$scope.isApplyingNewHeight) {
         $scope.isApplyingNewHeight = true;
@@ -132,6 +138,7 @@ angular
           setQueuesChannel($scope.currentSession);
           setPollsChannel($scope.currentSession);
           setVotesChannel($scope.currentSession);
+          setCountdownRecordChannel($scope.currentSession);
 
           checkCountdowns($scope.currentSession);
         }
@@ -181,6 +188,19 @@ angular
       });
     };
 
+    var setCountdownRecordChannel = function(plenarySession) {
+      $scope.pollsChannel = $scope.cable.subscribe({
+        channel: 'CountdownsChannel',
+        room: plenarySession.id
+      }, function(data) {
+        collectionRefresh(plenarySession.countdowns, data, {
+          callback: function(countdownRecord) {
+            setCountdown('countdownRecord', countdownRecord);
+          }
+        });
+      });
+    };
+
     var getPoll = function(pollId) {
       var result;
 
@@ -201,7 +221,7 @@ angular
         var end = moment().add(object.countdown, 'seconds');
         inactivityCountdown('off');
         resetCurrentEvent();
-        $scope[type === 'poll' ? 'currentPoll' : 'currentQueue'] = object;
+        $scope.objectsByEvent[type] = object;
 
         object.countdownPromise = $interval(function() {
           // +1 para corrigir tempo de criação do registro e entrega do mesmo por websocket
@@ -241,27 +261,18 @@ angular
     };
 
     var checkCountdowns = function(plenarySession) {
-      for (var i = 0; i < plenarySession.polls.length; i++) {
-        setCountdown('poll', plenarySession.polls[i], true);
+      var collectionsByEvent = {
+        poll: plenarySession.polls,
+        queue: plenarySession.queues,
+        countdownRecord: plenarySession.countdowns
       };
+      var events = Object.keys(collectionsByEvent);
 
-      for (var i = 0; i < plenarySession.queues.length; i++) {
-        setCountdown('queue', plenarySession.queues[i]);
-      };
-    };
-
-    var getCurrent = function(type) {
-      var result;
-      var collection = type === 'poll' ? $scope.currentSession.polls : $scope.currentSession.queues;
-
-      for (var i = 0; i < collection.length; i++) {
-        if (collection[i].countdownPromise) {
-          result = collection[i];
-          break;
+      for (var i1 = 0; i1 < events.length; i1++) {
+        for (var i2 = 0; i2 < collectionsByEvent[events[i1]].length; i2++) {
+          setCountdown(events[i1], collectionsByEvent[events[i1]][i2]);
         }
       }
-
-      return result;
     };
 
     var inactivityCountdown = function(turnTo) {
@@ -274,8 +285,11 @@ angular
 
     var resetCurrentEvent = function() {
       delete $scope.currentEvent;
-      $scope.currentPoll = {};
-      $scope.currentQueue = {};
+      var events = Object.keys($scope.objectsByEvent);
+
+      for (var i = 0; i < events.length; i++) {
+        $scope.objectsByEvent[events[i]] = {};
+      }
     };
 
     var refreshPieChartColumnsVisibility = function() {

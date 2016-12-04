@@ -1,0 +1,105 @@
+<div class="modal inmodal" id="add-poll" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content animated fadeIn">
+      <form ng-submit="createPoll(newPoll)">
+        <div class="modal-header">
+          <i class="fa fa-ticket modal-icon"></i>
+          <h4 class="modal-title"><%= t('miscellaneous.poll.add') %></h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-inputs">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="poll-description" class="control-label"><%= t('activerecord.attributes.poll.description') %></label>
+                  <input type="text" id="poll-description" class="form-control" ng-model="newPoll.description">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="poll-process" class="control-label"><%= t('simple_form.required.html') %> <%= t('activerecord.attributes.poll.process') %></label>
+                  <select id="poll-process" class="form-control" ng-model="newPoll.process" ng-options="key as label for (key, label) in pollProcesses"></select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="poll-duration" class="control-label"><%= t('simple_form.required.html') %> <%= t('activerecord.attributes.poll.duration') %></label>
+                  <input type="number" id="poll-duration" min="1" class="form-control" ng-model="newPoll.duration">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+          <button type="submit" class="btn btn-primary" ng-disabled="loading || countdownRunning"><%= t('buttons.add') %></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal inmodal" id="poll-details" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content animated fadeIn">
+      <div class="modal-header">
+        <i class="fa fa-ticket modal-icon"></i>
+        <h4 class="modal-title"><%= t('activerecord.models.poll.one') %></h4>
+        <span class="font-bold">
+          {{pollDetails.description}}
+          <span class="text-muted" ng-hide="pollDetails.description"><%= t('info.no_description') %></span>
+        </span>
+      </div>
+      <div class="modal-body">
+        <table>
+          <tbody>
+            <tr>
+              <td class="text-right"><strong>Participantes:</strong></td>
+              <td>&nbsp;&nbsp;{{plenarySession.members.length}}</td>
+            </tr>
+            <tr>
+              <td class="text-right"><strong>Votos:</strong></td>
+              <td>&nbsp;&nbsp;{{pollDetails.votes.length}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="text-navy"><%= t('enums.specific_items.vote.kind.approvation') %></th>
+              <th class="text-danger"><%= t('enums.specific_items.vote.kind.rejection') %></th>
+              <th class="text-muted"><%= t('enums.specific_items.vote.kind.abstention') %></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>{{ pollDetails.approvationVotes = ((pollDetails.votes || []) | filter:{kind: 'approvation'}); 'info.votes' | t:{count: pollDetails.approvationVotes.length} }}</td>
+              <td>{{ pollDetails.rejectionVotes = ((pollDetails.votes || []) | filter:{kind: 'rejection'}); 'info.votes' | t:{count: pollDetails.rejectionVotes.length} }}</td>
+              <td>{{ pollDetails.abstentionVotes = ((pollDetails.votes || []) | filter:{kind: 'abstention'}); 'info.votes' | t:{count: pollDetails.abstentionVotes.length} }}</td>
+            </tr>
+            <hr ng-hide="pollDetails.process === 'secret'">
+            <tr ng-hide="pollDetails.process === 'secret'">
+              <td class="text-navy">
+                <div class="row-padding" ng-repeat="vote in pollDetails.approvationVotes track by vote.councillor_id">{{getCouncillor(vote.councillor_id).name}}</div>
+              </td>
+              <td class="text-danger">
+                <div class="row-padding" ng-repeat="vote in pollDetails.rejectionVotes track by vote.councillor_id">{{getCouncillor(vote.councillor_id).name}}</div>
+              </td>
+              <td class="text-muted">
+                <div class="row-padding" ng-repeat="vote in pollDetails.abstentionVotes track by vote.councillor_id">{{getCouncillor(vote.councillor_id).name}}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-dismiss="modal"><%= t('buttons.close') %></button>
+      </div>
+    </div>
+  </div>
+</div>

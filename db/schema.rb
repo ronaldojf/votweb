@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161203170846) do
+ActiveRecord::Schema.define(version: 20161203201815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,15 @@ ActiveRecord::Schema.define(version: 20161203170846) do
     t.integer  "kind",                default: 0,     null: false
     t.boolean  "override_attendance", default: false, null: false
     t.index ["plenary_session_id"], name: "index_councillors_queues_on_plenary_session_id", using: :btree
+  end
+
+  create_table "countdowns", force: :cascade do |t|
+    t.integer  "plenary_session_id"
+    t.string   "description"
+    t.integer  "duration"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["plenary_session_id"], name: "index_countdowns_on_plenary_session_id", using: :btree
   end
 
   create_table "parties", force: :cascade do |t|
@@ -153,6 +162,7 @@ ActiveRecord::Schema.define(version: 20161203170846) do
 
   add_foreign_key "councillors", "parties"
   add_foreign_key "councillors_queues", "plenary_sessions"
+  add_foreign_key "countdowns", "plenary_sessions"
   add_foreign_key "permissions", "roles"
   add_foreign_key "polls", "plenary_sessions"
   add_foreign_key "session_items", "councillors"

@@ -120,13 +120,14 @@ RSpec.describe CouncillorsQueue, type: :model do
         queue = build :councillors_queue, description: nil, councillors_ids: [], duration: 20, created_at: DateTime.current
 
         expect(queue.to_builder.attributes!).to eq({
-          'id'=>nil,
-          'kind'=>'normal',
-          'description'=>nil,
-          'countdown'=>20,
-          'duration'=>20,
-          'councillors_ids'=>[],
-          'created_at'=> DateTime.current
+          'id' => nil,
+          'plenary_session_id' => queue.plenary_session_id,
+          'kind' => 'normal',
+          'description' => nil,
+          'countdown' => 20,
+          'duration' => 20,
+          'councillors_ids' => [],
+          'created_at' =>  DateTime.current
         })
       end
     end

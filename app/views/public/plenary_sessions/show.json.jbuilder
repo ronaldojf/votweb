@@ -21,3 +21,7 @@ end
 json.set! :queues do
   json.array! @plenary_session.queues, partial: 'partials/councillors_queues/queue', as: :queue
 end
+
+json.set! :countdowns do
+  json.array! @plenary_session.countdowns, partial: 'partials/countdowns/countdown', as: :countdown
+end

@@ -1,0 +1,57 @@
+<div class="panel-body">
+  <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.items.length > 0'} %>
+
+  <div ng-show="loading || plenarySession.items.length > 0">
+    <div class="m-t-md">
+      <small class="pull-right text-muted" ng-bind-html="'info.records_added_html' | t:{count: plenarySession.items.length || 0} | trust"></small><br>
+      <hr class="m-t-none">
+    </div>
+
+    <div class="table-responsive">
+      <div loading-container="loading">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th><%= t('activerecord.attributes.session_item.title') %></th>
+              <th><%= t('activerecord.attributes.session_item.author') %></th>
+              <th><%= t('activerecord.attributes.session_item.acceptance') %></th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr ng-repeat="item in plenarySession.items track by item.id" ng-class="{'success': item.acceptance === 'approved', 'danger': item.acceptance === 'rejected'}">
+              <td>{{$index + 1}}. {{item.title}}</td>
+              <td>{{item.author.name}}</td>
+              <td>
+                <i class="fa" ng-class="{
+                    'fa-check text-navy': item.acceptance === 'approved',
+                    'fa-times text-warning': item.acceptance === 'rejected',
+                    'fa-ellipsis-h text-muted': item.acceptance === 'not_voted'
+                  }"></i>
+              </td>
+              <td class="text-right">
+                <button class="btn btn-xs btn-primary" ng-click="openPollModal(item.title)" ng-show="item.acceptance === 'not_voted'">
+                  <%= t('buttons.new_poll') %>
+                </button>
+
+                <div class="btn-group">
+                  <button class="btn btn-xs btn-white" data-toggle="dropdown"><%= t('buttons.mark_as') %> <span class="caret"></span></button>
+                  <ul class="dropdown-menu pull-right">
+                    <% SessionItem.acceptances.keys.each do |acceptance| %>
+                      <li>
+                        <a ng-click="markSessionItemAs(item, '<%= acceptance %>')">
+                          <%= t(acceptance, scope: [:enums, :specific_items, :session_item, :acceptance]) %>
+                        </a>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
