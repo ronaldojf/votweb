@@ -35,13 +35,10 @@ gem 'font-awesome-sass',      '4.6.2'
 
 group :production, :staging do
   gem 'rack-canonical-host',  '0.2.2'
-  gem 'librato-rails',        '1.0.0'
 end
 
 group :development do
   gem 'foreman',              '0.82.0'
-  gem 'jumpup',               '0.0.8'
-  gem 'jumpup-heroku',        '0.0.6'
   gem 'better_errors',        '2.1.1'
   gem 'binding_of_caller',    '0.7.2'
   gem 'letter_opener',        '1.4.1'

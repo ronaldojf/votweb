@@ -39,7 +39,6 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     addressable (2.4.0)
-    aggregate (0.2.2)
     arel (7.1.1)
     autoprefixer-rails (6.4.0.1)
       execjs
@@ -79,7 +78,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
-    colorize (0.8.1)
     concurrent-ruby (1.0.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
@@ -114,8 +112,6 @@ GEM
     factory_girl_rails (4.5.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
-    faraday (0.9.2)
-      multipart-post (>= 1.2, < 3)
     ffi (1.9.14)
     flutie (2.0.0)
     font-awesome-sass (4.6.2)
@@ -145,7 +141,6 @@ GEM
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
     hashdiff (0.3.0)
-    hetchy (1.0.0)
     http_parser.rb (0.6.0)
     i18n (0.7.0)
     i18n-js (3.0.0.rc6)
@@ -161,10 +156,6 @@ GEM
       railties (>= 3.2)
       sprockets-rails
     json (1.8.3)
-    jumpup (0.0.8)
-      colorize
-      rake
-    jumpup-heroku (0.0.6)
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -175,17 +166,6 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.4.1)
       launchy (~> 2.2)
-    librato-metrics (1.6.1)
-      aggregate (~> 0.2.2)
-      faraday (~> 0.7)
-      multi_json
-    librato-rack (0.5.0)
-      hetchy (~> 1.0)
-      librato-metrics (~> 1.1)
-    librato-rails (1.0.0)
-      activesupport (>= 3.0)
-      librato-rack (= 0.5.0)
-      railties (>= 3.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -203,7 +183,6 @@ GEM
     mini_portile2 (2.1.0)
     minitest (5.9.0)
     multi_json (1.12.1)
-    multipart-post (2.0.0)
     nenv (0.3.0)
     ng-rails-csrf (0.1.0)
     nio4r (1.2.1)
@@ -387,11 +366,8 @@ DEPENDENCIES
   jbuilder (= 2.5.0)
   jquery-rails (= 4.1.1)
   js-routes (= 1.2.8)
-  jumpup (= 0.0.8)
-  jumpup-heroku (= 0.0.6)
   kaminari-bootstrap (= 3.0.1)
   letter_opener (= 1.4.1)
-  librato-rails (= 1.0.0)
   listen (= 3.1.5)
   ng-rails-csrf (= 0.1.0)
   normalize-rails (= 3.0.3)
@@ -426,4 +402,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.12.5
+   1.13.5

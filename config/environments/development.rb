@@ -26,7 +26,7 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  config.action_cable.mount_path = '/websocket'
+  config.action_cable.mount_path = '/cable'
   config.action_cable.allowed_request_origins = [/.*/]
 
   config.action_view.logger = nil
