@@ -36,15 +36,17 @@ angular
       var poll = getCurrent('poll');
 
       if (String(getInLocalStorage(LOCAL_STORAGE_POLL_KEY)) !== String(poll.id)) {
-        setInLocalStorage(LOCAL_STORAGE_POLL_KEY, poll.id);
         $scope.loading = true;
 
         Poll.vote($scope.currentSession.id, poll.id, voteType)
+        .success(function() {
+          setInLocalStorage(LOCAL_STORAGE_POLL_KEY, poll.id);
+          clearCountdown(poll);
+        })
         .error(function(errors) {
           console.log(errors);
         })
         .finally(function() {
-          clearCountdown(poll);
           $scope.loading = false;
         });
       }

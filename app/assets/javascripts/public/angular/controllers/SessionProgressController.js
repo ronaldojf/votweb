@@ -10,7 +10,7 @@ angular
     $scope.currentCountdownRecord = {};
     $scope.voteTypes = {approvation: 'SIM', rejection: 'NÃO', abstention: 'ABSTENÇÃO'};
     $scope.voteClasses = {approvation: 'text-navy', rejection: 'text-danger', abstention: 'text-muted'};
-    $scope.objectsByEvent = {poll: $scope.currentPoll, queue: $scope.currentQueue, countdownRecord: $scope.currentCountdownRecord};
+    $scope.objectsNames = {poll: 'currentPoll', queue: 'currentQueue', countdownRecord: 'currentCountdownRecord'};
 
     var inactivityCountdownPromise;
 
@@ -93,7 +93,7 @@ angular
     };
 
     $scope.currentObject = function() {
-      return $scope.objectsByEvent[$scope.currentEvent];
+      return $scope[$scope.objectsNames[$scope.currentEvent]];
     };
 
     var recreatePieChart = function() {
@@ -215,13 +215,16 @@ angular
     };
 
     var setCountdown = function(type, object) {
-      clearCountdown(object);
+      if (object.countdown <= 0 && object.countdownPromise) {
+        inactivityCountdown('on');
+      }
 
+      clearCountdown(object);
       if (object.countdown > 0) {
         var end = moment().add(object.countdown, 'seconds');
         inactivityCountdown('off');
         resetCurrentEvent();
-        $scope.objectsByEvent[type] = object;
+        $scope[$scope.objectsNames[type]] = object;
 
         object.countdownPromise = $interval(function() {
           // +1 para corrigir tempo de criação do registro e entrega do mesmo por websocket
@@ -285,10 +288,10 @@ angular
 
     var resetCurrentEvent = function() {
       delete $scope.currentEvent;
-      var events = Object.keys($scope.objectsByEvent);
+      var events = Object.keys($scope.objectsNames);
 
       for (var i = 0; i < events.length; i++) {
-        $scope.objectsByEvent[events[i]] = {};
+        $scope[$scope.objectsNames[events[i]]] = {};
       }
     };
 

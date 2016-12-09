@@ -5,58 +5,58 @@
   initSessions(<%= @plenary_sessions.to_json(only: [:id, :title, :kind]) %>);">
 
   <div class="profile-box-header">
-    <h1>{{tickingClockDateTime | date:'short'}}</h1>
+    <h1 class="font-bolder">{{tickingClockDateTime | date:'short'}}</h1>
   </div>
 
   <div class="profile-box-body">
-    <h1 class="text-center text-navy"><%= current_user.name %></h1>
+    <h1 class="text-center text-navy font-bolder"><%= current_user.name.mb_chars.upcase %></h1>
     <hr>
     <div class="session-info">
       <div class="no-sessions" ng-hide="sessions.length > 0">
-        <h4>Não existe nenhuma sessão que inicie hoje, na qual você seja um participante.</h4>
+        <h3 class="font-bolder p-sm">NÃO EXISTE NENHUMA SESSÃO QUE INICIE HOJE, NA QUAL VOCÊ SEJA UM PARTICIPANTE.</h3>
       </div>
 
       <div class="session-pick" ng-show="sessions.length > 0 && !currentSession">
-        <h4>Escolha uma das sessões abaixo para se conectar.</h4>
+        <h3 class="font-bolder m-b-sm">ESCOLHA UMA DAS SESSÕES ABAIXO PARA SE CONECTAR.</h3>
         <br>
 
         <ul class="list-unstyled">
-          <li ng-repeat="session in sessions track by session.id">
-            <h4>
+          <li class="m-b-sm" ng-repeat="session in sessions track by session.id">
+            <h3 class="font-bolder text-uppercase">
               <a href ng-click="setCurrentSession(session)">
                 [<%= t('activerecord.models.plenary_session.one') %> {{kinds[session.kind]}}] {{session.title}}
               </a>
-            </h4>
+            </h3>
           </li>
         </ul>
       </div>
 
       <div class="current-session" ng-show="currentSession">
-        <h4 class="p-sm">
+        <h3 class="font-bolder p-sm text-uppercase">
           [<%= t('activerecord.models.plenary_session.one') %> {{kinds[currentSession.kind]}}]
           {{currentSession.title}}
-          <a href ng-click="resetCurrentSession()">(Trocar)</a>
-        </h4>
+          <a href ng-click="resetCurrentSession()">(TROCAR)</a>
+        </h3>
         <div ng-if="currentSession.subscriptions">
           <hr>
-          <p><strong>Inscrever-se para falar sobre:</strong></p>
+          <h4 class="m-b-sm text-underline">INSCREVER-SE PARA FALAR SOBRE:</h3>
           <% t('enums.specific_items.subscription.kind').each do |kind, label| %>
-            <button class="btn {{findSubscriptionByKind('<%= kind %>') ? 'btn-success active' : 'btn-white'}}"
+            <button class="btn btn-lg fadeOut {{findSubscriptionByKind('<%= kind %>') ? 'btn-success active' : 'btn-white'}}"
                 ng-click="findSubscriptionByKind('<%= kind %>') ? unsubscribeFrom('<%= kind %>') : subscribeIn('<%= kind %>')"
                 ng-disabled="loading">
 
-              <%= label %>
+              <%= label.mb_chars.upcase %>
             </button>
           <% end %>
         </div>
       </div>
     </div>
     <hr>
-    <h3 class="text-right">
+    <h2 class="text-right font-bolder">
       <%= link_to destroy_session_path(:councillor), method: :delete, data: {confirm: t('confirm.signout')} do %>
         <%= t('profile.signout').mb_chars.upcase %>
       <% end %>
-    </h3>
+    </h2>
   </div>
 </div>
 
