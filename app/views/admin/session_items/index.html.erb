@@ -86,6 +86,9 @@
                 <td data-title="'<%= t('activerecord.attributes.session_item.author') %>'" data-sortable="'councillors.name'">
                   {{session_item.author}}
                 </td>
+                <td data-title="'<%= t('activerecord.attributes.session_item.abstract') %>'" data-sortable="'session_items.abstract'">
+                  <span ng-bind-html="(session_item.abstract || '').replace('\n', '<br>') | trust"></span>
+                </td>
                 <td data-title="'<%= t('activerecord.attributes.session_item.acceptance') %>'" data-sortable="'session_items.acceptance'">
                   {{acceptances[session_item.acceptance]}}
                 </td>

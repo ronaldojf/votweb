@@ -132,6 +132,7 @@
                     <tr>
                       <th><%= t('activerecord.attributes.session_item.title') %></th>
                       <th><%= t('activerecord.attributes.session_item.author') %></th>
+                      <th><%= t('activerecord.attributes.session_item.abstract') %></th>
                       <th><%= t('activerecord.attributes.session_item.acceptance') %></th>
                     </tr>
                   </thead>
@@ -140,6 +141,7 @@
                       <tr>
                         <td><%= index + 1 %>. <%= item.title %></td>
                         <td><%= item.author.try(:name) || t('miscellaneous.session_item.no_author') %></td>
+                        <td><%= sanitize item.abstract.to_s.gsub("\n", '<br>'), tags: %w(br) %></td>
                         <td><%= t(item.acceptance, scope: [:enums, :specific_items, :session_item, :acceptance]) %></td>
                       </tr>
                     <% end %>
