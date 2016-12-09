@@ -86,7 +86,7 @@ end
   { name: 'Alessandro Dal Zotto', party: 'PSB', is_active: true },
   { name: 'Flávio de Barcellos', party: 'PDT', is_active: true },
   { name: 'Gilson Roberto Serafin', party: 'PSD', is_active: true },
-  { name: 'Sandra Regina Picoli Ostrovski', party: 'PC do B', is_active: true }
+  { name: 'Sandra Regina Picoli Ostrovski', party: 'PCdoB', is_active: true }
 ].each do |councillor|
   unless Councillor.where(name: councillor[:name]).exists?
     puts "==> Criando vereador(a) #{councillor[:name]}"
@@ -96,7 +96,7 @@ end
     attributes[:party] = Party.find_by!(abbreviation: attributes[:party])
 
     Councillor.create! attributes.merge({
-      username: names[0] + names[-1],
+      username: I18n.transliterate(names[0] + names[-1]),
       password: 'votweb123'
     })
   end
