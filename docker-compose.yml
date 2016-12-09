@@ -18,10 +18,6 @@ services:
     image: votweb/votweb:latest
     restart: always
     environment:
-      RAILS_ENV: production
-      RACK_ENV: production
-      WEB_CONCURRENCY: 2
-      MAX_THREADS: 10
       REDISTOGO_URL: 'redis://redis:6379/1'
       ROLLBAR_ACCESS_TOKEN: 24268bdf0325412cae2ba66fe081c00f
     ports:
