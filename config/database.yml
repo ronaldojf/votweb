@@ -22,6 +22,7 @@ production:
   min_messages: WARNING
 <% else %>
 production:
+  adapter: postgresql
   database: votweb
   pool: 20
   username: postgres
