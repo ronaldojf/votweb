@@ -13,9 +13,19 @@ test:
   database: votweb_test
   min_messages: WARNING
 
+<% if ENV['HEROKU_ENV'].present? %>
 production:
   adapter: postgresql
   url: <%= ENV['DATABASE_URL'] %>
   encoding: utf8
   pool: 20
   min_messages: WARNING
+<% else %>
+production:
+  database: votweb
+  pool: 20
+  username: postgres
+  host: db
+  template: template0
+  password: <%= ENV['DB_ENV_POSTGRES_PASSWORD'] %>
+<% end %>
