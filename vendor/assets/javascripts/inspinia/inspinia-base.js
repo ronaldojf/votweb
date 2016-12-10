@@ -166,7 +166,7 @@ $(window).bind("resize", function () {
 // Local Storage functions
 // Set proper body class and plugins based on user configuration
 $(document).on('turbolinks:load', function () {
-  if (localStorageSupport) {
+  if (localStorageSupport()) {
 
     var collapse = localStorage.getItem("collapse_menu");
     var fixedsidebar = localStorage.getItem("fixedsidebar");
