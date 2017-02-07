@@ -182,7 +182,7 @@ angular
     $scope.openPollModal = function(description) {
       if (!$scope.countdownRunning) {
         angular.element('#add-poll').modal('show');
-        $scope.newPoll = { description: description, process: 'symbolic', duration: 20 };
+        $scope.newPoll = { description: description, process: 'named', duration: 20 };
         $timeout(function() {
           angular.element('#poll-description').focus();
         }, 600);

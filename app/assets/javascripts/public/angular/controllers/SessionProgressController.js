@@ -143,7 +143,11 @@ angular
           checkCountdowns($scope.currentSession);
         }
 
-        angular.element('#fullscreen-request').modal();
+        var fullscreenRequestModal = angular.element('#fullscreen-request');
+
+        fullscreenRequestModal.on('shown.bs.modal', function() {
+          angular.element('#fullscreen-button').focus();
+        }).modal();
       })
       .error(function(errors) {
         console.log(errors);
