@@ -1,0 +1,51 @@
+<div id="print-member-details" class="visible-print">
+  <table class="m-b-md">
+    <tbody>
+      <tr>
+        <td class="text-right"><strong><%= t('activerecord.attributes.councillor.name') %>:</strong></td>
+        <td>&nbsp;&nbsp;{{memberDetails.councillor.name}}</td>
+      </tr>
+      <tr>
+        <td class="text-right"><strong><%= t('activerecord.attributes.councillor.party_id') %>:</strong></td>
+        <td>&nbsp;&nbsp;{{memberDetails.councillor.party.abbreviation}}</td>
+      </tr>
+      <tr>
+        <td class="text-right"><strong><%= t('activerecord.attributes.session_member.is_president') %></strong></td>
+        <td>&nbsp;&nbsp;{{memberDetails.is_president ? '<%= t('buttons.accept') %>' : '<%= t('buttons.deny') %>'}}</td>
+      </tr>
+      <tr>
+        <td class="text-right"><strong><%= t('activerecord.attributes.session_member.is_present') %></strong></td>
+        <td>&nbsp;&nbsp;{{memberDetails.is_present ? '<%= t('buttons.accept') %>' : '<%= t('buttons.deny') %>'}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3><%= t('activerecord.models.poll.other') %></h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= t('activerecord.attributes.poll.description') %></th>
+        <th><%= t('activerecord.attributes.poll.process') %></th>
+        <th><%= t('activerecord.attributes.poll.created_at') %></th>
+        <th><%= t('activerecord.models.vote.one') %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr ng-repeat="poll in (plenarySession.polls | orderBy:'-created_at') track by poll.id">
+        <td>
+          {{poll.description | truncate:60}}
+          <span class="text-muted" ng-hide="poll.description"><%= t('info.no_description') %></span>
+        </td>
+        <td>{{pollProcesses[poll.process]}}</td>
+        <td>{{poll.created_at | date:'medium'}}</td>
+        <td>
+          <span ng-show="poll.process === 'secret'"><%= t('miscellaneous.poll.undefined_voter') %></span>
+          <span ng-hide="poll.process === 'secret'">
+            {{ voteKinds[((poll.votes || []) | filter:{councillor_id: memberDetails.councillor.id})[0].kind] || '<%= t('miscellaneous.vote.absence') %>' }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

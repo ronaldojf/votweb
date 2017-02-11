@@ -41,11 +41,26 @@
               <td>{{poll.created_at | date:'medium'}}</td>
               <td class="text-right">
                 <button class="btn btn-xs btn-warning"
-                ng-show="!poll.stopped && poll.countdownPromise"
-                ng-disabled="poll.stopping"
-                ng-click="stopPoll(poll)"><%= t('buttons.stop') %></button>
+                    ng-show="!poll.stopped && poll.countdownPromise"
+                    ng-disabled="poll.stopping"
+                    ng-click="stopPoll(poll)">
+                  <%= t('buttons.stop') %>
+                </button>
 
                 <button class="btn btn-xs btn-white" ng-click="openPollDetailsModal(poll)"><%= t('buttons.details') %></button>
+
+                <button class="btn btn-xs btn-white"
+                    ng-hide="!poll.stopped && poll.countdownPromise"
+                    ng-click="
+                      print({
+                        element: '#poll-details .modal-body',
+                        title: poll.description ? ('VOTAÇÃO: ' + poll.description) : 'VOTAÇÃO',
+                        scope: {
+                          pollDetails: poll
+                        }
+                      })">
+                  <%= t('buttons.print') %>
+                </button>
               </td>
             </tr>
           </tbody>

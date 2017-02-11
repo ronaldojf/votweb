@@ -1,3 +1,5 @@
+#!/bin/bash -e
+
 cd $HOME/votweb
 docker pull votweb/votweb:latest
 

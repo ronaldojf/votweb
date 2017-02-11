@@ -267,6 +267,40 @@ angular
       }
     };
 
+    $scope.print = function(options) {
+      var titleSplit = ['VotWEB', $scope.plenarySession.title];
+      if (!options) { options = {}; }
+      if (options.title) { titleSplit.push(options.title); }
+
+      if (options.scope) {
+        var keys = Object.keys(options.scope);
+        for (var i = 0; i < keys.length; i++) {
+          $scope[keys[i]] = options.scope[keys[i]];
+        }
+      }
+
+      $timeout(function() {
+        angular.element(options.element || 'body').print({title: titleSplit.join(' | ')});
+      });
+    };
+
+    $scope.absentMembersInPoll = function(poll) {
+      var councillorsWhoVoted = [];
+      var result = [];
+
+      for (var i = 0; i < (poll.votes || []).length; i++) {
+        var id = poll.votes[i].councillor_id;
+        if (id) { councillorsWhoVoted.push(id); }
+      }
+
+      for (var i = 0; i < (($scope.plenarySession || {}).members || []).length; i++) {
+        var member = $scope.plenarySession.members[i];
+        if (councillorsWhoVoted.indexOf(member.councillor.id) < 0) { result.push(member); }
+      }
+
+      return result;
+    };
+
     var collectionRefresh = function(collection, object, options) {
       options = options || {};
       var index = collection.map(function(currentObject) { return currentObject.id; }).indexOf(object.id);

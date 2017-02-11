@@ -39,6 +39,10 @@ pt-BR:
         zero: Nenhum voto
         one: '1 voto'
         other: '%{count} votos'
+      members:
+        zero: Nenhum participante
+        one: '1 participante'
+        other: '%{count} participantes'
     errors:
       searching_records: 'Ocorreu um erro ao tentar buscar os registros, tente novamente mais tarde'
     datepicker:

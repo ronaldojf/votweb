@@ -317,18 +317,22 @@ pt-BR:
       add: Adicionar item da ordem do dia
       list: Ordem do dia
       add_to_session_info: Somente itens não ligados a nenhuma sessão podem ser adicionados
-      no_author: Poder Executivo
+      no_author: Poder Executivo/TCE
       no_session: Nenhuma sessão adicionou este item ainda
     session_member:
       president: Presidente
     poll:
       add: Criar votação
+      undefined_voter: Não identificado
     queue:
       add: Criar fila de vereadores(as)
       attendance: Chamada de presença
       override_attendance: Sobrescrever todas as faltas já atribuídas?
     countdown:
       add: Criar contagem regressiva
+    vote:
+      absence: Ausência
+      absent: Ausente
 
   activerecord:
     <<: *models_and_attributes

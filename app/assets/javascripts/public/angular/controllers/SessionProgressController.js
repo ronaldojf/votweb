@@ -238,6 +238,7 @@ angular
           if (object.countdown <= 0) {
             clearCountdown(object);
             inactivityCountdown('on');
+            playSound();
           }
         }, 500);
       }
@@ -303,5 +304,15 @@ angular
       $scope.pieChart[($scope.currentPoll.approvationCount || 0) > 0 ? 'show' : 'hide']($scope.voteTypes.approvation);
       $scope.pieChart[($scope.currentPoll.rejectionCount || 0) > 0 ? 'show' : 'hide']($scope.voteTypes.rejection);
       $scope.pieChart[($scope.currentPoll.abstentionCount || 0) > 0 ? 'show' : 'hide']($scope.voteTypes.abstention);
+    };
+
+    var playSound = function() {
+      var soundContainer = angular.element('#sound-container');
+      if (soundContainer.length === 0) {
+        angular.element('body').append('<div id="sound-container" class="hide"></div>');
+        soundContainer = angular.element('#sound-container');
+      }
+
+      soundContainer.html('<audio autoplay="autoplay"><source src="ding.ogg" type="audio/ogg" /></audio>');
     };
   }]);

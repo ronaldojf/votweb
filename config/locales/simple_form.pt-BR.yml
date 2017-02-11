@@ -35,4 +35,4 @@ pt-BR:
       #   username: 'User name to sign in.'
       #   password: 'No special characters, please.'
       session_item:
-        author: 'Deixe em branco caso o autor seja o Poder Executivo.'
+        author: 'Deixe em branco caso o autor seja o Poder Executivo ou o TCE.'

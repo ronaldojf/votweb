@@ -3,7 +3,7 @@
     <div class="col-xs-12 text-right">
       <%= link_to '', class: 'btn btn-w-s btn-white',
           'ng-show' => '!loading && plenarySession.items.length > 0',
-          'onclick' => "$(this).parents('.panel-body:first').print({title: 'VotWEB | #{@plenary_session.title} | ORDEM DO DIA'})" do %>
+          'ng-click' => "print({element: '#session-items-list .panel-body:first', title: 'ORDEM DO DIA'})" do %>
         <i class="fa fa-print"></i><br/>
         <%= t('buttons.print') %>
       <% end %>

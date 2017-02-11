@@ -54,14 +54,30 @@
         </span>
       </div>
       <div class="modal-body">
-        <table>
+        <table class="m-b-sm">
           <tbody>
+            <tr class="visible-print">
+              <td class="text-right"><strong><%= t('activerecord.attributes.poll.description') %>:</strong></td>
+              <td>&nbsp;&nbsp;{{pollDetails.description}}</td>
+            </tr>
+            <tr class="visible-print">
+              <td class="text-right"><strong><%= t('activerecord.attributes.poll.process') %>:</strong></td>
+              <td>&nbsp;&nbsp;{{pollProcesses[pollDetails.process]}}</td>
+            </tr>
+            <tr class="visible-print">
+              <td class="text-right"><strong><%= t('activerecord.attributes.poll.duration') %>:</strong></td>
+              <td>&nbsp;&nbsp;{{ 'info.seconds' | t:{count: pollDetails.duration || 0} }}</td>
+            </tr>
+            <tr class="visible-print">
+              <td class="text-right"><strong><%= t('activerecord.attributes.poll.created_at') %>:</strong></td>
+              <td>&nbsp;&nbsp;{{ pollDetails.created_at | date:'medium' }}</td>
+            </tr>
             <tr>
-              <td class="text-right"><strong>Participantes:</strong></td>
+              <td class="text-right"><strong><%= t('activerecord.attributes.plenary_session.members') %>:</strong></td>
               <td>&nbsp;&nbsp;{{plenarySession.members.length}}</td>
             </tr>
             <tr>
-              <td class="text-right"><strong>Votos:</strong></td>
+              <td class="text-right"><strong><%= t('activerecord.models.vote.other') %>:</strong></td>
               <td>&nbsp;&nbsp;{{pollDetails.votes.length}}</td>
             </tr>
           </tbody>
@@ -73,6 +89,7 @@
               <th class="text-navy"><%= t('enums.specific_items.vote.kind.approvation') %></th>
               <th class="text-danger"><%= t('enums.specific_items.vote.kind.rejection') %></th>
               <th class="text-muted"><%= t('enums.specific_items.vote.kind.abstention') %></th>
+              <th class="visible-print"><%= t('miscellaneous.vote.absence') %></th>
             </tr>
           </thead>
 
@@ -81,9 +98,10 @@
               <td>{{ pollDetails.approvationVotes = ((pollDetails.votes || []) | filter:{kind: 'approvation'}); 'info.votes' | t:{count: pollDetails.approvationVotes.length} }}</td>
               <td>{{ pollDetails.rejectionVotes = ((pollDetails.votes || []) | filter:{kind: 'rejection'}); 'info.votes' | t:{count: pollDetails.rejectionVotes.length} }}</td>
               <td>{{ pollDetails.abstentionVotes = ((pollDetails.votes || []) | filter:{kind: 'abstention'}); 'info.votes' | t:{count: pollDetails.abstentionVotes.length} }}</td>
+              <td class="visible-print">{{ pollDetails.absentMembers = absentMembersInPoll(pollDetails); 'info.members' | t:{count: pollDetails.absentMembers.length} }}</td>
             </tr>
             <hr ng-hide="pollDetails.process === 'secret'">
-            <tr ng-hide="pollDetails.process === 'secret'">
+            <tr ng-if="pollDetails.process !== 'secret'">
               <td class="text-navy">
                 <div class="row-padding" ng-repeat="vote in pollDetails.approvationVotes track by vote.councillor_id">{{getCouncillor(vote.councillor_id).name}}</div>
               </td>
@@ -92,6 +110,9 @@
               </td>
               <td class="text-muted">
                 <div class="row-padding" ng-repeat="vote in pollDetails.abstentionVotes track by vote.councillor_id">{{getCouncillor(vote.councillor_id).name}}</div>
+              </td>
+              <td class="visible-print">
+                <div class="row-padding" ng-repeat="member in pollDetails.absentMembers track by member.id">{{member.councillor.name}}</div>
               </td>
             </tr>
           </tbody>

@@ -1,9 +1,16 @@
 <div class="panel-body">
-  <div class="row m-b-md">
+  <div class="row m-b-md hidden-print">
     <div class="col-xs-12 text-right">
       <%= link_to '', class: 'btn btn-w-s btn-success', 'ng-click' => "openQueueModal('attendance')", 'ng-disabled' => 'loading || countdownRunning' do %>
         <i class="fa fa-list-ul"></i><br/>
         <%= t('buttons.attendance') %>
+      <% end %>
+
+      <%= link_to '', class: 'btn btn-w-s btn-white',
+          'ng-show' => '!loading && plenarySession.members.length > 0',
+          'ng-click' => "print({element: '#members .panel-body:first', title: 'PARTICIPANTES'})" do %>
+        <i class="fa fa-print"></i><br/>
+        <%= t('buttons.print') %>
       <% end %>
     </div>
   </div>
@@ -25,6 +32,7 @@
               <th><%= t('activerecord.attributes.councillor.party_id') %></th>
               <th><%= t('activerecord.attributes.session_member.is_president') %></th>
               <th><%= t('activerecord.attributes.session_member.is_present') %></th>
+              <th class="hidden-print"></th>
             </tr>
           </thead>
 
@@ -32,13 +40,30 @@
             <tr ng-repeat="member in plenarySession.members track by member.id" ng-class="{'warning': member.is_present === false}">
               <td>{{$index + 1}}. {{member.councillor.name}}</td>
               <td>{{member.councillor.party.abbreviation}}</td>
-              <td><i class="fa {{member.is_president ? 'fa-check text-navy' : 'fa-times text-muted'}}"></i></td>
               <td>
-                <i class="fa" ng-class="{
+                <i class="hidden-print fa {{member.is_president ? 'fa-check text-navy' : 'fa-times text-muted'}}"></i>
+                <span class="visible-print">{{member.is_president ? '<%= t('buttons.accept') %>' : '<%= t('buttons.deny') %>'}}</span>
+              </td>
+              <td>
+                <i class="hidden-print fa" ng-class="{
                   'fa-check text-navy': member.is_present,
                   'fa-times text-warning': member.is_present === false,
                   'fa-ellipsis-h text-muted': member.is_present === null
                 }"></i>
+                <span class="visible-print">{{member.is_present ? '<%= t('buttons.accept') %>' : '<%= t('buttons.deny') %>'}}</span>
+              </td>
+              <td class="text-right hidden-print">
+                <button class="btn btn-xs btn-white"
+                    ng-click="
+                      print({
+                        element: '#print-member-details',
+                        title: member.councillor.name.toUpperCase() + ' (' + member.councillor.party.abbreviation + ')',
+                        scope: {
+                          memberDetails: member
+                        }
+                      })">
+                  <%= t('buttons.print') %>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -47,3 +72,5 @@
     </div>
   </div>
 </div>
+
+<%= render partial: 'admin/plenary_sessions/session_managements/partials/print_member' %>
