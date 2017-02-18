@@ -8,7 +8,6 @@ angular
     var LOCAL_STORAGE_QUEUE_KEY = 'last_queue_participation';
 
     $scope.loading = false;
-    $scope.tickingClockDateTime = new Date();
     $scope.cable = $cable();
 
     $scope.initSessions = function(sessions) {
@@ -259,8 +258,4 @@ angular
         return $window.localStorage.getItem(key);
       }
     };
-
-    var tickingClockPromise = $interval(function() {
-      $scope.tickingClockDateTime = new Date();
-    }, 1000);
   }]);

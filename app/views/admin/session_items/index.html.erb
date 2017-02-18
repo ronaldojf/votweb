@@ -89,6 +89,9 @@
                 <td data-title="'<%= t('activerecord.attributes.session_item.abstract') %>'" data-sortable="'session_items.abstract'">
                   <span ng-bind-html="(session_item.abstract || '').replace('\n', '<br>') | trust"></span>
                 </td>
+                <td data-title="'<%= t('activerecord.attributes.session_item.created_at') %>'" data-sortable="'session_items.created_at'">
+                  {{session_item.created_at | date:'medium'}}
+                </td>
                 <td data-title="'<%= t('activerecord.attributes.session_item.acceptance') %>'" data-sortable="'session_items.acceptance'">
                   {{acceptances[session_item.acceptance]}}
                 </td>

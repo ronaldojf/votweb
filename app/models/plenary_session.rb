@@ -9,6 +9,7 @@ class PlenarySession < ApplicationRecord
   has_many :countdowns
   has_many :subscriptions
   accepts_nested_attributes_for :members, allow_destroy: true
+  accepts_nested_attributes_for :items
 
   enum kind: [:ordinary, :extraordinary, :solemn, :special]
 

@@ -16,7 +16,7 @@ pt-BR:
       councillors: Vereadores(as)
       parties: Partidos
       surrogates: Suplentes
-      session_items: Itens da ordem do dia
+      session_items: Expediente político
       plenary_sessions: Sessões
       holds: Cadeiras
       session_managements: Gerenciamento de sessão
@@ -79,7 +79,7 @@ pt-BR:
     no_results: Nenhum resultado encontrado
     no_roles: Nenhuma função adicionada
     no_councillors: Nenhum(a) vereador(a) adicionado(a)
-    no_session_items: Nenhum item da ordem do dia adicionado
+    no_session_items: Nenhum item do expediente político adicionado
     no_president: Nenhum presidente foi adicionado
     no_member: Nenhum participante foi adicionado
     editing_password: Preencha apenas se deseja alterar...
@@ -151,8 +151,8 @@ pt-BR:
         one: Suplente
         other: Suplentes
       session_item:
-        one: Item da ordem do dia
-        other: Itens da ordem do dia
+        one: Expediente político
+        other: Expediente político
       plenary_session:
         one: Sessão
         other: Sessões
@@ -209,6 +209,7 @@ pt-BR:
         author_id: Autor
         acceptance: Aceitação
         abstract: Ementa
+        created_at: Criado em
       plenary_session:
         title: Título
         kind: Tipo
@@ -314,8 +315,8 @@ pt-BR:
       add: Adicionar vereador(a)
       add_to_session_info: Somente vereadores(as) ativos(as) podem ser adicionados(as)
     session_item:
-      add: Adicionar item da ordem do dia
-      list: Ordem do dia
+      add: Adicionar item do expediente político
+      list: Expediente político
       add_to_session_info: Somente itens não ligados a nenhuma sessão podem ser adicionados
       no_author: Poder Executivo/TCE
       no_session: Nenhuma sessão adicionou este item ainda

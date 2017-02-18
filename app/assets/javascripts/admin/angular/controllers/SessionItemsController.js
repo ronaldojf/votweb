@@ -8,7 +8,7 @@ angular
       $scope.tableParams = $scope.NgTableService.init({
         page: config.page,
         count: config.count,
-        sorting: config.sorting,
+        sorting: Object.keys(config.sorting || {}).length > 0 ? config.sorting : { 'session_items.created_at': 'desc' },
         filter: $scope.filters,
         url: $window.localizedPath('admin_session_items')
       });

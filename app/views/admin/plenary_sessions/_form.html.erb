@@ -38,7 +38,7 @@
               </div>
 
               <div class="col-xs-12 col-sm-6">
-                <%= f.input :start_at, as: :string, input_html: { class: 'datetimepicker' } %>
+                <%= f.input :start_at, as: :string, input_html: { class: 'datetimepicker', 'ng-model' => 'plenarySession.start_at' } %>
               </div>
             </div>
 
@@ -125,13 +125,15 @@
                   </thead>
 
                   <tbody>
-                    <tr ng-repeat="item in (plenarySession.items | orderBy:'title') track by $index">
+                    <tr ng-repeat="item in (plenarySession.items | orderBy:'sort') track by $index">
                       <td>{{item.title}}</td>
                       <td>{{item.author.name || '<%= t('miscellaneous.session_item.no_author') %>'}}</td>
                       <td>{{acceptances[item.acceptance]}}</td>
                       <td class="text-right">
                         <a href class="btn btn-xs btn-danger" ng-click="removeItem(item)"><i class="fa fa-trash"></i></a>
                         <input type="hidden" name="plenary_session[item_ids][]" ng-value="item.id" />
+                        <input type="hidden" name="plenary_session[items_attributes[]][id]" ng-value="item.id" />
+                        <input type="hidden" name="plenary_session[items_attributes[]][sort]" ng-model="item.sort" ng-value="$index" />
                       </td>
                     </tr>
                   </tbody>

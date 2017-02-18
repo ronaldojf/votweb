@@ -4,10 +4,6 @@
   kinds = <%= t('enums.specific_items.plenary_session.kind').to_json %>;
   initSessions(<%= @plenary_sessions.to_json(only: [:id, :title, :kind]) %>);">
 
-  <div class="profile-box-header">
-    <h1 class="font-bolder">{{tickingClockDateTime | date:'short'}}</h1>
-  </div>
-
   <div class="profile-box-body">
     <h1 class="text-center text-navy font-bolder"><%= current_user.name.mb_chars.upcase %></h1>
     <hr>

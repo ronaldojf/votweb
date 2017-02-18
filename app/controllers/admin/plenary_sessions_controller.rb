@@ -21,7 +21,7 @@ class Admin::PlenarySessionsController < Admin::BaseController
 
     @items = @plenary_session.items
                   .includes(:author)
-                  .order(:title)
+                  .order(:sort)
   end
 
   def new
@@ -62,6 +62,7 @@ class Admin::PlenarySessionsController < Admin::BaseController
               .permit(
                 :title, :kind, :start_at, :is_test, item_ids: [],
                 members_attributes: [:id, :councillor_id, :is_president, :_destroy],
+                items_attributes: [:id, :sort]
               )
 
     result[:item_ids] ||= []

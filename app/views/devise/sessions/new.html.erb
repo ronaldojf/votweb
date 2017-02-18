@@ -8,11 +8,11 @@
       <h2 class="font-bold text-center"><%= t("login.#{resource.is_a?(Councillor) ? 'councillor' : 'administrator'}.welcome") %></h2>
 
       <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'm-t'}) do |f| %>
-        <%= f.input (resource.is_a?(Councillor) ? :username : :email), required: true, label: false %>
-        <%= f.input :password, required: true, label: false %>
+        <%= f.input (resource.is_a?(Councillor) ? :username : :email), required: true, label: false, input_html: { class: 'input-lg' } %>
+        <%= f.input :password, required: true, label: false, input_html: { class: 'input-lg' } %>
 
         <%= flash_messages %>
-        <%= f.button :submit, t('buttons.signin'), class: 'btn btn-primary block full-width m-b' %>
+        <%= f.button :submit, t('buttons.signin'), class: 'btn btn-primary btn-block btn-lg full-width m-b' %>
       <% end %>
     </div>
 

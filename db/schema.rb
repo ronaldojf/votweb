@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161204101110) do
+ActiveRecord::Schema.define(version: 20170218132306) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(version: 20161204101110) do
     t.integer  "acceptance",         default: 0, null: false
     t.integer  "plenary_session_id"
     t.string   "abstract"
+    t.integer  "sort"
     t.index ["councillor_id"], name: "index_session_items_on_councillor_id", using: :btree
     t.index ["deleted_at"], name: "index_session_items_on_deleted_at", using: :btree
     t.index ["plenary_session_id"], name: "index_session_items_on_plenary_session_id", using: :btree
