@@ -65,6 +65,8 @@ pt-BR:
     attendance: Chamada
     print: Imprimir
     president_vote: Voto do presidente
+    lock_subscriptions: Bloquear inscrições
+    unlock_subscriptions: Desloquear inscrições
 
   login:
     administrator:
@@ -95,6 +97,7 @@ pt-BR:
 
   warnings:
     secret_poll_president_needed: Durante a votação secreta, o presidente deve utilizar o painel do vereador para poder votar.
+    subscriptions_locked: As inscrições estão bloqueadas e os participantes não podem se inscrever ou desincrever.
     unlock_record_html: |
       Este registro foi bloqueado por atingir %{maximum_attempts} tentativas seguidas de entrar no sistema com a senha incorreta.
       <strong>

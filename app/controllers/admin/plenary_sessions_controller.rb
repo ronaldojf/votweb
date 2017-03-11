@@ -60,12 +60,11 @@ class Admin::PlenarySessionsController < Admin::BaseController
     result = params
               .require(:plenary_session)
               .permit(
-                :title, :kind, :start_at, :is_test, item_ids: [],
+                :title, :kind, :start_at, :is_test, :is_subscriptions_locked, item_ids: [],
                 members_attributes: [:id, :councillor_id, :is_president, :_destroy],
                 items_attributes: [:id, :sort]
               )
 
-    result[:item_ids] ||= []
     result
   end
 end

@@ -294,6 +294,22 @@ angular
       });
     };
 
+    $scope.toogleLockSubscriptions = function() {
+      if ($scope.loading) { return; }
+      $scope.loading = true;
+
+      PlenarySession[$scope.plenarySession.is_subscriptions_locked ? 'unlockSubscriptions' : 'lockSubscriptions']($scope.plenarySession.id)
+      .success(function() {
+        $scope.plenarySession.is_subscriptions_locked = !$scope.plenarySession.is_subscriptions_locked;
+      })
+      .error(function(errors) {
+        console.log(errors);
+      })
+      .finally(function() {
+        $scope.loading = false;
+      });
+    };
+
     $scope.print = function(options) {
       var titleSplit = ['VotWEB', $scope.plenarySession.title];
       if (!options) { options = {}; }

@@ -4,16 +4,20 @@ class Panel::PlenarySessions::SubscriptionsController < Panel::PlenarySessions::
   def create
     @subscription = subscription_scope.build(subscription_params)
 
-    if @subscription.save
-      render partial: 'partials/subscriptions/subscription', locals: { subscription: @subscription }
+    if !@plenary_session.is_subscriptions_locked? && @subscription.save
+      render partial: 'partials/subscriptions/subscription', locals: { subscription: @subscription }, status: :created
     else
       render json: @subscription.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @subscription.destroy
-    head :no_content
+    if @plenary_session.is_subscriptions_locked?
+      head :unprocessable_entity
+    else
+      @subscription.destroy
+      head :no_content
+    end
   end
 
   private

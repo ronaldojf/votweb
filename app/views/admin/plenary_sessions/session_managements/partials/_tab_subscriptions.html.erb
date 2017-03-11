@@ -1,4 +1,18 @@
 <div class="panel-body">
+  <div class="row m-b-md">
+    <div class="col-xs-12 text-right">
+      <%= link_to '', class: 'btn btn-w-s',
+          'ng-class' => "{'btn-warning': !plenarySession.is_subscriptions_locked, 'btn-success': plenarySession.is_subscriptions_locked}",
+          'ng-click' => 'toogleLockSubscriptions()',
+          'ng-disabled' => 'loading' do %>
+
+      <i class="fa fa-{{plenarySession.is_subscriptions_locked ? 'unlock' : 'lock'}}"></i><br/>
+      {{plenarySession.is_subscriptions_locked ? '<%= t('buttons.unlock_subscriptions') %>' : '<%= t('buttons.lock_subscriptions') %>'}}
+      <% end %>
+    </div>
+  </div>
+
+  <%= custom_flash_messages warning: {show: true, fixed: true, icon: :warning, message: t('warnings.subscriptions_locked')}, html: {'ng-show' => 'plenarySession.is_subscriptions_locked'} %>
   <%= custom_flash_messages info: {show: true, fixed: true, icon: :info, message: t('info.no_results')}, html: {'ng-hide' => 'loading || plenarySession.subscriptions.length > 0'} %>
 
   <div ng-show="loading || plenarySession.subscriptions.length > 0">
