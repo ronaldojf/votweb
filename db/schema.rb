@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170311205350) do
+ActiveRecord::Schema.define(version: 20170311214557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -154,9 +154,10 @@ ActiveRecord::Schema.define(version: 20170311205350) do
   create_table "subscriptions", force: :cascade do |t|
     t.integer  "plenary_session_id"
     t.integer  "councillor_id"
-    t.integer  "kind",               default: 0, null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.integer  "kind",               default: 0,     null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.boolean  "is_done",            default: false, null: false
     t.index ["councillor_id"], name: "index_subscriptions_on_councillor_id", using: :btree
     t.index ["plenary_session_id"], name: "index_subscriptions_on_plenary_session_id", using: :btree
   end

@@ -58,7 +58,7 @@ pt-BR:
     stop: Encerrar
     details: Detalhes
     new_poll: Nova votação
-    new_countdown: Nova contagem regressiva
+    new_countdown: Nova contagem
     mark_as: Marcar como
     accept: Sim
     deny: Não
@@ -67,6 +67,8 @@ pt-BR:
     president_vote: Voto do presidente
     lock_subscriptions: Bloquear inscrições
     unlock_subscriptions: Desloquear inscrições
+    done: Concluído
+    undone: Não concluído
 
   login:
     administrator:

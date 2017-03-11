@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       end
 
       resources :roles, :councillors, :parties, :session_items
+      resources :subscriptions, only: [:update]
 
       root 'home#index'
     end

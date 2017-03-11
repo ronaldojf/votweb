@@ -1,8 +1,8 @@
 angular
   .module('votweb.controllers')
   .controller('SessionManagementController', [
-      '$scope', '$cable', '$timeout', '$interval', 'PlenarySession', 'Poll', 'CouncillorsQueue', 'SessionItem', 'Countdown',
-      function($scope, $cable, $timeout, $interval, PlenarySession, Poll, CouncillorsQueue, SessionItem, Countdown) {
+      '$scope', '$cable', '$timeout', '$interval', 'PlenarySession', 'Poll', 'CouncillorsQueue', 'SessionItem', 'Countdown', 'Subscription',
+      function($scope, $cable, $timeout, $interval, PlenarySession, Poll, CouncillorsQueue, SessionItem, Countdown, Subscription) {
 
     $scope.cable = $cable();
     $scope.loading = false;
@@ -294,13 +294,30 @@ angular
       });
     };
 
-    $scope.toogleLockSubscriptions = function() {
+    $scope.toggleLockSubscriptions = function() {
       if ($scope.loading) { return; }
       $scope.loading = true;
 
       PlenarySession[$scope.plenarySession.is_subscriptions_locked ? 'unlockSubscriptions' : 'lockSubscriptions']($scope.plenarySession.id)
       .success(function() {
         $scope.plenarySession.is_subscriptions_locked = !$scope.plenarySession.is_subscriptions_locked;
+      })
+      .error(function(errors) {
+        console.log(errors);
+      })
+      .finally(function() {
+        $scope.loading = false;
+      });
+    };
+
+    $scope.toggleDoneSubscription = function(subscription) {
+      if ($scope.loading) { return; }
+      $scope.loading = true;
+
+      var isSubscriptionDone = subscription.is_done; // pode acontecer que a modificação volte mais rápido no websockets do quê no request HTTP
+      Subscription[isSubscriptionDone ? 'markAsUndone' : 'markAsDone'](subscription.id)
+      .success(function() {
+        subscription.is_done = !isSubscriptionDone;
       })
       .error(function(errors) {
         console.log(errors);

@@ -3,7 +3,7 @@
     <div class="col-xs-12 text-right">
       <%= link_to '', class: 'btn btn-w-s',
           'ng-class' => "{'btn-warning': !plenarySession.is_subscriptions_locked, 'btn-success': plenarySession.is_subscriptions_locked}",
-          'ng-click' => 'toogleLockSubscriptions()',
+          'ng-click' => 'toggleLockSubscriptions()',
           'ng-disabled' => 'loading' do %>
 
       <i class="fa fa-{{plenarySession.is_subscriptions_locked ? 'unlock' : 'lock'}}"></i><br/>
@@ -34,7 +34,7 @@
           </thead>
 
           <tbody ng-if="plenarySession.subscriptions">
-            <tr ng-repeat="subscription in (plenarySession.subscriptions | orderBy:['kind_index', 'created_at']) track by subscription.id">
+            <tr ng-repeat="subscription in (plenarySession.subscriptions | orderBy:['kind_index', 'created_at']) track by subscription.id" ng-class="{'success': subscription.is_done}">
               <td>{{$index + 1}}. {{subscriptionKinds[subscription.kind]}}</td>
               <td>{{subscription.councillor.name}} ({{subscription.councillor.party.abbreviation}})</td>
               <td>{{subscription.created_at | date:'medium'}}</td>
@@ -42,6 +42,10 @@
                 <button class="btn btn-xs btn-primary"
                     ng-click="openCountdownRecordModal(subscriptionKinds[subscription.kind] + ' - ' + subscription.councillor.name + ' (' + subscription.councillor.party.abbreviation + ')')">
                   <%= t('buttons.new_countdown') %>
+                </button>
+
+                <button class="btn btn-xs btn-{{subscription.is_done ? 'white' : 'success'}}" ng-click="toggleDoneSubscription(subscription)" ng-disabled="loading">
+                  {{subscription.is_done ? '<%= t('buttons.undone') %>' : '<%= t('buttons.done') %>'}}
                 </button>
               </td>
             </tr>

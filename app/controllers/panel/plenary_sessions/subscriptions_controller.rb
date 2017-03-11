@@ -12,11 +12,10 @@ class Panel::PlenarySessions::SubscriptionsController < Panel::PlenarySessions::
   end
 
   def destroy
-    if @plenary_session.is_subscriptions_locked?
-      head :unprocessable_entity
-    else
-      @subscription.destroy
+    if !@plenary_session.is_subscriptions_locked? && @subscription.destroy
       head :no_content
+    else
+      head :unprocessable_entity
     end
   end
 

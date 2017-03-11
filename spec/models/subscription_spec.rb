@@ -43,6 +43,24 @@ RSpec.describe Subscription, type: :model do
     end
   end
 
+  describe '#destroy' do
+    context 'quando o atributo is_done estiver marcado' do
+      it 'não permite que um registro seja destruído' do
+        subscription = create :subscription, is_done: true
+
+        expect { subscription.destroy }.to change(Subscription, :count).by(0)
+      end
+    end
+
+    context 'quando o atributo is_done não estiver marcado' do
+      it 'permite que um registro seja destruído' do
+        subscription = create :subscription, is_done: false
+
+        expect { subscription.destroy }.to change(Subscription, :count).from(1).to(0)
+      end
+    end
+  end
+
   describe '#to_builder' do
     it 'deve retornar uma instância do JBuilder com os principais atributos do objeto' do
       Timecop.freeze do
@@ -53,6 +71,7 @@ RSpec.describe Subscription, type: :model do
           'plenary_session_id' => subscription.plenary_session_id,
           'councillor_id' => subscription.councillor_id,
           'kind' => 'explanation',
+          'is_done' => false,
           'created_at' => DateTime.current,
           '_destroyed' => false
         })

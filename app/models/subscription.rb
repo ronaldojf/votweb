@@ -9,9 +9,13 @@ class Subscription < ApplicationRecord
   validates :kind, :plenary_session, :councillor, presence: true
   validates :kind, uniqueness: { scope: [:plenary_session_id, :councillor_id] }
 
+  def destroy
+    super unless self.is_done?
+  end
+
   def to_builder
     Jbuilder.new do |json|
-      json.extract! self, :id, :plenary_session_id, :councillor_id, :kind, :created_at
+      json.extract! self, :id, :plenary_session_id, :councillor_id, :kind, :is_done, :created_at
       json._destroyed self.destroyed?
     end
   end
