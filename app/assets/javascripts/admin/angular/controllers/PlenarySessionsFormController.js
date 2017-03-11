@@ -65,4 +65,12 @@ angular
         return !item;
       });
     };
+
+    $scope.changedPresident = function(member) {
+      $scope.plenarySession.members.forEach(function(currentMember) {
+        if (currentMember.councillor_id !== member.councillor_id) {
+          currentMember.is_president = false;
+        }
+      });
+    };
   }]);

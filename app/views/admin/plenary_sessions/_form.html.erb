@@ -78,7 +78,9 @@
                       <td>{{member.councillor.name}}</td>
                       <td>
                         <label class="boolean optional" for="member_president_{{member.councillor_id}}">
-                          <input type="checkbox" icheck class="boolean optional" id="member_president_{{member.councillor_id}}" ng-model="member.is_president" />
+                          <input type="checkbox" icheck class="boolean optional" id="member_president_{{member.councillor_id}}"
+                              ng-change="changedPresident(member)"
+                              ng-model="member.is_president" />
                         </label>
                       </td>
                       <td class="text-right">
