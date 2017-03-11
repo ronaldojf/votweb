@@ -14,16 +14,17 @@ class Poll < ApplicationRecord
 
   def add_vote_for(councillor, vote_type)
     councillor_id = councillor.try(:id) || councillor
+    member = self.plenary_session.members.find_by(councillor_id: councillor_id)
     type = Vote.kinds[vote_type] || vote_type
 
-    if self.open? && type.present? && !self.votes.where(councillor_id: councillor_id).exists?
+    if type.present? && member.present? && (self.open? || member.is_president) && !self.votes.where(councillor_id: councillor_id).exists?
       self.votes.create councillor_id: (self.secret? ? nil : councillor_id), kind: type
     end
   end
 
   def to_builder
     Jbuilder.new do |json|
-      json.extract! self, :id, :process, :plenary_session_id, :description, :countdown, :duration, :created_at, :deleted_at
+      json.extract! self, :id, :process, :plenary_session_id, :description, :countdown, :duration, :president_voted, :created_at, :deleted_at
     end
   end
 

@@ -64,6 +64,7 @@ pt-BR:
     deny: Não
     attendance: Chamada
     print: Imprimir
+    president_vote: Voto do presidente
 
   login:
     administrator:
@@ -93,6 +94,7 @@ pt-BR:
     activate_fullscreen: 'Ativar visualização em tela cheia?'
 
   warnings:
+    secret_poll_president_needed: Durante a votação secreta, o presidente deve utilizar o painel do vereador para poder votar.
     unlock_record_html: |
       Este registro foi bloqueado por atingir %{maximum_attempts} tentativas seguidas de entrar no sistema com a senha incorreta.
       <strong>

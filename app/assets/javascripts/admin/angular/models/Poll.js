@@ -8,4 +8,8 @@ angular
     this.stop = function(poll) {
       return $http.patch($window.localizedPath('stop_admin_poll', poll.id));
     };
+
+    this.voteAsPresident = function(poll, voteType) {
+      return $http.patch($window.localizedPath('vote_as_president_admin_poll', poll), { vote_type: voteType });
+    };
   }]);

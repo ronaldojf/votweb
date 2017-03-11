@@ -7,8 +7,10 @@ pt-BR:
     messages:
       titles:
         sure: Você tem certeza?
+        sure_president_vote: 'Você tem certeza que deseja votar na %{vote_type}?'
       contents:
         signout: Você será desconectado.
+        unable_to_undo: Você será incapaz de reverter as mudanças após confirmar.
     enums:
       published:
         yes: Publicado

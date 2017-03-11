@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170218132306) do
+ActiveRecord::Schema.define(version: 20170311183859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,13 +103,14 @@ ActiveRecord::Schema.define(version: 20170218132306) do
   end
 
   create_table "polls", force: :cascade do |t|
-    t.integer  "process",            default: 0, null: false
+    t.integer  "process",            default: 0,     null: false
     t.integer  "plenary_session_id"
     t.string   "description"
     t.integer  "duration"
     t.datetime "deleted_at"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.boolean  "president_voted",    default: false, null: false
     t.index ["deleted_at"], name: "index_polls_on_deleted_at", using: :btree
     t.index ["plenary_session_id"], name: "index_polls_on_plenary_session_id", using: :btree
   end

@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
       resources :polls, only: [:create] do
         patch :stop, on: :member
+        patch :vote_as_president, on: :member
       end
 
       resources :councillors_queues, only: [:create] do

@@ -64,7 +64,8 @@ RSpec.describe Poll, type: :model do
       it 'deve adicionar o voto do vereador' do
         Timecop.freeze do
           councillor = create :councillor
-          poll = create :poll, created_at: 8.seconds.ago, duration: 5
+          plenary_session = create(:session_member, councillor: councillor).plenary_session
+          poll = create :poll, plenary_session: plenary_session, created_at: 8.seconds.ago, duration: 5
 
           poll.add_vote_for(councillor, :rejection)
           vote = poll.votes.reload.first
@@ -79,11 +80,28 @@ RSpec.describe Poll, type: :model do
       it 'não deve adicionar votos' do
         Timecop.freeze do
           councillor = create :councillor
-          poll = create :poll, created_at: 8.seconds.ago, duration: 4
+          plenary_session = create(:session_member, councillor: councillor).plenary_session
+          poll = create :poll, plenary_session: plenary_session, created_at: 8.seconds.ago, duration: 4
 
           poll.add_vote_for(councillor, :approvation)
 
           expect(poll.votes.reload).to eq []
+        end
+      end
+
+      context 'quando a votação não estiver aberta e o vereador é o presidente da sessão' do
+        it 'deve adicionar o voto do vereador' do
+          Timecop.freeze do
+            councillor = create :councillor
+            plenary_session = create(:session_member, councillor: councillor, is_president: true).plenary_session
+            poll = create :poll, plenary_session: plenary_session, created_at: 8.seconds.ago, duration: 4
+
+            poll.add_vote_for(councillor, :rejection)
+            vote = poll.votes.reload.first
+
+            expect(vote.councillor).to eq councillor
+            expect(vote).to be_rejection
+          end
         end
       end
     end
@@ -92,7 +110,9 @@ RSpec.describe Poll, type: :model do
       it 'não deve adicionar outro voto do mesmo vereador' do
         councillor1 = create :councillor
         councillor2 = create :councillor
-        poll = create :poll
+        plenary_session = create(:session_member, councillor: councillor1).plenary_session
+        create :session_member, plenary_session: plenary_session, councillor: councillor2
+        poll = create :poll, plenary_session: plenary_session
 
         poll.add_vote_for(councillor1, :rejection)
         vote = poll.votes.reload.first
@@ -114,7 +134,8 @@ RSpec.describe Poll, type: :model do
     context 'quando a votação for secreta' do
       it 'não deve associar o vereador com o voto' do
         councillor = create :councillor
-        poll = create :poll, process: :secret
+        plenary_session = create(:session_member, councillor: councillor).plenary_session
+        poll = create :poll, plenary_session: plenary_session, process: :secret
 
         poll.add_vote_for(councillor, :approvation)
         vote = poll.votes.reload.first
@@ -138,6 +159,7 @@ RSpec.describe Poll, type: :model do
           'description' => nil,
           'countdown' => 20,
           'duration' => 20,
+          'president_voted' => false,
           'created_at' => DateTime.current,
           'deleted_at' => nil
         })

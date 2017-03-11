@@ -267,6 +267,33 @@ angular
       }
     };
 
+    $scope.vote = function(poll, voteType) {
+      if ($scope.loading) { return; }
+
+      window.swal({
+        title: window.I18n.t('js.messages.titles.sure_president_vote', { vote_type: $scope.voteKinds[voteType] }),
+        text: window.I18n.t('js.messages.contents.unable_to_undo'),
+        type: 'warning',
+        showCancelButton: true,
+        customClass: 'data-confirm-swal'
+      },
+      function(isConfirm){
+        if (!isConfirm) { return; }
+
+        $scope.loading = true;
+        Poll.voteAsPresident(poll, voteType)
+        .success(function() {
+          poll.president_voted = true;
+        })
+        .error(function(errors) {
+          console.log(errors);
+        })
+        .finally(function() {
+          $scope.loading = false;
+        });
+      });
+    };
+
     $scope.print = function(options) {
       var titleSplit = ['VotWEB', $scope.plenarySession.title];
       if (!options) { options = {}; }

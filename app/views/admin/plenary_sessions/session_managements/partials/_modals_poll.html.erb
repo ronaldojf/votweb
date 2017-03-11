@@ -31,6 +31,8 @@
                 </div>
               </div>
             </div>
+
+            <div class="alert alert-warning" role="alert" ng-show="newPoll.process === 'secret'"><%= t('warnings.secret_poll_president_needed') %></div>
           </div>
         </div>
         <div class="modal-footer">
@@ -54,34 +56,55 @@
         </span>
       </div>
       <div class="modal-body">
-        <table class="m-b-sm">
-          <tbody>
-            <tr class="visible-print">
-              <td class="text-right"><strong><%= t('activerecord.attributes.poll.description') %>:</strong></td>
-              <td>&nbsp;&nbsp;{{pollDetails.description}}</td>
-            </tr>
-            <tr class="visible-print">
-              <td class="text-right"><strong><%= t('activerecord.attributes.poll.process') %>:</strong></td>
-              <td>&nbsp;&nbsp;{{pollProcesses[pollDetails.process]}}</td>
-            </tr>
-            <tr class="visible-print">
-              <td class="text-right"><strong><%= t('activerecord.attributes.poll.duration') %>:</strong></td>
-              <td>&nbsp;&nbsp;{{ 'info.seconds' | t:{count: pollDetails.duration || 0} }}</td>
-            </tr>
-            <tr class="visible-print">
-              <td class="text-right"><strong><%= t('activerecord.attributes.poll.created_at') %>:</strong></td>
-              <td>&nbsp;&nbsp;{{ pollDetails.created_at | date:'medium' }}</td>
-            </tr>
-            <tr>
-              <td class="text-right"><strong><%= t('activerecord.attributes.plenary_session.members') %>:</strong></td>
-              <td>&nbsp;&nbsp;{{plenarySession.members.length}}</td>
-            </tr>
-            <tr>
-              <td class="text-right"><strong><%= t('activerecord.models.vote.other') %>:</strong></td>
-              <td>&nbsp;&nbsp;{{pollDetails.votes.length}}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="row">
+          <div class="col-sm-8">
+            <table class="m-b-sm">
+              <tbody>
+                <tr class="visible-print">
+                  <td class="text-right"><strong><%= t('activerecord.attributes.poll.description') %>:</strong></td>
+                  <td>&nbsp;&nbsp;{{pollDetails.description}}</td>
+                </tr>
+                <tr class="visible-print">
+                  <td class="text-right"><strong><%= t('activerecord.attributes.poll.process') %>:</strong></td>
+                  <td>&nbsp;&nbsp;{{pollProcesses[pollDetails.process]}}</td>
+                </tr>
+                <tr class="visible-print">
+                  <td class="text-right"><strong><%= t('activerecord.attributes.poll.duration') %>:</strong></td>
+                  <td>&nbsp;&nbsp;{{ 'info.seconds' | t:{count: pollDetails.duration || 0} }}</td>
+                </tr>
+                <tr class="visible-print">
+                  <td class="text-right"><strong><%= t('activerecord.attributes.poll.created_at') %>:</strong></td>
+                  <td>&nbsp;&nbsp;{{ pollDetails.created_at | date:'medium' }}</td>
+                </tr>
+                <tr>
+                  <td class="text-right"><strong><%= t('activerecord.attributes.plenary_session.members') %>:</strong></td>
+                  <td>&nbsp;&nbsp;{{plenarySession.members.length}}</td>
+                </tr>
+                <tr>
+                  <td class="text-right"><strong><%= t('activerecord.models.vote.other') %>:</strong></td>
+                  <td>&nbsp;&nbsp;{{pollDetails.votes.length}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="col-sm-4 hidden-print">
+            <div ng-hide="pollDetails.president_voted || pollDetails.process === 'secret'">
+              <button class="btn btn-xs btn-white" data-toggle="dropdown" ng-disabled="countdownRunning">
+                <%= t('buttons.president_vote') %> <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <% Vote.kinds.keys.reject { |type| type == 'abstention' }.each do |vote_type| %>
+                  <li>
+                    <a ng-click="vote(pollDetails, '<%= vote_type %>')">
+                      <%= t(vote_type, scope: [:enums, :specific_items, :vote, :kind]) %>
+                    </a>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
 
         <table class="table">
           <thead>
