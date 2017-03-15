@@ -133,17 +133,18 @@ RSpec.describe PlenarySession, type: :model do
     end
   end
 
-  describe '.starts_today' do
+  describe '.starts_today_or_yesterday' do
     it 'deve retornar somente sessões que iniciem hoje' do
       Timecop.freeze do
-        session1 = create :plenary_session, start_at: 1.day.ago
-        session2 = create :plenary_session, start_at: DateTime.current.at_beginning_of_day
-        session3 = create :plenary_session, start_at: DateTime.current
-        session4 = create :plenary_session, start_at: DateTime.current.at_end_of_day
-        session5 = create :plenary_session, start_at: 1.day.from_now
+        session1 = create :plenary_session, start_at: 2.days.ago
+        session2 = create :plenary_session, start_at: 1.day.ago
+        session3 = create :plenary_session, start_at: DateTime.current.at_beginning_of_day
+        session4 = create :plenary_session, start_at: DateTime.current
+        session5 = create :plenary_session, start_at: DateTime.current.at_end_of_day
+        session6 = create :plenary_session, start_at: 1.day.from_now
 
-        expect(PlenarySession.starts_today).to include(session2, session3, session4)
-        expect(PlenarySession.starts_today).to_not include(session1, session5)
+        expect(PlenarySession.starts_today_or_yesterday).to include(session2, session3, session4, session5)
+        expect(PlenarySession.starts_today_or_yesterday).to_not include(session1, session6)
       end
     end
   end

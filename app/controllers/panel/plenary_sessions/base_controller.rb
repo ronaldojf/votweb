@@ -5,7 +5,7 @@ class Panel::PlenarySessions::BaseController < Panel::BaseController
 
   def set_plenary_session
     @plenary_session = PlenarySession
-                        .starts_today
+                        .starts_today_or_yesterday
                         .has_member(current_user)
                         .find(params[:plenary_session_id])
   end

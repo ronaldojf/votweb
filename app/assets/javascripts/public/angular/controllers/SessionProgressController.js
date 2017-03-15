@@ -39,12 +39,6 @@ angular
       }
     });
 
-    $scope.$watchCollection('currentSession.members', function(newMembers, oldMembers) {
-      if ((newMembers || []).length !== (oldMembers || []).length) {
-        $scope.currentSession.splittedMembers = $filter('chunk')(newMembers, 10);
-      }
-    });
-
     $scope.$watchCollection('currentQueue.councillors_ids', function(newCouncillorsIds, oldCouncillorsIds) {
       if ($scope.currentQueue && (newCouncillorsIds || []).length !== (oldCouncillorsIds || []).length) {
         var councillors = [];
@@ -58,7 +52,7 @@ angular
           }
         });
 
-        $scope.currentQueue.splittedCouncillors = $filter('chunk')(councillors, 10);
+        $scope.currentQueue.councillors = councillors;
       }
     });
 
@@ -94,6 +88,12 @@ angular
 
     $scope.currentObject = function() {
       return $scope[$scope.objectsNames[$scope.currentEvent]];
+    };
+
+    $scope.formatCountdown = function(duration) {
+      var duration = window.moment.duration(duration, 'seconds');
+      if (duration.minutes() === 0) { return duration.seconds(); }
+      return duration.minutes() + ':' + (duration.seconds() > 9 ? duration.seconds() : ('0' + duration.seconds()));
     };
 
     var recreatePieChart = function() {
@@ -199,6 +199,7 @@ angular
       }, function(data) {
         collectionRefresh(plenarySession.countdowns, data, {
           callback: function(countdownRecord) {
+            resetCurrentEvent();
             setCountdown('countdownRecord', countdownRecord);
           }
         });
@@ -227,7 +228,6 @@ angular
       if (object.countdown > 0) {
         var end = moment().add(object.countdown, 'seconds');
         inactivityCountdown('off');
-        resetCurrentEvent();
         $scope[$scope.objectsNames[type]] = object;
 
         object.countdownPromise = $interval(function() {

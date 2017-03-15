@@ -1,7 +1,7 @@
 class Public::PlenarySessionsController < Public::BaseController
   def show
     @plenary_session = PlenarySession
-                        .starts_today
+                        .starts_today_or_yesterday
                         .find(params[:id])
 
     @members = @plenary_session.members

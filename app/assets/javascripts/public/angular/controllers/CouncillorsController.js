@@ -119,6 +119,10 @@ angular
       });
     };
 
+    $scope.reloadPage = function() {
+      $window.location.reload(true);
+    };
+
     var setPollsChannel = function(plenarySession) {
       $scope.pollsChannel = $scope.cable.subscribe({
         channel: 'PollsChannel',

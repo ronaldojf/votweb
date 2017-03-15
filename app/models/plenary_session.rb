@@ -17,8 +17,8 @@ class PlenarySession < ApplicationRecord
 
   scope :not_test, -> { where.not(is_test: true) }
 
-  scope :starts_today, -> {
-    where('plenary_sessions.start_at BETWEEN :start AND :end', start: DateTime.current.at_beginning_of_day, end: DateTime.current.at_end_of_day)
+  scope :starts_today_or_yesterday, -> {
+      where('plenary_sessions.start_at BETWEEN :start AND :end', start: 1.day.ago.at_beginning_of_day, end: Time.zone.now.at_end_of_day)
   }
 
   scope :has_member, -> (councillor) {
