@@ -25,6 +25,16 @@
                 </div>
               </div>
             </div>
+
+            <div class="row">
+              <div class="col-xs-12 text-center">
+                <% t('miscellaneous.timers').keys.each do |minutes| %>
+                  <button type="button" class="btn btn-white" ng-click="newCountdownRecord.duration = <%= t('miscellaneous.timers')[minutes] %>">
+                    <%= t('miscellaneous.minutes', count: minutes) %>
+                  </button>
+                <% end %>
+              </div>
+            </div>
           </div>
         </div>
         <div class="modal-footer">

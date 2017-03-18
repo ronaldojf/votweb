@@ -54,6 +54,15 @@
                     <% end %>
                   </ul>
                 </div>
+
+                <div class="btn-group">
+                  <button class="btn btn-xs btn-white" data-toggle="dropdown"><%= t('activerecord.models.queue.one') %> <span class="caret"></span></button>
+                  <ul class="dropdown-menu pull-right">
+                    <% t('miscellaneous.session_item_queues').values.each do |label| %>
+                      <li><a ng-click="openQueueModal({description: '<%= label.mb_chars.upcase %> - ' + item.title})"><%= label %></a></li>
+                    <% end %>
+                  </ul>
+                </div>
               </td>
             </tr>
           </tbody>

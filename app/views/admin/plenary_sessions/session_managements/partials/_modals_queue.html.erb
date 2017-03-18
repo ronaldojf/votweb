@@ -28,6 +28,16 @@
               </div>
             </div>
 
+            <div class="row" ng-hide="newQueue.kind === 'attendance'">
+              <div class="col-xs-12 text-center">
+                <% t('miscellaneous.timers').keys.each do |minutes| %>
+                  <button type="button" class="btn btn-white" ng-click="newQueue.duration = <%= t('miscellaneous.timers')[minutes] %>">
+                    <%= t('miscellaneous.minutes', count: minutes) %>
+                  </button>
+                <% end %>
+              </div>
+            </div>
+
             <div class="row" ng-show="newQueue.kind === 'attendance'">
               <div class="col-xs-12">
                 <div class="form-group">
@@ -70,7 +80,10 @@
         <ol ng-if="queueDetails.kind !== 'attendance'">
           <li ng-repeat="councillorId in queueDetails.councillors_ids">
             {{queueDetails.councillors[councillorId] = getCouncillor(councillorId);''}}
-            ({{queueDetails.councillors[councillorId].party.abbreviation}}) <strong>{{queueDetails.councillors[councillorId].name}}</strong>
+            ({{queueDetails.councillors[councillorId].party.abbreviation}}) <strong>{{queueDetails.councillors[councillorId].name}}</strong> -
+            <a href ng-click="openCountdownRecordModal({
+                description: '(' + queueDetails.councillors[councillorId].party.abbreviation + ') ' + queueDetails.councillors[councillorId].name + ' - ' + queueDetails.description
+              })"><%= t('activerecord.models.countdown.one') %></a>
           </li>
         </ol>
 

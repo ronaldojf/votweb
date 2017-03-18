@@ -1,29 +1,40 @@
-redis:
-  image: redis:3-alpine
-  restart: always
-  volumes:
-  - '$HOME/votweb/redis/data:/data'
+version: '2'
 
-db:
-  image: postgres:9.5
-  restart: always
-  environment:
-    POSTGRES_PASSWORD: O0V2DQsnpBtOEUM76yGew
-  volumes:
-    - '$HOME/votweb/database/volumes/data:/var/lib/postgresql/data'
+volumes:
+  pg-data:
+  redis-data:
+  pictures:
+  logs:
 
-web:
-  image: votweb/votweb:latest
-  restart: always
-  environment:
-    REDISTOGO_URL: 'redis://redis:6379/1'
-    ROLLBAR_ACCESS_TOKEN: 24268bdf0325412cae2ba66fe081c00f
-  ports:
-    - '80:3000'
-  command: bundle exec rails server -b 0.0.0.0
-  volumes:
-    - '$HOME/votweb/pictures:/usr/src/votweb/public/system'
-    - '$HOME/votweb/logs:/usr/src/votweb/log'
-  links:
-    - db
-    - redis
+services:
+  redis:
+    image: redis:3-alpine
+    restart: always
+    volumes:
+    - redis-data:/data
+
+  db:
+    image: postgres:9.5
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: O0V2DQsnpBtOEUM76yGew
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  web:
+    image: votweb/votweb:latest
+    restart: always
+    environment:
+      REDISTOGO_URL: 'redis://redis:6379/1'
+      ROLLBAR_ACCESS_TOKEN: 24268bdf0325412cae2ba66fe081c00f
+      DB_ENV_POSTGRES_PASSWORD: O0V2DQsnpBtOEUM76yGew
+      RAILS_LOG_TO_STDOUT: 1
+    ports:
+      - '80:3000'
+    command: bundle exec rails server -b 0.0.0.0
+    volumes:
+      - pictures:/usr/src/votweb/public/system
+      - logs:/usr/src/votweb/log
+    depends_on:
+      - db
+      - redis

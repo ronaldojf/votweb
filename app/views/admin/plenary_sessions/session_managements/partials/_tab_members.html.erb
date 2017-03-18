@@ -1,7 +1,7 @@
 <div class="panel-body">
   <div class="row m-b-md hidden-print">
     <div class="col-xs-12 text-right">
-      <%= link_to '', class: 'btn btn-w-s btn-success', 'ng-click' => "openQueueModal('attendance')", 'ng-disabled' => 'loading || countdownRunning' do %>
+      <%= link_to '', class: 'btn btn-w-s btn-success', 'ng-click' => "openQueueModal({kind: 'attendance'})", 'ng-disabled' => 'loading' do %>
         <i class="fa fa-list-ul"></i><br/>
         <%= t('buttons.attendance') %>
       <% end %>

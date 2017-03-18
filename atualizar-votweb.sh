@@ -11,7 +11,11 @@ docker cp $WEB:$WORKDIR/atualizar-votweb.sh atualizar-votweb.sh
 chmod +x atualizar-votweb.sh
 
 docker-compose up -d
-docker-compose run --rm web rake db:create
-docker-compose run --rm web rake db:migrate
+docker-compose run --rm web rake db:create db:migrate
+
+echo "Removendo container não usados..."
+docker ps -a -q | xargs docker rm &> /dev/null
+echo "Removendo imagens não usadas..."
+docker images -q | xargs docker rmi &> /dev/null
 
 echo "ATUALIZAÇÃO CONCLUÍDA!"

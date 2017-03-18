@@ -180,13 +180,11 @@ angular
     };
 
     $scope.openPollModal = function(description) {
-      if (!$scope.countdownRunning) {
-        angular.element('#add-poll').modal('show');
-        $scope.newPoll = { description: description, process: 'named', duration: 20 };
-        $timeout(function() {
-          angular.element('#poll-description').focus();
-        }, 600);
-      }
+      angular.element('#add-poll').modal('show');
+      $scope.newPoll = { description: description, process: 'named', duration: 20 };
+      $timeout(function() {
+        angular.element('#poll-description').focus();
+      }, 600);
     };
 
     $scope.openPollDetailsModal = function(poll) {
@@ -199,24 +197,22 @@ angular
       $scope.queueDetails = queue;
     };
 
-    $scope.openQueueModal = function(kind) {
-      if (!$scope.countdownRunning) {
-        angular.element('#add-queue').modal('show');
-        $scope.newQueue = { duration: 20, kind: (kind || 'normal') };
-        $timeout(function() {
-          angular.element('#queue-' + (kind === 'attendance' ? 'duration' : 'description')).focus();
-        }, 600);
-      }
+    $scope.openQueueModal = function(options) {
+      var attributes = angular.extend({ kind: 'normal', duration: 20, description: '' }, options || {});
+      angular.element('#add-queue').modal('show');
+      $scope.newQueue = angular.copy(attributes);
+      $timeout(function() {
+        angular.element('#queue-' + ($scope.newQueue.kind === 'attendance' ? 'duration' : 'description')).focus();
+      }, 600);
     };
 
-    $scope.openCountdownRecordModal = function(description) {
-      if (!$scope.countdownRunning) {
-        angular.element('#add-countdown').modal('show');
-        $scope.newCountdownRecord = { description: description, duration: 120 };
-        $timeout(function() {
-          angular.element('#countdown-description').focus();
-        }, 600);
-      }
+    $scope.openCountdownRecordModal = function(options) {
+      var attributes = angular.extend({description: '', duration: 120}, options || {});
+      angular.element('#add-countdown').modal('show');
+      $scope.newCountdownRecord = angular.copy(attributes);
+      $timeout(function() {
+        angular.element('#countdown-description').focus();
+      }, 600);
     };
 
     $scope.getCouncillor = function(councillorId) {

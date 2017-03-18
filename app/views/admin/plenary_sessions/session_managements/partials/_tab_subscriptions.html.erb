@@ -40,7 +40,9 @@
               <td>{{subscription.created_at | date:'medium'}}</td>
               <td class="text-right">
                 <button class="btn btn-xs btn-primary"
-                    ng-click="openCountdownRecordModal(subscriptionKinds[subscription.kind] + ' - ' + subscription.councillor.name + ' (' + subscription.councillor.party.abbreviation + ')')">
+                    ng-click="openCountdownRecordModal({
+                      description: subscriptionKinds[subscription.kind] + ' - ' + subscription.councillor.name + ' (' + subscription.councillor.party.abbreviation + ')'
+                    })">
                   <%= t('buttons.new_countdown') %>
                 </button>
 
