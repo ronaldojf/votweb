@@ -31,7 +31,7 @@
           <tbody>
             <tr ng-repeat="queue in (plenarySession.queues | orderBy:'-created_at') track by queue.id" ng-class="{'info': queue.countdownPromise}">
               <td>
-                <strong ng-show="queue.countdownPromise">({{queue.countdown}})</strong>
+                <strong ng-show="queue.countdownPromise && queue.intervalCountdown">({{queue.intervalCountdown}})</strong>
                 {{queue.description | truncate:60}}
                 <span class="text-muted" ng-hide="queue.description"><%= t('info.no_description') %></span>
               </td>

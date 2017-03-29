@@ -91,8 +91,8 @@ angular
     };
 
     $scope.formatCountdown = function(duration) {
+      if (duration < 60) { return duration; }
       var duration = window.moment.duration(duration, 'seconds');
-      if (duration.minutes() === 0) { return duration.seconds(); }
       return duration.minutes() + ':' + (duration.seconds() > 9 ? duration.seconds() : ('0' + duration.seconds()));
     };
 
@@ -199,7 +199,6 @@ angular
       }, function(data) {
         collectionRefresh(plenarySession.countdowns, data, {
           callback: function(countdownRecord) {
-            resetCurrentEvent();
             setCountdown('countdownRecord', countdownRecord);
           }
         });
@@ -224,23 +223,27 @@ angular
         inactivityCountdown('on');
       }
 
-      clearCountdown(object);
       if (object.countdown > 0) {
         var end = moment().add(object.countdown, 'seconds');
         inactivityCountdown('off');
         $scope[$scope.objectsNames[type]] = object;
 
-        object.countdownPromise = $interval(function() {
-          // +1 para corrigir tempo de criação do registro e entrega do mesmo por websocket
-          object.countdown = end.unix() - moment().unix() + 1;
-          $scope.currentEvent = type;
+        if (!object.countdownPromise) {
+          object.countdownPromise = $interval(function() {
+            // +1 para corrigir tempo de criação do registro e entrega do mesmo por websocket
+            object.countdown = object.intervalCountdown = end.unix() - moment().unix() + 1;
+            $scope.currentEvent = type;
 
-          if (object.countdown <= 0) {
-            clearCountdown(object);
-            inactivityCountdown('on');
-            playSound();
-          }
-        }, 500);
+            if (object.countdown <= 0) {
+              clearCountdown(object);
+              inactivityCountdown('on');
+              playSound();
+            }
+          }, 250);
+        }
+      } else {
+        clearCountdown(object);
+        object.intervalCountdown = 0;
       }
     };
 

@@ -31,7 +31,9 @@
           <tbody>
             <tr ng-repeat="countdownRecord in (plenarySession.countdowns | orderBy:'-created_at') track by countdownRecord.id" ng-class="{'info': countdownRecord.countdownPromise}">
               <td>
-                <strong ng-show="countdownRecord.countdownPromise">({{countdownRecord.countdown}})</strong>
+                <strong ng-show="countdownRecord.countdownPromise && countdownRecord.intervalCountdown">
+                  ({{countdownRecord.intervalCountdown}})
+                </strong>
                 {{countdownRecord.description | truncate:60}}
                 <span class="text-muted" ng-hide="countdownRecord.description"><%= t('info.no_description') %></span>
               </td>

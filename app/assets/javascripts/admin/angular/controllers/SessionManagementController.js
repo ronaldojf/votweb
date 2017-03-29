@@ -246,20 +246,24 @@ angular
     };
 
     $scope.setCountdown = function(object, verifyPresence) {
-      clearCountdown(object);
-
       if (object.countdown > 0) {
         var end = moment().add(object.countdown, 'seconds');
-        object.countdownPromise = $interval(function() {
-          // +1 para corrigir tempo de criação do registro e entrega do mesmo por websocket
-          object.countdown = end.unix() - moment().unix() + 1;
-          $scope.countdownRunning = true;
 
-          if (object.countdown <= 0) {
-            clearCountdown(object);
-            if (verifyPresence) { verifyMembersAttendance(); }
-          }
-        }, 500);
+        if (!object.countdownPromise) {
+          object.countdownPromise = $interval(function() {
+            // +1 para corrigir tempo de criação do registro e entrega do mesmo por websocket
+            object.countdown = object.intervalCountdown = end.unix() - moment().unix() + 1;
+            $scope.countdownRunning = true;
+
+            if (object.countdown <= 0) {
+              clearCountdown(object);
+              if (verifyPresence) { verifyMembersAttendance(); }
+            }
+          }, 250);
+        }
+      } else {
+        clearCountdown(object);
+        object.intervalCountdown = 0;
       }
     };
 
