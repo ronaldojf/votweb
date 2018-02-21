@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.3.1'
 
-gem 'rails',                  '5.0.0'
+gem 'rails',                  '~> 5.0.0'
 gem 'puma',                   '3.5.2'
 gem 'redis',                  '3.3.1'
 gem 'secure_headers',         '3.4.0'
